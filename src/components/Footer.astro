@@ -1,0 +1,44 @@
+---
+import { BLOG_NAME } from "../utils/constants";
+---
+
+<footer class="site-footer">
+	<div class="footer-shell">
+		<p>&copy; {new Date().getFullYear()} {BLOG_NAME}</p>
+		<a href="mailto:hello@example.com">hello@example.com</a>
+        <a href="https://www.instagram.com/il_linguista_disperato/">Pagina Instagram</a>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		border-top: 1px solid #d4af37;
+		background: #333;
+		color: #fff;
+	}
+
+	.footer-shell {
+		align-items: center;
+		display: flex;
+		justify-content: space-between;
+		margin: 0 auto;
+		max-width: 1120px;
+		padding: 1.25rem 1.5rem;
+	}
+
+	.footer-shell p {
+		margin: 0;
+	}
+
+	.footer-shell a {
+		color: #f4f1e1;
+	}
+
+	@media (max-width: 520px) {
+		.footer-shell {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+	}
+</style>

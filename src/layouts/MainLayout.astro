@@ -1,0 +1,28 @@
+---
+import Footer from "../components/Footer.astro";
+import Navbar from "../components/Navbar.astro";
+
+import { BLOG_NAME } from "../utils/constants";
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/png" href="/logo.png" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{BLOG_NAME}</title>
+	</head>
+	<body>
+		<Navbar />
+		    <slot />
+		<Footer />
+	</body>
+</html>
+
+<style>
+    body {
+        background-color: #f4f1e1;
+        min-height: 100vh;
+    }
+</style>

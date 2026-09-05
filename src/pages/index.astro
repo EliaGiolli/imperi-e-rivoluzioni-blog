@@ -1,0 +1,19 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { HeroSection } from "../layouts/hero-section.astro";
+import { Contact } from "../layouts/contact.astro";
+import { About } from "../components/about.astro";
+import { Certificates } from "../layouts/certificates.astro";
+import { Projects } from "../layouts/projects.astro"
+---
+
+<MainLayout>
+	<HeroSection />
+
+	<main>
+		<About />
+		<Certificates />
+		<Projects />
+		<Contact />
+	</main>
+</MainLayout>
