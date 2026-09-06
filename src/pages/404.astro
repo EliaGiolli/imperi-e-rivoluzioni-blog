@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets";
+import image404 from '../assets/images/404.png';
+
+import MainLayout from "../layouts/MainLayout.astro";
+---
+
+<MainLayout>
+    <div class="flex flex-col items-center justify-items-center gap-7">
+        <Image 
+            src={image404}
+            class="mt-10" 
+            width={250} 
+            height={250} 
+            alt="Un cartello giallo simile a quello per i lavori con la scritta 404"
+        />
+        <h1 class="text-5xl text-indigo-700">404 - Pagina non trovata</h1>
+        <p class="text-2xl mb-10">
+            Mi dispiace, ma non siamo riusciti a trovare la pagina che stai cercando
+        </p>
+
+    </div>
+
+</MainLayout>

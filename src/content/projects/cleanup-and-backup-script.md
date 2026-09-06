@@ -2,7 +2,7 @@
 title: "Cleanp and Backup Script with Python and Powershell"
 githubUrl: ""
 tags: ['python', 'powershell', 'sysadmin', 'linux', 'windows']
-slug: cisco-packet-tracer-labs
+slug: cleanup-and-backup-script
 ---
 
 # Cleanup & Backup — Cross-Platform Sysadmin Exercise
