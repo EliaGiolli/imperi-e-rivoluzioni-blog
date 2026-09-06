@@ -4,73 +4,22 @@ import { Image } from "astro:assets";
 import { LOGO_ALT_TEXT } from '../utils/constants'
 ---
 
-<header class="site-header">
-	<div class="nav-shell">
-		<a class="brand" href="/" aria-label="Homepage">
-            <Image src="/public/logo.png" width={60} height={60} alt={LOGO_ALT_TEXT} />
-            <p>Il Linguista Disperato</p>
+<header class="border-b border-indigo-600 bg-slate-50/80">
+	<div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 max-[520px]:flex-col max-[520px]:items-start max-[520px]:gap-3">
+		<a class="flex items-center text-xl font-bold text-indigo-600 no-underline" href="/" aria-label="Homepage">
+            <Image src="/public/logo.svg" width={60} height={60} alt={LOGO_ALT_TEXT} />
+            <h1 class="hidden" aria-label="main-title">Portfolio Elia Giolli</h1>
         </a>
 		<nav aria-label="Main navigation">
-			<ul class="nav-links">
-				<li><a href="/about">About</a></li>
-				<li><a href="/blog">Blog</a></li>
-				<li><a href="/contact">Contact</a></li>
+			<ul class="flex list-none gap-6 p-0 max-[520px]:gap-4">
+				<li><a class="text-neutral-900 no-underline hover:text-indigo-600 focus-visible:text-indigo-600" href="/about">Su di me</a></li>
+				<li><a class="text-neutral-900 no-underline hover:text-indigo-600 focus-visible:text-indigo-600" href="/blog">Progetti</a></li>
+				<li><a class="text-neutral-900 no-underline hover:text-indigo-600 focus-visible:text-indigo-600" href="/blog">Certificati</a></li>
+				<li><a class="text-neutral-900 no-underline hover:text-indigo-600 focus-visible:text-indigo-600" href="/contact">Contatti</a></li>
 			</ul>
+			<!-- Selector for multi-language -->
+
+			<!-- Mobile menu  -->
 		</nav>
 	</div>
 </header>
-
-<style>
-	.site-header {
-		border-bottom: 1px solid #d4af37;
-		background: #fff;
-	}
-
-	.nav-shell {
-		align-items: center;
-		display: flex;
-		justify-content: space-between;
-		margin: 0 auto;
-		max-width: 1120px;
-		padding: 1.25rem 1.5rem;
-	}
-
-	.brand {
-        display: flex;
-        align-items: center;
-		color: #e63946;
-		font-size: 1.25rem;
-		font-weight: 700;
-		text-decoration: none;
-	}
-
-	.nav-links {
-		display: flex;
-		gap: 1.5rem;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.nav-links a {
-		color: #333;
-		text-decoration: none;
-	}
-
-	.nav-links a:hover,
-	.nav-links a:focus-visible {
-		color: #e63946;
-	}
-
-	@media (max-width: 520px) {
-		.nav-shell {
-			align-items: flex-start;
-			flex-direction: column;
-			gap: 0.75rem;
-		}
-
-		.nav-links {
-			gap: 1rem;
-		}
-	}
-</style>
