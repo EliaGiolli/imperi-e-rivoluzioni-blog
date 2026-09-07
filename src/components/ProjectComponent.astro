@@ -1,0 +1,232 @@
+---
+interface Project {
+	data: {
+		title: string;
+		tags: string[];
+		slug: string;
+		githubUrl: string;
+	};
+}
+
+interface Props {
+	project: Project;
+}
+
+const { project } = Astro.props;
+
+const troubleshooting: Record<string, { cause: string; method: string; result: string }> = {
+	"active-directory-homelab": {
+		cause: "Il laboratorio ha esposto problemi di stato difficili da vedere dalla GUI: un revert della snapshot aveva rimosso il ruolo AD DS e il client era finito nel contenitore Computers con il nome sbagliato.",
+		method: "Ho verificato lo stato reale con Get-WindowsFeature, hostname, Get-ADGroup, ping e nslookup invece di fidarmi del wizard. Ho reinstallato il ruolo, spostato gli oggetti nell'OU corretta e ripetuto i controlli dal client.",
+		result: "Il dominio, il DNS, il join del client e le GPO sono stati verificati end-to-end. La regola guida è diventata semplice: ogni schermata deve essere confermata da un comando o da un test indipendente.",
+	},
+	"cisco-packet-tracer-labs": {
+		cause: "Nei laboratori di rete il problema nasce spesso da una configurazione che sembra corretta su un dispositivo, ma non è coerente con VLAN, trunk, routing inter-VLAN o ACL degli altri apparati.",
+		method: "Ho isolato il percorso a strati: indirizzamento e subnet, stato delle interfacce, VLAN e trunk, gateway e routing, quindi ACL e test di connettività. Ho confrontato la configurazione attesa con i risultati di ping e dei comandi show.",
+		result: "La verifica non si ferma al comando accettato dal dispositivo: ogni laboratorio viene considerato risolto solo quando il traffico previsto passa e quello vietato viene effettivamente isolato.",
+	},
+	"cleanup-and-backup-script": {
+		cause: "Gli errori più istruttivi sono stati piccoli ma pericolosi: una directory creata dentro venv, un refuso nel percorso, le differenze tra mtime e proprietà Windows e i blocchi dell'Execution Policy.",
+		method: "Ho riprodotto ogni errore in ambiente controllato, verificato i percorsi prima di spostare file, aggiunto dry-run e logging e mantenuto la stessa logica tra Python/Linux e PowerShell/Windows.",
+		result: "Lo script evita operazioni distruttive per impostazione predefinita, produce archivi timestampati e rende verificabile sia il risultato sia il percorso seguito per ottenerlo.",
+	},
+	"windows-network-security-auditor": {
+		cause: "Una regola Block basata sulla porta può essere aggirata da una regola Allow basata sull'applicazione: è il problema di precedenza chiamato Rule Shadowing, che la console grafica può nascondere.",
+		method: "Ho analizzato la gerarchia con i moduli NetSecurity, individuato le regole applicative permissive e verificato il comportamento dal punto di vista della rete con Test-NetConnection, senza considerare affidabile il solo loopback localhost.",
+		result: "La policy viene considerata efficace solo dopo aver rimosso il conflitto e osservato il traffico cadere dalle interfacce previste. Anche le connessioni già aperte vengono considerate nello stato della verifica.",
+	},
+};
+
+const caseStudy = troubleshooting[project.data.slug] ?? {
+	cause: "Il problema viene scomposto in sintomo, stato del sistema e causa verificabile.",
+	method: "Raccolgo evidenze, modifico una variabile alla volta e ripeto il test dal punto di vista dell'utente e del sistema.",
+	result: "La soluzione è completa quando il comportamento è riproducibile e documentato.",
+};
+---
+
+<main class="bg-[#f6f4ee] text-[#17252b]" aria-labelledby="project-title">
+	<header class="border-b border-[#31454c] bg-[#17252b] text-white">
+		<div class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
+			<a href="/projects" class="inline-flex items-center gap-2 text-sm font-bold text-[#f2b84b] underline-offset-4 transition-colors hover:text-[#ffd477] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f2b84b]">
+				<span aria-hidden="true">←</span>
+				<span>Tutti i progetti</span>
+			</a>
+			<div class="mt-10 max-w-4xl">
+				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#f2b84b]">Case study tecnico</p>
+				<h1 id="project-title" class="text-4xl font-extrabold tracking-tight sm:text-6xl">{project.data.title}</h1>
+				<ul class="mt-6 flex flex-wrap gap-2" aria-label="Tecnologie del progetto">
+					{project.data.tags.map((tag) => <li class="rounded-md border border-white/20 px-3 py-1 text-sm text-slate-200">{tag}</li>)}
+				</ul>
+			</div>
+		</div>
+	</header>
+
+	<section class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24" aria-labelledby="troubleshooting-title">
+		<div class="mb-10 max-w-2xl">
+			<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-indigo-600">Come lavoro</p>
+			<h2 id="troubleshooting-title" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Dal sintomo alla verifica</h2>
+			<p class="mt-4 text-lg leading-8 text-slate-600">Ogni progetto racconta una decisione tecnica: cosa non funzionava, quale evidenza ha ristretto il problema e come ho verificato la soluzione.</p>
+		</div>
+
+		<ol class="grid gap-6 lg:grid-cols-3">
+			<li class="rounded-2xl border border-[#d9d6cb] bg-white p-6 shadow-[6px_6px_0_#ebe9e1]">
+				<span class="font-mono text-sm font-bold text-[#d89418]">01 / CAUSA</span>
+				<p class="mt-4 text-base leading-7 text-slate-600">{caseStudy.cause}</p>
+			</li>
+			<li class="rounded-2xl border border-[#d9d6cb] bg-white p-6 shadow-[6px_6px_0_#ebe9e1]">
+				<span class="font-mono text-sm font-bold text-[#d89418]">02 / METODO</span>
+				<p class="mt-4 text-base leading-7 text-slate-600">{caseStudy.method}</p>
+			</li>
+			<li class="rounded-2xl border border-[#d9d6cb] bg-white p-6 shadow-[6px_6px_0_#ebe9e1]">
+				<span class="font-mono text-sm font-bold text-[#d89418]">03 / VERIFICA</span>
+				<p class="mt-4 text-base leading-7 text-slate-600">{caseStudy.result}</p>
+			</li>
+		</ol>
+
+		<div class="mt-20 border-t border-[#d9d6cb] pt-10" aria-labelledby="documentation-title">
+			<div class="flex flex-wrap items-center justify-between gap-4">
+				<h2 id="documentation-title" class="text-2xl font-extrabold">Documentazione completa</h2>
+				{project.data.githubUrl && <a href={project.data.githubUrl} target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 font-bold text-indigo-600 underline-offset-4 hover:text-violet-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Repository GitHub <span aria-hidden="true">↗</span></a>}
+			</div>
+			<article class="project-document mt-8 max-w-none rounded-2xl border border-[#d9d6cb] bg-white p-6 sm:p-10">
+				<slot />
+			</article>
+		</div>
+	</section>
+</main>
+
+<style is:global>
+	.project-document {
+		color: #475569;
+		font-size: 1rem;
+		line-height: 1.8;
+	}
+
+	.project-document h1,
+	.project-document h2,
+	.project-document h3,
+	.project-document h4 {
+		margin-top: 2.25rem;
+		margin-bottom: 0.75rem;
+		color: #17252b;
+		font-weight: 800;
+		line-height: 1.2;
+	}
+
+	.project-document h1 {
+		margin-top: 0;
+		font-size: clamp(1.75rem, 4vw, 2.5rem);
+	}
+
+	.project-document h2 {
+		border-top: 1px solid #d9d6cb;
+		padding-top: 1.5rem;
+		font-size: 1.75rem;
+	}
+
+	.project-document h3 {
+		font-size: 1.25rem;
+	}
+
+	.project-document p,
+	.project-document ul,
+	.project-document ol,
+	.project-document blockquote,
+	.project-document table,
+	.project-document pre {
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.project-document ul,
+	.project-document ol {
+		padding-left: 1.5rem;
+	}
+
+	.project-document ul {
+		list-style: disc;
+	}
+
+	.project-document ol {
+		list-style: decimal;
+	}
+
+	.project-document li + li {
+		margin-top: 0.4rem;
+	}
+
+	.project-document a {
+		color: #4f46e5;
+		font-weight: 700;
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
+	.project-document a:hover {
+		color: #7c3aed;
+	}
+
+	.project-document code {
+		border-radius: 0.35rem;
+		background: #ebe9e1;
+		padding: 0.15rem 0.35rem;
+		color: #17252b;
+		font-size: 0.9em;
+	}
+
+	.project-document pre {
+		overflow-x: auto;
+		border-radius: 0.75rem;
+		background: #17252b;
+		padding: 1rem;
+		color: #e2e8f0;
+	}
+
+	.project-document pre code {
+		background: transparent;
+		padding: 0;
+		color: inherit;
+	}
+
+	.project-document blockquote {
+		border-left: 4px solid #f2b84b;
+		padding-left: 1rem;
+		font-weight: 600;
+		color: #334155;
+	}
+
+	.project-document hr {
+		margin: 2rem 0;
+		border: 0;
+		border-top: 1px solid #d9d6cb;
+	}
+
+	.project-document table {
+		display: block;
+		overflow-x: auto;
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.95rem;
+	}
+
+	.project-document th,
+	.project-document td {
+		border: 1px solid #d9d6cb;
+		padding: 0.65rem 0.75rem;
+		text-align: left;
+		vertical-align: top;
+	}
+
+	.project-document th {
+		background: #ebe9e1;
+		color: #17252b;
+		font-weight: 800;
+	}
+
+	.project-document img {
+		max-width: 100%;
+		height: auto;
+		border-radius: 0.75rem;
+		border: 1px solid #d9d6cb;
+	}
+</style>
