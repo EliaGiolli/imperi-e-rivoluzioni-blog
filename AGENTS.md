@@ -4,7 +4,6 @@ Before doing anything, always check the following documentation's pages:
 - ALPINE.JS DOCS: https://alpinejs.dev/start-here
 
 
-And then follow the @ROADMAP.md
 ---
 
 When starting the dev server, use background mode:
