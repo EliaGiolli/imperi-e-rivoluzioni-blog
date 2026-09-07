@@ -1,0 +1,49 @@
+---
+import MainLayout from "../../core/layouts/MainLayout.astro";
+
+const { id } = Astro.params;
+
+const timelineEntries = {
+	"journey-start": {
+		title: "The beginning",
+		publishedAt: "2026-09-07",
+		content: [
+			"This is a placeholder timeline entry for the history detail route.",
+			"Use this page to describe important milestones, turning points, or story arcs.",
+			"Later, connect it to structured data or a CMS-driven collection.",
+		],
+	},
+	"next-step": {
+		title: "The next step",
+		publishedAt: "2026-09-08",
+		content: [
+			"This second item shows the pattern for deeper historical storytelling.",
+			"You can add richer sections, images, and quotes as needed.",
+			"The route is already set up to support multiple entries.",
+		],
+	},
+};
+
+const entry = timelineEntries[id as keyof typeof timelineEntries];
+
+if (!entry) {
+	throw new Error(`Timeline entry not found: ${id}`);
+}
+---
+
+<MainLayout>
+	<main class="mx-auto max-w-4xl px-6 py-16 lg:px-8">
+		<a href="/history" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-red-700 hover:text-red-800">
+			← Back to history
+		</a>
+
+		<article class="mt-8 rounded-2xl border border-stone-300 bg-white p-8 shadow-[6px_6px_0_rgba(185,139,62,0.12)] sm:p-10">
+			<p class="text-sm font-bold uppercase tracking-[0.18em] text-amber-700">{entry.publishedAt}</p>
+			<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">{entry.title}</h1>
+
+			<div class="mt-8 space-y-5 text-lg leading-8 text-stone-700">
+				{entry.content.map((paragraph) => <p>{paragraph}</p>)}
+			</div>
+		</article>
+	</main>
+</MainLayout>

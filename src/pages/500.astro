@@ -1,0 +1,13 @@
+---
+import MainLayout from '../core/layouts/MainLayout.astro';
+
+interface Props {
+    error: unknown
+}
+
+const { error } = Astro.props;
+---
+
+<MainLayout>
+    <div>{error instanceof Error ? error.message : "Unknown error"}</div>
+</MainLayout>
