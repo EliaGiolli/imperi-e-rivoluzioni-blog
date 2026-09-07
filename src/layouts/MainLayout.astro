@@ -1,6 +1,7 @@
 ---
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
+import SmoothScroll from "../components/SmoothScroll.astro";
 import "../styles/global.css";
 
 import { BLOG_NAME } from "../utils/constants";
@@ -17,6 +18,7 @@ import { BLOG_NAME } from "../utils/constants";
 	</head>
 	<body class="min-h-screen bg-[#f6f4ee] text-[#17252b]">
 		<Navbar />
+		<SmoothScroll />
 		<slot />
 		<Footer />
 	</body>

@@ -1,0 +1,24 @@
+<script>
+	const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+	document.addEventListener("click", (event) => {
+		const clickedElement = event.target;
+		if (!(clickedElement instanceof Element)) return;
+
+		const link = clickedElement.closest<HTMLAnchorElement>("a[href^='#']");
+		if (!link || link.hash.length < 2) return;
+		if (link.origin !== window.location.origin || link.pathname !== window.location.pathname) return;
+
+		const target = document.querySelector<HTMLElement>(link.hash);
+		if (!target) return;
+
+		event.preventDefault();
+		target.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "start" });
+		window.history.pushState({}, "", link.hash);
+
+		const alreadyFocusable = target.hasAttribute("tabindex");
+		if (!alreadyFocusable) target.setAttribute("tabindex", "-1");
+		target.focus({ preventScroll: true });
+		if (!alreadyFocusable) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true });
+	});
+</script>

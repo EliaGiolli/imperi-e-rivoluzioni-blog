@@ -1,0 +1,26 @@
+---
+interface Props {
+	id: string;
+	action?: string;
+	serviceId?: string;
+	templateId?: string;
+	publicKey?: string;
+	class?: string;
+}
+
+const { id, action = "mailto:eliagiolli22@gmail.com", serviceId = "", templateId = "", publicKey = "", class: extraClass } = Astro.props;
+---
+
+<form
+	id={id}
+	action={action}
+	method="post"
+	class:list={[extraClass]}
+	data-contact-form
+	data-service-id={serviceId}
+	data-template-id={templateId}
+	data-public-key={publicKey}
+	novalidate={Boolean(serviceId && templateId && publicKey)}
+>
+	<slot />
+</form>
