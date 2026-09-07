@@ -27,51 +27,52 @@ const techGroups = [
 
 <section
 	id="hero"
-	class="relative overflow-hidden border-b border-slate-200 bg-slate-50"
+	class="relative overflow-hidden border-b border-[#31454c] bg-[#17252b] text-white"
 	aria-labelledby="hero-title"
 >
-	<div class="mx-auto grid max-w-6xl gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:py-28">
+	<div class="mx-auto grid max-w-6xl gap-14 px-6 py-24 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:py-32">
 		<div class="max-w-3xl">
-			<p class="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">
+			<p class="mb-6 flex items-center gap-3 text-sm font-bold uppercase tracking-[0.18em] text-[#f2b84b]">
+				<span class="h-px w-8 bg-[#f2b84b]" aria-hidden="true"></span>
 				Portfolio professionale
 			</p>
-			<h1 id="hero-title" class="max-w-3xl text-4xl font-bold tracking-tight text-neutral-900 sm:text-6xl">
+			<h1 id="hero-title" class="max-w-3xl text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
 				Ciao, sono Elia Giolli.
 			</h1>
-			<p class="mt-6 max-w-2xl text-xl leading-8 text-slate-600 sm:text-2xl">
+			<p class="mt-6 max-w-2xl text-xl font-medium leading-8 text-slate-200 sm:text-2xl">
 				Tecnico IT Support, Help Desk e Service Desk con una passione per il networking e le infrastrutture.
 			</p>
-			<p class="mt-5 max-w-2xl text-base leading-7 text-slate-600">
+			<p class="mt-5 max-w-2xl text-base leading-7 text-slate-300">
 				Risolvo problemi con metodo, documento ciò che scopro e trasformo ogni incidente in un'occasione per costruire sistemi più affidabili.
 			</p>
 
 			<div class="mt-8 flex flex-wrap gap-4">
-				<Button href="/cv" variant="primary" size="lg" aria-label="Apri il curriculum di Elia Giolli">
+				<Button href="/cv" variant="primary" size="lg" class="!bg-[#f2b84b] !text-[#17252b] hover:!bg-[#ffd477]" aria-label="Apri il curriculum di Elia Giolli">
 					<span aria-hidden="true">↗</span>
 					<span>Scarica il CV</span>
 				</Button>
-				<Button href="/projects" variant="secondary" size="lg" aria-label="Vai ai progetti di Elia Giolli">
+				<Button href="/projects" variant="secondary" size="lg" class="!border-white/25 !bg-white/10 !text-white hover:!border-white hover:!bg-white/15" aria-label="Vai ai progetti di Elia Giolli">
 					<span aria-hidden="true">⌘</span>
 					<span>Scopri i progetti</span>
 				</Button>
 			</div>
 		</div>
 
-		<aside class="border-l-2 border-indigo-600 pl-6 sm:pl-8" aria-labelledby="tech-stack-title">
+		<aside class="rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8" aria-labelledby="tech-stack-title">
 			<div class="mb-6 flex items-center gap-3">
-				<span class="text-2xl text-indigo-600" aria-hidden="true">✦</span>
-				<h2 id="tech-stack-title" class="text-2xl font-bold text-neutral-900">Tecnologie</h2>
+				<span class="text-2xl text-[#f2b84b]" aria-hidden="true">✦</span>
+				<h2 id="tech-stack-title" class="text-2xl font-bold text-white">Tecnologie</h2>
 			</div>
-			<p class="mb-6 text-sm leading-6 text-slate-600">
+			<p class="mb-6 text-sm leading-6 text-slate-300">
 				Gli strumenti che uso per supportare persone, diagnosticare problemi e automatizzare il lavoro quotidiano.
 			</p>
 			<ul class="grid gap-4" aria-label="Competenze tecniche principali">
-				{techGroups.map((group) => (
-					<li class="flex gap-3 border-t border-slate-200 pt-4">
-						<span class="mt-0.5 text-lg text-indigo-600" aria-hidden="true">{group.icon}</span>
+				{techGroups.map((group, index) => (
+					<li class="flex gap-3 border-t border-white/10 pt-4">
+						<span class="mt-0.5 font-mono text-sm text-[#f2b84b]" aria-hidden="true">0{index + 1}</span>
 						<div>
-							<h3 class="font-semibold text-neutral-900">{group.label}</h3>
-							<p class="mt-1 text-sm text-slate-600">{group.items}</p>
+							<h3 class="font-semibold text-white">{group.label}</h3>
+							<p class="mt-1 text-sm text-slate-300">{group.items}</p>
 						</div>
 					</li>
 				))}

@@ -36,8 +36,6 @@ This project is considered **done** relative to its original scope. The value he
 | **CL01** | Domain-joined client | Windows 10 Pro 22H2 | `10.10.10.50` (static) | `10.10.10.10` |
 | Gateway | VMware NAT gateway | — | `10.10.10.2` | — |
 
-![Network Topology](./diagrams/network-topology.svg)
-
 Both VMs run on **VMware Workstation Pro**, connected through a dedicated NAT network (`VMnet8`, subnet `10.10.10.0/24`, DHCP disabled) — isolated from my home LAN but with outbound internet access for licensing activation and updates.
 
 **Design decisions explained in detail in [`docs/01-planning.md`](docs/01-planning.md)**, including:
@@ -74,8 +72,6 @@ ad-homelab/
 │   ├── create-ou-structure.ps1     Idempotent OU hierarchy creation
 │   ├── create-gpos.ps1             GPO creation + linking
 │   └── health-check.ps1            Environment sanity check (services, OUs, groups, GPOs)
-└── diagrams/
-    └── network-topology.svg        Network topology diagram
 ```
 
 ---

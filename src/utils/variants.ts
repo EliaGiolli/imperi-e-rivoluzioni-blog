@@ -1,13 +1,13 @@
 import { cva } from "class-variance-authority";
 
 export const button = cva(
-  "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2",
+  "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
         primary: "bg-indigo-600 text-white hover:bg-violet-600",
-        secondary: "bg-accent-secondary text-foreground hover:bg-accent-secondary/80",
-        ghost: "bg-transparent text-accent hover:bg-accent/10",
+        secondary: "border border-slate-300 bg-slate-100 text-neutral-900 hover:border-indigo-600 hover:bg-indigo-50",
+        ghost: "bg-transparent text-indigo-600 hover:bg-indigo-50",
       },
       size: {
         sm: "px-3 py-1.5 text-sm",

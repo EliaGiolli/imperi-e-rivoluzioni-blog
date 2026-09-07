@@ -1,0 +1,96 @@
+---
+import { getCollection } from "astro:content";
+import ProjectCard from "./ProjectCard.astro";
+
+const projectOrder = [
+	"active-directory-homelab",
+	"cisco-packet-tracer-labs",
+	"windows-network-security-auditor",
+	"cleanup-and-backup-script",
+];
+
+const descriptions: Record<string, string> = {
+	"active-directory-homelab":
+		"Un ambiente Active Directory costruito da zero per comprendere dominio, DNS, utenti, OU, GPO e troubleshooting di un'infrastruttura Windows.",
+	"cisco-packet-tracer-labs":
+		"Laboratori di networking con VLAN, trunk, routing inter-VLAN, ACL e progettazione di topologie orientate alla risoluzione dei problemi.",
+	"windows-network-security-auditor":
+		"Toolkit PowerShell per analizzare le regole del firewall Windows, individuare conflitti e verificare che la policy di sicurezza blocchi davvero il traffico.",
+	"cleanup-and-backup-script":
+		"Esercizio di automazione multipiattaforma: pulizia dei file e backup implementati con Python e PowerShell per Linux e Windows.",
+};
+
+const icons: Record<string, string> = {
+	"active-directory-homelab": "▣",
+	"cisco-packet-tracer-labs": "⌁",
+	"windows-network-security-auditor": "◉",
+	"cleanup-and-backup-script": "$_",
+};
+
+const projects = (await getCollection("projects")).sort(
+	(first, second) => projectOrder.indexOf(first.data.slug) - projectOrder.indexOf(second.data.slug),
+);
+---
+
+<section
+	id="projects"
+	class="border-b border-[#d9d6cb] bg-white"
+	aria-labelledby="projects-title"
+	x-data="{ activeProject: 0 }"
+>
+	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
+		<div class="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+			<div class="max-w-2xl">
+				<p class="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">Lavori selezionati</p>
+				<h2 id="projects-title" class="text-3xl font-extrabold tracking-tight text-[#17252b] sm:text-4xl">Progetti in evidenza</h2>
+				<p class="mt-4 text-lg leading-8 text-slate-600">
+					Laboratori e strumenti costruiti per capire come funzionano i sistemi, diagnosticare i guasti e documentare soluzioni ripetibili.
+				</p>
+			</div>
+
+			<nav aria-label="Seleziona un progetto">
+				<ul class="flex flex-wrap gap-2" role="tablist">
+					{projects.map((project, index) => (
+						<li role="presentation">
+							<button
+								type="button"
+								role="tab"
+								id={`project-tab-${project.data.slug}`}
+								aria-controls={`project-panel-${project.data.slug}`}
+								:aria-selected={`activeProject === ${index}`}
+								x-on:click={`activeProject = ${index}`}
+								:class="activeProject === ${index} ? 'border-[#17252b] bg-[#17252b] text-white' : 'border-[#d9d6cb] bg-[#f6f4ee] text-slate-700'"
+								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-[#17252b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+							>
+								{index + 1}. {project.data.title}
+							</button>
+						</li>
+					))}
+				</ul>
+			</nav>
+		</div>
+
+		<div class="relative" aria-live="polite">
+			{projects.map((project, index) => (
+				<div
+					id={`project-panel-${project.data.slug}`}
+					role="tabpanel"
+					aria-labelledby={`project-tab-${project.data.slug}`}
+					x-show={`activeProject === ${index}`}
+					x-cloak
+					x-transition.opacity.duration.200ms
+				>
+					<ProjectCard
+						title={project.data.title}
+						tags={project.data.tags}
+						slug={project.data.slug}
+						githubUrl={project.data.githubUrl}
+					>
+						<span slot="icon">{icons[project.data.slug] ?? "◈"}</span>
+						<p>{descriptions[project.data.slug] ?? "Un progetto tecnico documentato con attenzione a diagnosi, implementazione e verifica."}</p>
+					</ProjectCard>
+				</div>
+			))}
+		</div>
+	</div>
+</section>
