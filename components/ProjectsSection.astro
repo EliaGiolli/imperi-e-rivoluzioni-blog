@@ -2,6 +2,15 @@
 import { getCollection } from "astro:content";
 import ProjectCard from "./ProjectCard.astro";
 
+interface ProjectEntry {
+	data: {
+		title: string;
+		githubUrl: string;
+		tags: string[];
+		slug: string;
+	};
+}
+
 const projectOrder = [
 	"active-directory-homelab",
 	"cisco-packet-tracer-labs",
@@ -27,8 +36,9 @@ const icons: Record<string, string> = {
 	"cleanup-and-backup-script": "$_",
 };
 
-const projects = (await getCollection("projects")).sort(
-	(first, second) => projectOrder.indexOf(first.data.slug) - projectOrder.indexOf(second.data.slug),
+const projects = (await getCollection("projects")) as ProjectEntry[];
+projects.sort(
+	(first: ProjectEntry, second: ProjectEntry) => projectOrder.indexOf(first.data.slug) - projectOrder.indexOf(second.data.slug),
 );
 ---
 
@@ -50,7 +60,7 @@ const projects = (await getCollection("projects")).sort(
 
 			<nav aria-label="Seleziona un progetto">
 				<ul class="flex flex-wrap gap-2" role="tablist">
-					{projects.map((project, index) => (
+					{projects.map((project: ProjectEntry, index: number) => (
 						<li role="presentation">
 							<button
 								type="button"
@@ -71,7 +81,7 @@ const projects = (await getCollection("projects")).sort(
 		</div>
 
 		<div class="relative" aria-live="polite">
-			{projects.map((project, index) => (
+			{projects.map((project: ProjectEntry, index: number) => (
 				<div
 					id={`project-panel-${project.data.slug}`}
 					role="tabpanel"

@@ -12,7 +12,7 @@ interface Props {
 	project: Project;
 }
 
-const { project } = Astro.props;
+const { project }: Props = Astro.props;
 
 const troubleshooting: Record<string, { cause: string; method: string; result: string }> = {
 	"active-directory-homelab": {
@@ -55,7 +55,7 @@ const caseStudy = troubleshooting[project.data.slug] ?? {
 				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#f2b84b]">Case study tecnico</p>
 				<h1 id="project-title" class="text-4xl font-extrabold tracking-tight sm:text-6xl">{project.data.title}</h1>
 				<ul class="mt-6 flex flex-wrap gap-2" aria-label="Tecnologie del progetto">
-					{project.data.tags.map((tag) => <li class="rounded-md border border-white/20 px-3 py-1 text-sm text-slate-200">{tag}</li>)}
+					{project.data.tags.map((tag: string) => <li class="rounded-md border border-white/20 px-3 py-1 text-sm text-slate-200">{tag}</li>)}
 				</ul>
 			</div>
 		</div>
