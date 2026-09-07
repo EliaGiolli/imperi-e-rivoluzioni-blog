@@ -6,13 +6,14 @@ Il progetto racconta il lavoro attraverso case study tecnici: non solo cosa è s
 
 ## ✦ Esperienza
 
-- **Hero**: ruolo professionale, competenze principali e accesso al CV.
+- **Hero**: ruolo professionale, competenze principali, CTA verso il CV e scroll diretto alla sezione progetti.
 - **Profilo**: esperienza in Help Desk, Service Desk, Microsoft 365, Windows e supporto enterprise.
-- **Progetti**: carousel accessibile alimentato dalla content collection `projects`.
-- **Case study**: route dinamiche con causa, metodo di troubleshooting, verifica e documentazione completa.
+- **Progetti**: carousel accessibile alimentato dalla content collection `projects`, con pannelli tab in home page.
+- **Case study**: route dinamiche con causa, metodo di troubleshooting, verifica e documentazione completa; il ritorno porta alla home.
+- **CV**: pagina dedicata con layout minimale, branding del portfolio e pulsante per tornare alla home.
 - **Certificazioni**: carousel con immagini ottimizzate tramite Astro Image.
 - **Contatti**: form accessibile con EmailJS e fallback diretto via client email.
-- **Navigazione**: smooth scroll con offset per la navbar sticky e supporto a `prefers-reduced-motion`.
+- **Navigazione**: smooth scroll per ancore interne, navbar sticky e supporto a `prefers-reduced-motion`.
 
 ## 🧭 Architettura
 
@@ -22,9 +23,12 @@ Il progetto usa Astro per il rendering statico, Alpine.js per le interazioni leg
 portfolio-astro/
 ├── public/                     # Asset statici serviti senza trasformazione
 ├── src/
-│   ├── core/layouts/           # Shell globale e layout applicativi
-│   ├── features/               # Slice per dominio: home, progetti, certificati, contatti
+│   ├── core/layouts/           # Shell globale, layout principale e layout CV dedicato
+│   │   ├── MainLayout.astro
+│   │   └── CvLayout.astro
+│   ├── features/               # Slice per dominio: home, CV, progetti, certificati, contatti
 │   │   ├── certificates/assets/
+│   │   ├── cv/
 │   │   ├── home/assets/
 │   │   ├── home/
 │   │   ├── projects/
@@ -38,13 +42,15 @@ portfolio-astro/
 │   ├── content/projects/       # Markdown dei progetti e case study
 │   ├── content.config.ts       # Schema tipizzato della collection projects
 │   ├── helpers/                 # Helper condivisi per testo e date
-│   ├── pages/                  # Route Astro e route dinamiche /projects/[...slug]
-│   ├── styles/                 # Tailwind e stili globali
+│   ├── pages/                  # Route Astro: home, /cv e /projects/[...slug]
+│   ├── styles/                 # Stili globali del portfolio
 ├── tsconfig.json               # Configurazione TypeScript ereditata da Astro
 ├── astro.config.mjs
 ├── package.json
 ├── PALETTE.md
-└── ROADMAP.md
+├── ROADMAP.md
+├── FINAL-REVISION.md
+└── README.md
 ```
 
 ### Flusso dei progetti
@@ -55,13 +61,17 @@ src/content/projects/*.md
           ▼
    content.config.ts
           │
-          ├── ProjectsSection → ProjectCard → /projects/:slug
-          │                                  │
-          │                                  ▼
-          └────────────────────────── ProjectDetail
+          ├── Home page → ProjectsSection → tabbed carousel
+          │
+          └── ProjectCard → /projects/:slug
+                                             │
+                                             ▼
+                                  ProjectDetail
                                              │
                                              └── markdown completo + case study
 ```
+
+Nota: la home page contiene la sezione progetti; il CTA del hero usa un link anchor verso `#projects` invece di una route dedicata a `/projects`.
 
 ## 🛠️ Stack
 
@@ -137,6 +147,8 @@ La build verifica content collection, route dinamiche, trasformazione delle imma
 ## 📌 Stato del progetto
 
 Le fasi 1–9 del [ROADMAP.md](ROADMAP.md) sono completate. La struttura segue una separazione feature-based tra `core`, `features` e `shared`.
+
+In particolare, la pagina CV è disponibile in `/cv`, usa un layout dedicato con branding minimale e torna alla home tramite pulsante dedicato; i link interni del navbar e i CTA della homepage puntano alla sezione corretta in home page senza creare route non esistenti.
 
 ## 🔗 Riferimenti
 
