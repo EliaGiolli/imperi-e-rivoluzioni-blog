@@ -1,1 +1,81 @@
-<h1>hero section</h1>
+---
+import Button from "../components/Button.astro";
+
+const techGroups = [
+	{
+		label: "Supporto e workplace",
+		icon: "▣",
+		items: "ServiceNow · Microsoft 365",
+	},
+	{
+		label: "Reti",
+		icon: "⌁",
+		items: "TCP/IP · VLAN · ACL",
+	},
+	{
+		label: "Sistemi",
+		icon: "▤",
+		items: "Windows Server · Active Directory",
+	},
+	{
+		label: "Scripting e automazione",
+		icon: "$_",
+		items: "PowerShell · Bash",
+	},
+];
+---
+
+<section
+	id="hero"
+	class="relative overflow-hidden border-b border-slate-200 bg-slate-50"
+	aria-labelledby="hero-title"
+>
+	<div class="mx-auto grid max-w-6xl gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:py-28">
+		<div class="max-w-3xl">
+			<p class="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">
+				Portfolio professionale
+			</p>
+			<h1 id="hero-title" class="max-w-3xl text-4xl font-bold tracking-tight text-neutral-900 sm:text-6xl">
+				Ciao, sono Elia Giolli.
+			</h1>
+			<p class="mt-6 max-w-2xl text-xl leading-8 text-slate-600 sm:text-2xl">
+				Tecnico IT Support, Help Desk e Service Desk con una passione per il networking e le infrastrutture.
+			</p>
+			<p class="mt-5 max-w-2xl text-base leading-7 text-slate-600">
+				Risolvo problemi con metodo, documento ciò che scopro e trasformo ogni incidente in un'occasione per costruire sistemi più affidabili.
+			</p>
+
+			<div class="mt-8 flex flex-wrap gap-4">
+				<Button href="/cv" variant="primary" size="lg" aria-label="Apri il curriculum di Elia Giolli">
+					<span aria-hidden="true">↗</span>
+					<span>Scarica il CV</span>
+				</Button>
+				<Button href="/projects" variant="secondary" size="lg" aria-label="Vai ai progetti di Elia Giolli">
+					<span aria-hidden="true">⌘</span>
+					<span>Scopri i progetti</span>
+				</Button>
+			</div>
+		</div>
+
+		<aside class="border-l-2 border-indigo-600 pl-6 sm:pl-8" aria-labelledby="tech-stack-title">
+			<div class="mb-6 flex items-center gap-3">
+				<span class="text-2xl text-indigo-600" aria-hidden="true">✦</span>
+				<h2 id="tech-stack-title" class="text-2xl font-bold text-neutral-900">Tecnologie</h2>
+			</div>
+			<p class="mb-6 text-sm leading-6 text-slate-600">
+				Gli strumenti che uso per supportare persone, diagnosticare problemi e automatizzare il lavoro quotidiano.
+			</p>
+			<ul class="grid gap-4" aria-label="Competenze tecniche principali">
+				{techGroups.map((group) => (
+					<li class="flex gap-3 border-t border-slate-200 pt-4">
+						<span class="mt-0.5 text-lg text-indigo-600" aria-hidden="true">{group.icon}</span>
+						<div>
+							<h3 class="font-semibold text-neutral-900">{group.label}</h3>
+							<p class="mt-1 text-sm text-slate-600">{group.items}</p>
+						</div>
+					</li>
+				))}
+			</ul>
+		</aside>
+	</div>
+</section>
