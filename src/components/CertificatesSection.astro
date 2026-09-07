@@ -1,0 +1,116 @@
+---
+import introToNetworking from "../assets/images/certificates/intro-to-networking.png";
+import introToCybersecurity from "../assets/images/certificates/intro-to-cybersecurity.png";
+import networkSupport from "../assets/images/certificates/network-support-and-security.png";
+import activeDirectory from "../assets/images/certificates/active-directory.png";
+import CertificateCard from "./CertificateCard.astro";
+
+const certificates = [
+	{
+		title: "Introduction to Networking",
+		issuer: "Cisco Networking Academy",
+		status: "Fondamenti di rete",
+		image: introToNetworking,
+		imageAlt: "Certificato Cisco Introduction to Networking",
+		copy: "Indirizzamento, dispositivi e principi di comunicazione che uso come base per leggere e diagnosticare una rete.",
+	},
+	{
+		title: "Network Support and Security",
+		issuer: "Cisco Networking Academy",
+		status: "Supporto e sicurezza",
+		image: networkSupport,
+		imageAlt: "Certificato Cisco Network Support and Security",
+		copy: "Pratiche di supporto, sicurezza e troubleshooting per trasformare un sintomo di rete in una verifica ripetibile.",
+	},
+	{
+		title: "Introduction to Cybersecurity",
+		issuer: "Cisco Networking Academy",
+		status: "Sicurezza informatica",
+		image: introToCybersecurity,
+		imageAlt: "Certificato Cisco Introduction to Cybersecurity",
+		copy: "Minacce, difese e comportamento sicuro: il contesto necessario per proteggere sistemi e persone durante il supporto tecnico.",
+	},
+	{
+		title: "Active Directory Fundamentals",
+		issuer: "Laboratorio personale",
+		status: "Sistemi Windows",
+		image: activeDirectory,
+		imageAlt: "Certificato o attestato sulle competenze Active Directory",
+		copy: "Un percorso pratico su dominio, DNS, utenti, OU e Group Policy, verificato nel laboratorio Active Directory documentato.",
+	},
+];
+---
+
+<section
+	id="certificates"
+	class="border-b border-[#d9d6cb] bg-[#ebe9e1]"
+	aria-labelledby="certificates-title"
+	x-data="{ activeCertificate: 0 }"
+>
+	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
+		<div class="mb-12 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+			<div class="max-w-2xl">
+				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-indigo-600">Formazione continua</p>
+				<h2 id="certificates-title" class="text-3xl font-extrabold tracking-tight text-[#17252b] sm:text-4xl">Educazione e certificazioni</h2>
+				<p class="mt-4 text-lg leading-8 text-slate-600">Studio per capire davvero come funzionano i sistemi, poi verifico la teoria in laboratorio.</p>
+			</div>
+			<nav aria-label="Seleziona una certificazione">
+				<ul class="flex flex-wrap gap-2" role="tablist">
+					{certificates.map((certificate, index) => (
+						<li role="presentation">
+							<button
+								type="button"
+								role="tab"
+								id={`certificate-tab-${index}`}
+								aria-controls={`certificate-panel-${index}`}
+								:aria-selected={`activeCertificate === ${index}`}
+								x-on:click={`activeCertificate = ${index}`}
+								:class={`activeCertificate === ${index} ? 'certificate-tab-active' : 'certificate-tab-inactive'`}
+								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-[#17252b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+							>
+								{index + 1}. {certificate.title}
+							</button>
+						</li>
+					))}
+				</ul>
+			</nav>
+		</div>
+
+		<div aria-live="polite">
+			{certificates.map((certificate, index) => (
+				<div
+					id={`certificate-panel-${index}`}
+					role="tabpanel"
+					aria-labelledby={`certificate-tab-${index}`}
+					x-show={`activeCertificate === ${index}`}
+					x-cloak
+					x-transition.opacity.duration.200ms
+				>
+					<CertificateCard
+						title={certificate.title}
+						issuer={certificate.issuer}
+						status={certificate.status}
+						image={certificate.image}
+						imageAlt={certificate.imageAlt}
+					>
+						<p>{certificate.copy}</p>
+					</CertificateCard>
+				</div>
+			))}
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	.certificate-tab-active {
+		border-color: #17252b;
+		background: #17252b;
+		color: white;
+	}
+
+	.certificate-tab-inactive {
+		border-color: #d9d6cb;
+		background: white;
+		color: #334155;
+	}
+</style>
