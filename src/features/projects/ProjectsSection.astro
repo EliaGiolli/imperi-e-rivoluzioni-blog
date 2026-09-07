@@ -44,16 +44,16 @@ projects.sort(
 
 <section
 	id="projects"
-	class="border-b border-[#d9d6cb] bg-white"
+	class="border-b border-stone-300 bg-white"
 	aria-labelledby="projects-title"
 	x-data="{ activeProject: 0 }"
 >
 	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
 		<div class="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
 			<div class="max-w-2xl">
-				<p class="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">Lavori selezionati</p>
-				<h2 id="projects-title" class="text-3xl font-extrabold tracking-tight text-[#17252b] sm:text-4xl">Progetti in evidenza</h2>
-				<p class="mt-4 text-lg leading-8 text-slate-600">
+				<p class="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-red-700">Lavori selezionati</p>
+				<h2 id="projects-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Progetti in evidenza</h2>
+				<p class="mt-4 text-lg leading-8 text-stone-700">
 					Laboratori e strumenti costruiti per capire come funzionano i sistemi, diagnosticare i guasti e documentare soluzioni ripetibili.
 				</p>
 			</div>
@@ -69,8 +69,8 @@ projects.sort(
 								aria-controls={`project-panel-${project.data.slug}`}
 								:aria-selected={`activeProject === ${index}`}
 								x-on:click={`activeProject = ${index}`}
-								:class="activeProject === ${index} ? 'border-[#17252b] bg-[#17252b] text-white' : 'border-[#d9d6cb] bg-[#f6f4ee] text-slate-700'"
-								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-[#17252b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+								:class="activeProject === ${index} ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300 bg-stone-100 text-stone-700'"
+								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
 							>
 								{index + 1}. {project.data.title}
 							</button>

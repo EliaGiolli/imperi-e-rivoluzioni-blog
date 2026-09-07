@@ -14,14 +14,14 @@ const { title, issuer, image, imageAlt, status } = Astro.props;
 ---
 
 <Card as="article" class="grid overflow-hidden lg:grid-cols-[0.9fr_1.1fr]" aria-labelledby={`certificate-title-${title}`}>
-	<div class="flex min-h-64 items-center justify-center bg-[#17252b] p-6 sm:p-10">
+	<div class="flex min-h-64 items-center justify-center bg-stone-900 p-6 sm:p-10">
 		<Image src={image} alt={imageAlt} class="max-h-72 w-full rounded-lg object-contain" loading="lazy" />
 	</div>
 	<div class="flex flex-col justify-center p-6 sm:p-10">
-		<p class="text-sm font-bold uppercase tracking-[0.16em] text-indigo-600">{status}</p>
-		<h3 id={`certificate-title-${title}`} class="mt-3 text-2xl font-extrabold text-[#17252b] sm:text-3xl">{title}</h3>
-		<p class="mt-3 font-semibold text-slate-700">{issuer}</p>
-		<div class="mt-6 text-base leading-7 text-slate-600">
+		<p class="text-sm font-bold uppercase tracking-[0.16em] text-red-700">{status}</p>
+		<h3 id={`certificate-title-${title}`} class="mt-3 text-2xl font-extrabold text-stone-900 sm:text-3xl">{title}</h3>
+		<p class="mt-3 font-semibold text-stone-700">{issuer}</p>
+		<div class="mt-6 text-base leading-7 text-stone-700">
 			<slot />
 		</div>
 	</div>

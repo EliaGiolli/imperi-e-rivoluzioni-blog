@@ -43,16 +43,16 @@ const certificates = [
 
 <section
 	id="certificates"
-	class="border-b border-[#d9d6cb] bg-[#ebe9e1]"
+	class="border-b border-stone-300 bg-stone-200"
 	aria-labelledby="certificates-title"
 	x-data="{ activeCertificate: 0 }"
 >
 	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
 		<div class="mb-12 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
 			<div class="max-w-2xl">
-				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-indigo-600">Formazione continua</p>
-				<h2 id="certificates-title" class="text-3xl font-extrabold tracking-tight text-[#17252b] sm:text-4xl">Educazione e certificazioni</h2>
-				<p class="mt-4 text-lg leading-8 text-slate-600">Studio per capire davvero come funzionano i sistemi, poi verifico la teoria in laboratorio.</p>
+				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-red-700">Formazione continua</p>
+				<h2 id="certificates-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Educazione e certificazioni</h2>
+				<p class="mt-4 text-lg leading-8 text-stone-700">Studio per capire davvero come funzionano i sistemi, poi verifico la teoria in laboratorio.</p>
 			</div>
 			<nav aria-label="Seleziona una certificazione">
 				<ul class="flex flex-wrap gap-2" role="tablist">
@@ -66,7 +66,7 @@ const certificates = [
 								:aria-selected={`activeCertificate === ${index}`}
 								x-on:click={`activeCertificate = ${index}`}
 								:class={`activeCertificate === ${index} ? 'certificate-tab-active' : 'certificate-tab-inactive'`}
-								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-[#17252b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
 							>
 								{index + 1}. {certificate.title}
 							</button>
@@ -103,14 +103,14 @@ const certificates = [
 
 <style is:global>
 	.certificate-tab-active {
-		border-color: #17252b;
-		background: #17252b;
+		border-color: #2b2622;
+		background: #2b2622;
 		color: white;
 	}
 
 	.certificate-tab-inactive {
-		border-color: #d9d6cb;
+		border-color: #d6d3ce;
 		background: white;
-		color: #334155;
+		color: #44403c;
 	}
 </style>
