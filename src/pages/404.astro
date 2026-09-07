@@ -3,15 +3,16 @@ import { Image } from "astro:assets";
 import image404 from '../assets/images/404.png';
 
 import MainLayout from "../layouts/MainLayout.astro";
+import Button from "../components/Button.astro";
 ---
 
 <MainLayout>
+    <Button href="/" variant="primary" class="mx-10 mt-10">Torna alla home</Button>
     <div class="flex flex-col items-center justify-items-center gap-7">
         <Image 
             src={image404}
-            class="mt-10" 
             width={250} 
-            height={250} 
+            height={200} 
             alt="Un cartello giallo simile a quello per i lavori con la scritta 404"
         />
         <h1 class="text-5xl text-indigo-700">404 - Pagina non trovata</h1>

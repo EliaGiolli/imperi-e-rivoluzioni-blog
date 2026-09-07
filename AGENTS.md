@@ -1,4 +1,11 @@
 ## Development
+Before doing anything, always check the following documentation's pages:
+- ASTRO DOCS: https://docs.astro.build/en/getting-started/
+- ALPINE.JS DOCS: https://alpinejs.dev/start-here
+
+
+And then follow the @ROADMAP.md
+---
 
 When starting the dev server, use background mode:
 
@@ -24,13 +31,12 @@ Consult these guides before working on related tasks:
 # UI and styling
 Always prefere Alping.js over vanilla Javascript for browser interactivity
 
+Create small components that follow the SoC and DRY principle (Separation of Concerns, Do not repeat yourself)
+
+Separate the UI from the logic: when you can, outsource business logic inside the /helpers folder
+
 ## Color palette
-background - #f4f1e1
-background-secondary - #fdcb00
-main accent color - #e63946
-color for borders and outlines - #d4af37
-text-color - #333333
-background for cards - #fff
+Always check @PALETTE.md file before styling components
 
 ## Typography
 font - Noto Sans
