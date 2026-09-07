@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import Card from "../../shared/ui/Card.astro";
 
 interface Props {
 	title: string;
@@ -12,7 +13,7 @@ interface Props {
 const { title, issuer, image, imageAlt, status } = Astro.props;
 ---
 
-<article class="grid overflow-hidden rounded-2xl border border-[#d9d6cb] bg-white shadow-[8px_8px_0_#d9d6cb] lg:grid-cols-[0.9fr_1.1fr]" aria-labelledby={`certificate-title-${title}`}>
+<Card as="article" class="grid overflow-hidden lg:grid-cols-[0.9fr_1.1fr]" aria-labelledby={`certificate-title-${title}`}>
 	<div class="flex min-h-64 items-center justify-center bg-[#17252b] p-6 sm:p-10">
 		<Image src={image} alt={imageAlt} class="max-h-72 w-full rounded-lg object-contain" loading="lazy" />
 	</div>
@@ -24,4 +25,4 @@ const { title, issuer, image, imageAlt, status } = Astro.props;
 			<slot />
 		</div>
 	</div>
-</article>
+</Card>

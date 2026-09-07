@@ -1,5 +1,5 @@
 ---
-import Button from "../../components/Button.astro";
+import Button from "../../shared/ui/Button.astro";
 
 const techGroups = [
 	{
@@ -47,11 +47,11 @@ const techGroups = [
 			</p>
 
 			<div class="mt-8 flex flex-wrap gap-4">
-				<Button href="/cv" variant="primary" size="lg" class="!bg-[#f2b84b] !text-[#17252b] hover:!bg-[#ffd477]" aria-label="Apri il curriculum di Elia Giolli">
+				<Button href="/cv" variant="primary" size="lg" class="hero-primary" aria-label="Apri il curriculum di Elia Giolli">
 					<span aria-hidden="true">↗</span>
 					<span>Scarica il CV</span>
 				</Button>
-				<Button href="/projects" variant="secondary" size="lg" class="!border-white/25 !bg-white/10 !text-white hover:!border-white hover:!bg-white/15" aria-label="Vai ai progetti di Elia Giolli">
+				<Button href="/projects" variant="secondary" size="lg" class="hero-secondary" aria-label="Vai ai progetti di Elia Giolli">
 					<span aria-hidden="true">⌘</span>
 					<span>Scopri i progetti</span>
 				</Button>

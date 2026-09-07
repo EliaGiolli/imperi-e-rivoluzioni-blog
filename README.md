@@ -20,31 +20,27 @@ Il progetto usa Astro per il rendering statico, Alpine.js per le interazioni leg
 
 ```text
 portfolio-astro/
-├── components/                 # UI condivisa e componenti di feature
-│   ├── AboutSection.astro
-│   ├── CertificateCard.astro
-│   ├── CertificatesSection.astro
-│   ├── ContactMe.astro
-│   ├── Form.astro
-│   ├── Input.astro
-│   ├── ProjectCard.astro
-│   ├── ProjectComponent.astro
-│   ├── ProjectsSection.astro
-│   └── SmoothScroll.astro
 ├── public/                     # Asset statici serviti senza trasformazione
 ├── src/
-│   ├── assets/images/          # Immagini gestite dalla pipeline Astro
-│   │   ├── certificates/
-│   │   ├── foto-elia.jpg
-│   │   └── foto-laurea.jpg
+│   ├── core/layouts/           # Shell globale e layout applicativi
+│   ├── features/               # Slice per dominio: home, progetti, certificati, contatti
+│   │   ├── certificates/assets/
+│   │   ├── home/assets/
+│   │   ├── home/
+│   │   ├── projects/
+│   │   └── contact/
+│   ├── shared/                 # UI, form, utility e componenti riutilizzabili
+│   │   ├── components/
+│   │   ├── forms/
+│   │   ├── lib/
+│   │   ├── ui/
+│   │   └── utils/
 │   ├── content/projects/       # Markdown dei progetti e case study
 │   ├── content.config.ts       # Schema tipizzato della collection projects
-│   ├── helpers/                # Helper riutilizzabili per testo e date
-│   ├── layouts/                # MainLayout e sezioni/layout legacy
-│   ├── lib/                    # Utility di composizione classi
+│   ├── helpers/                 # Helper condivisi per testo e date
 │   ├── pages/                  # Route Astro e route dinamiche /projects/[...slug]
 │   ├── styles/                 # Tailwind e stili globali
-│   └── utils/                  # Costanti e varianti dei componenti
+├── tsconfig.json               # Configurazione TypeScript ereditata da Astro
 ├── astro.config.mjs
 ├── package.json
 ├── PALETTE.md
@@ -62,7 +58,7 @@ src/content/projects/*.md
           ├── ProjectsSection → ProjectCard → /projects/:slug
           │                                  │
           │                                  ▼
-          └────────────────────────── ProjectComponent
+          └────────────────────────── ProjectDetail
                                              │
                                              └── markdown completo + case study
 ```
@@ -72,6 +68,7 @@ src/content/projects/*.md
 - [Astro](https://astro.build/) · rendering statico e routing
 - [Tailwind CSS](https://tailwindcss.com/) · sistema visuale e responsive layout
 - [Alpine.js](https://alpinejs.dev/) · carousel, menu mobile e stato locale
+- `Card.astro`, `Button.astro`, `Input.astro` e `Form.astro` · primitive UI condivise
 - [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/) · contenuti progetto tipizzati
 - [Astro Image](https://docs.astro.build/en/guides/images/) + `sharp` · ottimizzazione immagini
 - [EmailJS](https://www.emailjs.com/) · invio del form di contatto
@@ -139,7 +136,7 @@ La build verifica content collection, route dinamiche, trasformazione delle imma
 
 ## 📌 Stato del progetto
 
-Le fasi 1–7 del [ROADMAP.md](ROADMAP.md) sono completate. Le fasi successive riguardano l’analisi finale del codice e una futura riorganizzazione feature-based della struttura.
+Le fasi 1–9 del [ROADMAP.md](ROADMAP.md) sono completate. La struttura segue una separazione feature-based tra `core`, `features` e `shared`.
 
 ## 🔗 Riferimenti
 

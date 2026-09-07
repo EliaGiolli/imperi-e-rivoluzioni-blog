@@ -12,18 +12,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/vue": "^7.0.2",
     "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.3.3",
     "alpinejs": "^3.17.1",
     "astro": "^7.3.1",
-    "astro-i18next": "^1.0.0-beta.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "sharp": "^0.35.4",
     "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.3",
-    "vue": "^3.5.42"
+    "tailwindcss": "^4.3.3"
   },
   "allowScripts": {
     "esbuild": true

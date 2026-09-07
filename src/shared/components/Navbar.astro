@@ -1,8 +1,8 @@
 ---
 import { Image } from "astro:assets";
-import Button from "./Button.astro";
+import Button from "../ui/Button.astro";
 
-import { LOGO_ALT_TEXT } from "../src/utils/constants";
+import { LOGO_ALT_TEXT } from "../utils/constants";
 ---
 
 <header
@@ -11,7 +11,7 @@ import { LOGO_ALT_TEXT } from "../src/utils/constants";
   @keydown.escape.window="open = false"
 >
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex min-h-[76px] items-center justify-between gap-4">
+    <div class="flex min-h-19 items-center justify-between gap-4">
       <a
         class="flex items-center gap-3 rounded-full px-2 py-1.5 text-indigo-600 no-underline transition-transform duration-200 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50"
         href="/"

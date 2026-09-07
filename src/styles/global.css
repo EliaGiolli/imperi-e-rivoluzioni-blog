@@ -23,6 +23,26 @@ body {
 	color: #17252b;
 }
 
+.hero-primary {
+	background: #f2b84b !important;
+	color: #17252b !important;
+}
+
+.hero-primary:hover {
+	background: #ffd477 !important;
+}
+
+.hero-secondary {
+	border-color: rgb(255 255 255 / 25%) !important;
+	background: rgb(255 255 255 / 10%) !important;
+	color: white !important;
+}
+
+.hero-secondary:hover {
+	border-color: white !important;
+	background: rgb(255 255 255 / 15%) !important;
+}
+
 [x-cloak] {
 	display: none !important;
 }
