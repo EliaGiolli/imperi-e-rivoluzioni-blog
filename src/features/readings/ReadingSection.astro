@@ -1,0 +1,82 @@
+---
+import { getCollection } from "astro:content";
+import ReadingCard from "./ReadingCard.astro";
+
+const readingOrder = [
+	"perche-stalin-creo-israele",
+	"brevissima-storia-conflitto-israele-palestina",
+	"il-giappone-moderno",
+];
+
+const readings = await getCollection("readings");
+readings.sort((first, second) => readingOrder.indexOf(first.id) - readingOrder.indexOf(second.id));
+---
+
+<section
+	id="readings"
+	class="border-b border-stone-300 bg-stone-200"
+	aria-labelledby="readings-title"
+	x-data="{ activeReading: 0 }"
+>
+	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
+		<div class="mb-12 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+			<div class="max-w-2xl">
+				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-red-700">Letture consigliate</p>
+				<h2 id="readings-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Libri per orientarsi</h2>
+				<p class="mt-4 text-lg leading-8 text-stone-700">
+					Le letture più recenti per seguire le connessioni tra imperi, ideologie, conflitti e ordine internazionale.
+				</p>
+			</div>
+
+			<nav aria-label="Seleziona una lettura">
+				<ul class="flex flex-wrap gap-2" role="tablist">
+					{readings.map((reading, index) => (
+						<li role="presentation">
+							<button
+								type="button"
+								role="tab"
+								id={`reading-tab-${reading.id}`}
+								aria-controls={`reading-panel-${reading.id}`}
+								:aria-selected={`activeReading === ${index}`}
+								x-on:click={`activeReading = ${index}`}
+								:class={`activeReading === ${index} ? 'reading-tab-active' : 'reading-tab-inactive'`}
+								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
+							>
+								{index + 1}. {reading.data.name}
+							</button>
+						</li>
+					))}
+				</ul>
+			</nav>
+		</div>
+
+		<div aria-live="polite">
+			{readings.map((reading, index) => (
+				<div
+					id={`reading-panel-${reading.id}`}
+					role="tabpanel"
+					aria-labelledby={`reading-tab-${reading.id}`}
+					x-show={`activeReading === ${index}`}
+					x-cloak
+					x-transition.opacity.duration.200ms
+				>
+					<ReadingCard reading={reading} />
+				</div>
+			))}
+		</div>
+	</div>
+</section>
+
+<style is="global">
+	.reading-tab-active {
+		border-color: #2b2622;
+		background: #2b2622;
+		color: white;
+	}
+
+	.reading-tab-inactive {
+		border-color: #d6d3ce;
+		background: white;
+		color: #44403c;
+	}
+</style>

@@ -15,6 +15,22 @@ const projectsCollection = defineCollection({
     })
 });
 
+const readingsCollection = defineCollection({
+    loader: glob({
+        pattern: "**/*.md",
+        base: './src/content/readings'
+    }),
+    schema: z.object({
+        name: z.string(),
+        author: z.string(),
+        description: z.string(),
+        tags: z.array(z.string()),
+        topic: z.string(),
+        amazonUrl: z.string().url(),
+    })
+});
+
 export const collections = {
     projects: projectsCollection,
+    readings: readingsCollection,
 }

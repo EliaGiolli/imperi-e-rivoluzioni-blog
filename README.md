@@ -6,14 +6,6 @@ Il progetto racconta il lavoro attraverso case study tecnici: non solo cosa è s
 
 ## ✦ Esperienza
 
-- **Hero**: ruolo professionale, competenze principali, CTA verso il CV e scroll diretto alla sezione progetti.
-- **Profilo**: esperienza in Help Desk, Service Desk, Microsoft 365, Windows e supporto enterprise.
-- **Progetti**: carousel accessibile alimentato dalla content collection `projects`, con pannelli tab in home page.
-- **Case study**: route dinamiche con causa, metodo di troubleshooting, verifica e documentazione completa; il ritorno porta alla home.
-- **CV**: pagina dedicata con layout minimale, branding del portfolio e pulsante per tornare alla home.
-- **Certificazioni**: carousel con immagini ottimizzate tramite Astro Image.
-- **Contatti**: form accessibile con EmailJS e fallback diretto via client email.
-- **Navigazione**: smooth scroll per ancore interne, navbar sticky e supporto a `prefers-reduced-motion`.
 
 ## 🧭 Architettura
 
@@ -51,6 +43,174 @@ portfolio-astro/
 ├── ROADMAP.md
 ├── FINAL-REVISION.md
 └── README.md
+# Imperi e Rivoluzioni
+
+Blog personale dedicato alla storia contemporanea e alla geopolitica. Il progetto raccoglie articoli, letture consigliate e approfondimenti sui rapporti tra imperi, ideologie, conflitti e ordine internazionale.
+
+## Contenuti
+
+- **Homepage**: presenta il progetto, i temi principali, le letture consigliate e i contatti.
+- **Articoli**: sezione blog attualmente predisposta con contenuti di esempio e una route dinamica per il dettaglio.
+- **Letture consigliate**: libri organizzati per autore, argomento, descrizione e tag, con una pagina di dettaglio e link ad Amazon.
+- **Temi**: pagina `/about` dedicata ai temi e alle chiavi di lettura del progetto.
+- **Contatti**: form di contatto con invio tramite EmailJS quando configurato e fallback `mailto:`.
+- **Navigazione**: navbar responsive con menu mobile gestito da Alpine.js.
+
+## Struttura
+
+Il progetto segue una struttura feature-based: i layout e gli elementi condivisi sono separati dalle sezioni specifiche della homepage.
+
+```text
+.
+├── public/                         # Asset statici pubblici
+├── src/
+│   ├── content/
+│   │   ├── projects/               # Progetti tecnici documentati in Markdown
+│   │   └── readings/               # Schede e approfondimenti sui libri
+│   ├── content.config.ts           # Collection tipizzate projects e readings
+│   ├── core/
+│   │   ├── helpers/                # Helper condivisi
+│   │   └── layouts/                # MainLayout.astro
+│   ├── features/
+│   │   ├── certificates/           # Sezione certificazioni
+│   │   ├── contact/                # Sezione contatti
+│   │   ├── home/                   # Hero e profilo
+│   │   ├── projects/               # Cards e sezione progetti
+│   │   └── readings/               # Cards e sezione letture
+│   ├── pages/
+│   │   ├── index.astro             # Homepage
+│   │   ├── about.astro             # Temi del progetto
+│   │   ├── articles/               # Indice e dettaglio articoli
+│   │   └── readings/               # Indice e dettaglio letture
+│   ├── shared/
+│   │   ├── components/             # Navbar e footer
+│   │   ├── forms/                  # Form e input riutilizzabili
+│   │   ├── lib/                    # Utility generiche
+│   │   ├── ui/                     # Primitive UI, card e button
+│   │   └── utils/                  # Costanti e varianti
+│   └── styles/                     # Stili globali
+├── astro.config.mjs
+├── package.json
+├── PALETTE.md
+├── ROADMAP.md
+└── tsconfig.json
+```
+
+## Flusso dei contenuti
+
+### Progetti
+
+```text
+src/content/projects/*.md
+          │
+          ▼
+   content.config.ts
+          │
+          ▼
+   ProjectsSection → ProjectCard
+          │
+          └── link al repository GitHub
+```
+
+I progetti sono mostrati nella homepage attraverso pannelli tab gestiti da Alpine.js. Ogni scheda contiene titolo, tag, descrizione e link GitHub.
+
+### Letture
+
+```text
+src/content/readings/*.md
+          │
+          ▼
+   content.config.ts
+          │
+          ├── ReadingSection → ReadingCard → /readings/:id
+          │
+          └── pagina completa con contenuto Markdown renderizzato
+```
+
+La collection `readings` valida nome, autore, descrizione, tag, argomento e URL Amazon per ogni lettura.
+
+## Stack
+
+- [Astro](https://astro.build/) per rendering, routing e content collections
+- [Tailwind CSS](https://tailwindcss.com/) per gli stili responsive
+- [Alpine.js](https://alpinejs.dev/) per menu, tab e interazioni locali
+- TypeScript per configurazione, helper e contratti dei componenti
+- [EmailJS](https://www.emailjs.com/) per il form di contatto
+- `sharp` per l'elaborazione delle immagini Astro
+- `class-variance-authority`, `clsx` e `tailwind-merge` per le utility UI
+
+La direzione visiva usa una palette ispirata alla carta, al carbone, all'oro antico e al rosso ruggine. I riferimenti sono raccolti in [PALETTE.md](PALETTE.md).
+
+## Avvio locale
+
+Requisiti: Node.js `>=22.12.0`.
+
+```sh
+npm install
+npm run dev
+```
+
+Per usare il server Astro in background:
+
+```sh
+npx astro dev --background
+```
+
+Il sito è disponibile su `http://localhost:4321`.
+
+| Comando | Scopo |
+| --- | --- |
+| `npm run dev` | Avvia il server di sviluppo |
+| `npm run build` | Genera la build statica |
+| `npm run preview` | Serve la build locale |
+| `npm run astro` | Esegue i comandi Astro |
+| `npx astro dev stop` | Arresta il server in background |
+| `npx astro dev status` | Controlla lo stato del server |
+| `npx astro dev logs` | Mostra i log del server in background |
+
+## Configurazione EmailJS
+
+Il form usa EmailJS quando sono presenti queste variabili pubbliche. Senza configurazione, mantiene un fallback diretto tramite `mailto:`.
+
+```env
+PUBLIC_EMAILJS_SERVICE_ID=your_service_id
+PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
+PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
+Il template EmailJS deve prevedere almeno i campi `from_name`, `reply_to`, `subject` e `message`.
+
+## Accessibilità
+
+- landmark semantici come `header`, `main`, `nav`, `section`, `article` e `footer`;
+- relazioni esplicite tra tab e pannelli tramite `aria-controls`, `aria-labelledby` e `aria-selected`;
+- label associate ai campi del form e messaggi live per gli stati di invio;
+- focus visibile per link e controlli interattivi;
+- testo alternativo per logo, immagini e certificati;
+- supporto a `prefers-reduced-motion` negli elementi animati.
+
+## Verifica
+
+Per controllare template, tipi e diagnostica Astro:
+
+```sh
+npx astro check
+```
+
+Per verificare la generazione statica:
+
+```sh
+npm run build
+```
+
+La build verifica collection, route, immagini e bundle client. La route dinamica degli articoli è ancora un'area in evoluzione: prima della pubblicazione è necessario collegarla a una collection di articoli e aggiungere i relativi `getStaticPaths()`.
+
+## Riferimenti
+
+- [Documentazione Astro](https://docs.astro.build/)
+- [Documentazione Alpine.js](https://alpinejs.dev/start-here)
+- [ROADMAP.md](ROADMAP.md)
+- [PALETTE.md](PALETTE.md)
 ```
 
 ### Flusso dei progetti

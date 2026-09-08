@@ -1,49 +1,52 @@
 ---
+import { getCollection, render } from "astro:content";
 import MainLayout from "../../core/layouts/MainLayout.astro";
 
-const { id } = Astro.params;
+export async function getStaticPaths() {
+	const readings = await getCollection("readings");
 
-const timelineEntries = {
-	"journey-start": {
-		title: "The beginning",
-		publishedAt: "2026-09-07",
-		content: [
-			"This is a placeholder timeline entry for the history detail route.",
-			"Use this page to describe important milestones, turning points, or story arcs.",
-			"Later, connect it to structured data or a CMS-driven collection.",
-		],
-	},
-	"next-step": {
-		title: "The next step",
-		publishedAt: "2026-09-08",
-		content: [
-			"This second item shows the pattern for deeper historical storytelling.",
-			"You can add richer sections, images, and quotes as needed.",
-			"The route is already set up to support multiple entries.",
-		],
-	},
-};
-
-const entry = timelineEntries[id as keyof typeof timelineEntries];
-
-if (!entry) {
-	throw new Error(`Timeline entry not found: ${id}`);
+	return readings.map((reading) => ({
+		params: { id: reading.id },
+		props: { reading },
+	}));
 }
+
+const { reading } = Astro.props;
+const { Content } = await render(reading);
 ---
 
 <MainLayout>
-	<main class="mx-auto max-w-4xl px-6 py-16 lg:px-8">
-		<a href="/history" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-red-700 hover:text-red-800">
-			← Back to history
+	<main class="mx-auto max-w-4xl px-6 py-16 lg:px-8 lg:py-24">
+		<a href="/readings" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-red-700 hover:text-red-800">
+			<span aria-hidden="true">←</span>
+			<span>Torna alle letture</span>
 		</a>
 
 		<article class="mt-8 rounded-2xl border border-stone-300 bg-white p-8 shadow-[6px_6px_0_rgba(185,139,62,0.12)] sm:p-10">
-			<p class="text-sm font-bold uppercase tracking-[0.18em] text-amber-700">{entry.publishedAt}</p>
-			<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">{entry.title}</h1>
+			<p class="text-sm font-bold uppercase tracking-[0.18em] text-red-700">{reading.data.topic}</p>
+			<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">{reading.data.name}</h1>
+			<p class="mt-4 text-xl font-semibold text-amber-700">{reading.data.author}</p>
+			<p class="mt-6 text-lg leading-8 text-stone-700">{reading.data.description}</p>
 
-			<div class="mt-8 space-y-5 text-lg leading-8 text-stone-700">
-				{entry.content.map((paragraph) => <p>{paragraph}</p>)}
+			<ul class="mt-6 flex flex-wrap gap-2" aria-label={`Argomenti di ${reading.data.name}`}>
+				{reading.data.tags.map((tag) => (
+					<li class="rounded-md border border-stone-300 bg-stone-100 px-3 py-1 text-sm font-medium text-stone-700">{tag}</li>
+				))}
+			</ul>
+
+			<div class="prose mt-10 max-w-none space-y-5 text-lg leading-8 text-stone-700">
+				<Content />
 			</div>
+
+			<a
+				href={reading.data.amazonUrl}
+				target="_blank"
+				rel="noreferrer"
+				class="mt-10 inline-flex items-center gap-2 font-semibold text-red-700 underline-offset-4 hover:text-red-800 hover:underline"
+			>
+				<span>Vedi il libro su Amazon</span>
+				<span aria-hidden="true">↗</span>
+			</a>
 		</article>
 	</main>
 </MainLayout>

@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.10",
     "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.3.3",
     "alpinejs": "^3.17.1",
@@ -20,7 +21,8 @@
     "clsx": "^2.1.1",
     "sharp": "^0.35.4",
     "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3"
   },
   "allowScripts": {
     "esbuild": true
