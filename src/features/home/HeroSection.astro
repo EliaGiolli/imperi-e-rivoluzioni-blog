@@ -3,24 +3,24 @@ import Button from "../../shared/ui/Button.astro";
 
 const techGroups = [
 	{
-		label: "Supporto e workplace",
+		label: "Domande",
 		icon: "▣",
-		items: "ServiceNow · Microsoft 365",
+		items: "Il potere · Le crisi · Il cambiamento",
 	},
 	{
-		label: "Reti",
+		label: "Connessioni",
 		icon: "⌁",
-		items: "TCP/IP · VLAN · ACL",
+		items: "Eventi · Persone · Ideologie · Stati",
 	},
 	{
-		label: "Sistemi",
+		label: "Lungo XX secolo",
 		icon: "▤",
-		items: "Windows Server · Active Directory",
+		items: "Dalla fine dell'Ottocento alla Guerra fredda",
 	},
 	{
-		label: "Scripting e automazione",
+		label: "Fonti e letture",
 		icon: "$_",
-		items: "PowerShell · Bash",
+		items: "Storia · Geopolitica · Più lingue",
 	},
 ];
 ---
@@ -34,26 +34,26 @@ const techGroups = [
 		<div class="max-w-3xl">
 			<p class="mb-6 flex items-center gap-3 text-sm font-bold uppercase tracking-[0.18em] text-amber-700">
 				<span class="h-px w-8 bg-amber-700" aria-hidden="true"></span>
-				Portfolio professionale
+				Progetto editoriale indipendente
 			</p>
 			<h1 id="hero-title" class="max-w-3xl text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
-				Ciao, sono Elia Giolli.
+				Imperi e rivoluzioni.
 			</h1>
 			<p class="mt-6 max-w-2xl text-xl font-medium leading-8 text-stone-200 sm:text-2xl">
-				Tecnico IT Support, Help Desk e Service Desk con una passione per il networking e le infrastrutture.
+				Storia, potere e geopolitica per comprendere il mondo contemporaneo attraverso le sue radici.
 			</p>
 			<p class="mt-5 max-w-2xl text-base leading-7 text-stone-300">
-				Risolvo problemi con metodo, documento ciò che scopro e trasformo ogni incidente in un'occasione per costruire sistemi più affidabili.
+				Partiamo da domande, ricostruiamo connessioni e distinguiamo fatti, interpretazioni storiografiche e questioni ancora aperte.
 			</p>
 
 			<div class="mt-8 flex flex-wrap gap-4">
-				<Button href="/cv" variant="primary" size="lg" class="hero-primary" aria-label="Apri il curriculum di Elia Giolli">
+				<Button href="/articles" variant="primary" size="lg" class="hero-primary" aria-label="Leggi gli articoli di storia e geopolitica">
 					<span aria-hidden="true">↗</span>
-					<span>Scarica il CV</span>
+					<span>Leggi gli articoli</span>
 				</Button>
-				<Button href="#projects" variant="secondary" size="lg" class="hero-secondary" aria-label="Vai ai progetti di Elia Giolli">
+				<Button href="/readings" variant="secondary" size="lg" class="hero-secondary" aria-label="Esplora fonti e letture di storia contemporanea">
 					<span aria-hidden="true">⌘</span>
-					<span>Scopri i progetti</span>
+					<span>Scopri la bibliografia</span>
 				</Button>
 			</div>
 		</div>
@@ -61,12 +61,12 @@ const techGroups = [
 		<aside class="rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8" aria-labelledby="tech-stack-title">
 			<div class="mb-6 flex items-center gap-3">
 				<span class="text-2xl text-amber-700" aria-hidden="true">✦</span>
-				<h2 id="tech-stack-title" class="text-2xl font-bold text-white">Tecnologie</h2>
+				<h2 id="tech-stack-title" class="text-2xl font-bold text-white">Una mappa per orientarsi</h2>
 			</div>
 			<p class="mb-6 text-sm leading-6 text-stone-300">
-				Gli strumenti che uso per supportare persone, diagnosticare problemi e automatizzare il lavoro quotidiano.
+				Un percorso tra storia contemporanea, relazioni internazionali e letture per capire il presente.
 			</p>
-			<ul class="grid gap-4" aria-label="Competenze tecniche principali">
+			<ul class="grid gap-4" aria-label="Temi principali del progetto editoriale">
 				{techGroups.map((group, index) => (
 					<li class="flex gap-3 border-t border-white/10 pt-4">
 						<span class="mt-0.5 font-mono text-sm text-amber-700" aria-hidden="true">0{index + 1}</span>

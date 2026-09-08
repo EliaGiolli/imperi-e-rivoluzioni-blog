@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import Button from "../ui/Button.astro";
 
+import Logo from '../assets/I&R logo.png'
 import { LOGO_ALT_TEXT, BLOG_NAME } from "../utils/constants";
 ---
 
@@ -18,7 +19,7 @@ import { LOGO_ALT_TEXT, BLOG_NAME } from "../utils/constants";
         aria-label="Homepage"
       >
         <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-stone-300 bg-white shadow-sm shadow-stone-200">
-          <Image src="/logo.svg" width={44} height={44} alt={LOGO_ALT_TEXT} class="h-full w-full object-contain" />
+          <Image src={Logo} width={44} height={44} alt={LOGO_ALT_TEXT} class="h-full w-full object-contain" />
         </div>
         <div class="hidden sm:block">
           <div class="text-sm font-medium uppercase tracking-[0.2em] text-stone-500">Blog</div>
@@ -29,10 +30,10 @@ import { LOGO_ALT_TEXT, BLOG_NAME } from "../utils/constants";
 
       <nav class="hidden md:block" aria-label="Main navigation">
         <ul class="flex list-none items-center gap-2 p-0">
-          <li><a class="rounded-full px-3.5 py-2 text-sm font-semibold text-stone-800 no-underline transition-all duration-200 hover:bg-stone-200 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href="/about">Su di me</a></li>
-          <li><a class="rounded-full px-3.5 py-2 text-sm font-semibold text-stone-800 no-underline transition-all duration-200 hover:bg-stone-200 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href="/blog">Blog</a></li>
-          <li><a class="rounded-full px-3.5 py-2 text-sm font-semibold text-stone-800 no-underline transition-all duration-200 hover:bg-stone-200 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href="/history">Storia</a></li>
-          <li><a class="rounded-full bg-amber-700 px-4 py-2.5 text-sm font-semibold text-stone-900 no-underline shadow-sm shadow-stone-200 transition-all duration-200 hover:bg-amber-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href="/#contact">Contatti</a></li>
+          <li><a class="rounded-full px-3.5 py-2 text-sm font-semibold text-stone-800 no-underline transition-all duration-200 hover:bg-stone-200 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href="/about">Articoli</a></li>
+          <li><a class="rounded-full px-3.5 py-2 text-sm font-semibold text-stone-800 no-underline transition-all duration-200 hover:bg-stone-200 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href="/blog">Letture consigliate</a></li>
+          <li><a class="rounded-full px-3.5 py-2 text-sm font-semibold text-stone-800 no-underline transition-all duration-200 hover:bg-stone-200 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href="/history">Temi</a></li>
+          <li><a class="rounded-full bg-amber-700 px-4 py-2.5 text-sm font-semibold text-stone-900 no-underline shadow-sm shadow-stone-200 transition-all duration-200 hover:bg-amber-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href="/contact">Contatti</a></li>
         </ul>
       </nav>
 
@@ -66,10 +67,10 @@ import { LOGO_ALT_TEXT, BLOG_NAME } from "../utils/constants";
       aria-label="Mobile navigation"
     >
       <ul class="m-0 flex list-none flex-col gap-1.5 p-0">
-        <li><a class="block rounded-2xl px-4 py-3 font-semibold text-stone-800 no-underline transition-colors hover:bg-stone-200 hover:text-stone-900" href="/about" @click="open = false">Su di me</a></li>
-        <li><a class="block rounded-2xl px-4 py-3 font-semibold text-stone-800 no-underline transition-colors hover:bg-stone-200 hover:text-stone-900" href="/blog" @click="open = false">Blog</a></li>
-        <li><a class="block rounded-2xl px-4 py-3 font-semibold text-stone-800 no-underline transition-colors hover:bg-stone-200 hover:text-stone-900" href="/history" @click="open = false">Storia</a></li>
-        <li><a class="mt-1 block rounded-2xl bg-amber-700 px-4 py-3 font-semibold text-stone-900 no-underline shadow-sm shadow-stone-200 transition-colors hover:bg-amber-600" href="/#contact" @click="open = false">Contatti</a></li>
+        <li><a class="block rounded-2xl px-4 py-3 font-semibold text-stone-800 no-underline transition-colors hover:bg-stone-200 hover:text-stone-900" href="/about" @click="open = false">Articoli</a></li>
+        <li><a class="block rounded-2xl px-4 py-3 font-semibold text-stone-800 no-underline transition-colors hover:bg-stone-200 hover:text-stone-900" href="/blog" @click="open = false">Letture</a></li>
+        <li><a class="block rounded-2xl px-4 py-3 font-semibold text-stone-800 no-underline transition-colors hover:bg-stone-200 hover:text-stone-900" href="/history" @click="open = false">Temi</a></li>
+        <li><a class="mt-1 block rounded-2xl bg-amber-700 px-4 py-3 font-semibold text-stone-900 no-underline shadow-sm shadow-stone-200 transition-colors hover:bg-amber-600" href="/#contact">Contatti</a></li>
       </ul>
     </nav>
   </div>

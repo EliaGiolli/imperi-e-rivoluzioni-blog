@@ -1,7 +1,6 @@
 ---
 import Footer from "../../shared/components/Footer.astro";
 import Navbar from "../../shared/components/Navbar.astro";
-import SmoothScroll from "../../shared/components/SmoothScroll.astro";
 import "../../styles/global.css";
 
 import { BLOG_NAME } from "../../shared/utils/constants";
@@ -13,12 +12,11 @@ import { BLOG_NAME } from "../../shared/utils/constants";
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="Portfolio di Elia Giolli, tecnico IT Support specializzato in troubleshooting, networking e infrastrutture." />
+		<meta name="description" content="Imperi e Rivoluzioni: storia contemporanea, lungo XX secolo, geopolitica e rapporti di potere per capire il presente attraverso le sue radici storiche." />
 		<title>{BLOG_NAME}</title>
 	</head>
 	<body class="min-h-screen bg-stone-100 text-stone-900">
 		<Navbar />
-		<SmoothScroll />
 		<slot />
 		<Footer />
 	</body>
