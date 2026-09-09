@@ -1,0 +1,36 @@
+---
+import MainLayout from "../core/layouts/MainLayout.astro";
+import ContactMe from "../features/contact/ContactMe.astro";
+
+import { SUBSTACK_URL } from '../shared/utils/constants';
+---
+
+<MainLayout
+	title="Contatti | Supporto tecnico | Imperi e Rivoluzioni"
+	description="Contattami per supporto tecnico e assistenza su problemi tecnici. Racconta il problema e ricevi un primo orientamento."
+>
+	<main>
+		<section class="border-b border-stone-300 bg-stone-100" aria-labelledby="contacts-title">
+			<div class="mx-auto max-w-6xl px-6 pb-16 pt-16 lg:px-8 lg:pb-20 lg:pt-24">
+				<p class="font-dispatch text-sm uppercase text-red-700">Contatti</p>
+				<h1 id="contacts-title" class="mt-4 max-w-3xl text-4xl font-extrabold tracking-tight text-stone-900 sm:text-6xl">Mettiamo in ordine il problema.</h1>
+			</div>
+		</section>
+
+		<ContactMe />
+
+		<section class="bg-stone-900 text-stone-100" aria-labelledby="substack-title">
+			<div class="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 sm:flex-row sm:items-center sm:justify-between lg:px-8 lg:py-20">
+				<div class="max-w-2xl">
+					<p class="font-dispatch text-sm uppercase text-stone-300">Dalla casella di posta</p>
+					<h2 id="substack-title" class="mt-3 text-3xl font-extrabold tracking-tight text-stone-100 sm:text-4xl">Ricevi i prossimi dispacci.</h2>
+					<p class="mt-4 text-lg leading-8 text-stone-300">Su Substack raccolgo articoli e riflessioni su storia contemporanea, geopolitica e rapporti di potere.</p>
+				</div>
+				<a href={SUBSTACK_URL} target="_blank" rel="noreferrer" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-amber-700 px-5 py-3 font-bold text-stone-900 transition-colors hover:bg-amber-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-900">
+					<span>Iscriviti su Substack</span>
+					<span aria-hidden="true">↗</span>
+				</a>
+			</div>
+		</section>
+	</main>
+</MainLayout>

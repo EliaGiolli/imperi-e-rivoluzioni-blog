@@ -4,6 +4,16 @@ import Navbar from "../../shared/components/Navbar.astro";
 import "../../styles/global.css";
 
 import { BLOG_NAME } from "../../shared/utils/constants";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = BLOG_NAME,
+	description = "Imperi e Rivoluzioni: storia contemporanea, lungo XX secolo, geopolitica e rapporti di potere per capire il presente attraverso le sue radici storiche.",
+} = Astro.props;
 ---
 
 <html lang="it" class="bg-stone-100 text-stone-900">
@@ -12,8 +22,8 @@ import { BLOG_NAME } from "../../shared/utils/constants";
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="Imperi e Rivoluzioni: storia contemporanea, lungo XX secolo, geopolitica e rapporti di potere per capire il presente attraverso le sue radici storiche." />
-		<title>{BLOG_NAME}</title>
+		<meta name="description" content={description} />
+		<title>{title}</title>
 	</head>
 	<body class="min-h-screen bg-stone-100 text-stone-900">
 		<Navbar />

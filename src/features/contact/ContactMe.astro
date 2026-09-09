@@ -12,19 +12,15 @@ const emailJs = {
 <section id="contact" class="bg-stone-900 text-white" aria-labelledby="contact-title">
 	<div class="mx-auto grid max-w-6xl gap-10 px-6 py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:px-8 lg:py-24">
 		<div class="max-w-xl lg:sticky lg:top-28">
-			<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-amber-700">Parliamone</p>
+			<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-amber-700">Supporto tecnico</p>
 			<h2 id="contact-title" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Hai un problema da risolvere?</h2>
-			<p class="mt-5 text-lg leading-8 text-stone-300">Sono disponibile per opportunità in Help Desk, IT Support e Service Desk, in Italia o in contesti internazionali.</p>
-			<div class="mt-8 border-t border-white/15 pt-5 text-sm leading-6 text-stone-300">
-				<p>Preferisci scrivere direttamente?</p>
-				<a href="mailto:eliagiolli22@gmail.com" class="mt-1 inline-flex font-bold text-amber-700 underline-offset-4 hover:text-amber-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700">eliagiolli22@gmail.com</a>
-			</div>
+			<p class="mt-5 text-lg leading-8 text-stone-300">Scrivimi per il supporto tecnico. Anche un problema piccolo, come un menu che non si vede sullo schermo mobile, è un buon punto da cui iniziare.</p>
 		</div>
 
 		<div class="rounded-2xl bg-white p-6 text-stone-900 shadow-[10px_10px_0_rgba(185,139,62,0.28)] sm:p-10">
 			<div class="mb-8">
 				<p class="text-sm font-bold uppercase tracking-[0.16em] text-red-700">Contatto diretto</p>
-				<h3 class="mt-2 text-2xl font-extrabold">Raccontami cosa stai costruendo.</h3>
+				<h3 class="mt-2 text-2xl font-extrabold">Raccontami cosa non funziona.</h3>
 			</div>
 			<Form
 				id="contact-form"
@@ -41,7 +37,7 @@ const emailJs = {
 						<span slot="icon">@</span>
 					</Input>
 				</div>
-				<Input name="subject" label="Oggetto" placeholder="Supporto, networking, collaborazione..." required>
+					<Input name="subject" label="Oggetto" placeholder="Es. il menu mobile non si vede..." required>
 					<span slot="icon">#</span>
 				</Input>
 				<div class="grid gap-2">
