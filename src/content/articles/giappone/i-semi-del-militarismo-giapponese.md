@@ -34,16 +34,19 @@ Uno degli snodi più rilevanti per comprendere la futura caduta della democrazia
 
 Concepita sotto la guida di Itō Hirobumi e modellata sul sistema prussiano, la Carta conferiva al Giappone l'aspetto di una monarchia costituzionale moderna, con un Parlamento (Dieta Imperiale) composto da una Camera dei Rappresentanti e una Camera dei Pari. Tuttavia, l'impianto celava una grave falla strutturale.
 
-    ```text
-    [ IMPERATORE MEIJI ]
-       (Sacro e Inviolabile)
-                 |
-  +--------------+--------------+
-  |                             |
-  v                             v
-[GOVERNO CIVILE]      [STATO MAGGIORE MILITARE]
-(Primo Ministro)       (Esercito e Marina)
+```text
+[ IMPERATORE MEIJI ]
+   (Sacro e Inviolabile)
+             |
++------------+------------+
+|                         |
+v                         v
+[ GOVERNO CIVILE ]        [ STATO MAGGIORE MILITARE ]
+  (Primo Ministro)          (Esercito e Marina)
 ```
+
+Questa separazione istituzionale rese possibile una progressiva autonomia delle forze armate rispetto agli organi civili dello Stato.
+
 ### L'autonomia delle forze armate (Tōsuiken)
 L'Articolo 11 della Costituzione stabiliva che il comando supremo dell'Esercito e della Marina spettava esclusivamente all'Imperatore, scindendo le forze armate dal controllo del governo civile.
 
@@ -62,7 +65,8 @@ Rilasciato nel 1890, il Rescritto Imperiale sull'Educazione (Kyōiku Chokugo) di
 
 Il testo fondeva i valori confuciani tradizionali con una lealtà assoluta allo Stato, insegnando che il dovere supremo di ogni cittadino era sacrificarsi per la patria e per la casa imperiale in caso di emergenza nazionale.
 
-Valori Confuciani Tradizionali + Lealtà Assoluta all'Imperatore = Disciplina Statale e Spirito di Sacrificio
+> **Valori confuciani tradizionali** + **lealtà assoluta all'Imperatore** = **disciplina statale e spirito di sacrificio**
+
 ### Il Kokutai e lo Shinto di Stato
 Attraverso la separazione del Buddismo dallo Shinto, lo Stato istituzionalizzò quest'ultimo come religione di Stato. L'Imperatore venne elevato a discendente diretto della dea del sole Amaterasu, figura divina (Arahitogami) e padre spirituale della "famiglia-nazione" (Kokutai).
 
