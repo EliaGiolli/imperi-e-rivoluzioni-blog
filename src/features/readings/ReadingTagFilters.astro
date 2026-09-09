@@ -1,0 +1,71 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ReadingCard from "./ReadingCard.astro";
+
+interface Props {
+	readings: CollectionEntry<"readings">[];
+	label: string;
+	title: string;
+	description: string;
+}
+
+const { readings, label, title, description } = Astro.props;
+const tags = [...new Set(readings.flatMap((reading) => reading.data.tags))].sort((first, second) => first.localeCompare(second, "it"));
+---
+
+<section
+	class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24"
+	aria-labelledby="reading-filter-title"
+	x-data="{ activeTag: 'Tutti' }"
+>
+	<div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+		<div class="max-w-3xl">
+			<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700">{label}</p>
+			<h1 id="reading-filter-title" class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">{title}</h1>
+			<p class="mt-6 text-lg leading-8 text-stone-700">{description}</p>
+		</div>
+
+		<nav class="lg:max-w-xl" aria-label="Filtra le letture per tag">
+			<p class="mb-3 text-sm font-bold text-stone-900">Esplora per tag</p>
+			<ul class="flex flex-wrap gap-2" role="list">
+				<li>
+					<button
+						type="button"
+						class="rounded-lg border px-3 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
+						:class="activeTag === 'Tutti' ? 'border-stone-900 bg-stone-900 text-stone-100' : 'border-stone-300 bg-white text-stone-700'"
+						:aria-pressed="activeTag === 'Tutti'"
+						x-on:click="activeTag = 'Tutti'"
+					>
+						Tutti
+					</button>
+				</li>
+				{tags.map((tag) => (
+					<li>
+						<button
+							type="button"
+							class="rounded-lg border px-3 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
+							:class={`activeTag === ${JSON.stringify(tag)} ? 'border-stone-900 bg-stone-900 text-stone-100' : 'border-stone-300 bg-white text-stone-700'`}
+							:aria-pressed={`activeTag === ${JSON.stringify(tag)}`}
+							x-on:click={`activeTag = ${JSON.stringify(tag)}`}
+						>
+							{tag}
+						</button>
+					</li>
+				))}
+			</ul>
+		</nav>
+	</div>
+
+	<div class="mt-12 grid gap-6 md:grid-cols-2" aria-live="polite">
+		{readings.map((reading) => (
+			<div
+				x-data={`{ readingTags: ${JSON.stringify(reading.data.tags)} }`}
+				x-show="activeTag === 'Tutti' || readingTags.includes(activeTag)"
+				x-transition.opacity.duration.150ms
+				x-cloak
+			>
+				<ReadingCard reading={reading} />
+			</div>
+		))}
+	</div>
+</section>
