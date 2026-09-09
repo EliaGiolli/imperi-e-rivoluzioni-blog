@@ -132,6 +132,22 @@ Il template EmailJS deve prevedere almeno i campi `from_name`, `reply_to`, `subj
 - testo alternativo per immagini e certificati;
 - supporto a `prefers-reduced-motion` negli elementi animati.
 
+## Test suite
+
+Il progetto include tre livelli di controllo automatizzati:
+
+```sh
+npm run test:unit
+npm run test:integration
+npm run test:e2e
+```
+
+Per eseguire tutte le suite in sequenza:
+
+```sh
+npm test
+```
+
 ## Verifica
 
 Per controllare template, tipi e diagnostica Astro:
@@ -147,10 +163,3 @@ npm run build
 ```
 
 La build verifica collection, route, immagini e bundle client delle interazioni.
-
-## Riferimenti
-
-- [Documentazione Astro](https://docs.astro.build/)
-- [Documentazione Alpine.js](https://alpinejs.dev/start-here)
-- [ROADMAP.md](ROADMAP.md)
-- [PALETTE.md](PALETTE.md)
