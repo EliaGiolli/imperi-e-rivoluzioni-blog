@@ -3,8 +3,9 @@ import { getCollection } from "astro:content";
 import MainLayout from "../../core/layouts/MainLayout.astro";
 
 import ArticleCard from "../../features/articles/ArticleCard.astro";
+import { byReadingOrder } from "../../core/helpers";
 
-const articles = await getCollection("articles");
+const articles = [...(await getCollection("articles"))].sort(byReadingOrder);
 ---
 
 <MainLayout>

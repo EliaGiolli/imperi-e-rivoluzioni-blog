@@ -2,6 +2,7 @@
 title: "L'illusione democratica: La crisi Taishō e il crollo delle istituzioni"
 description: "Dalla parentesi della Democrazia Taishō alla Grande Depressione del 1929: come la corruzione e la crisi economica hanno travolto le istituzioni civili giapponesi."
 pubDate: 2026-09-13
+order: 2
 tags: ["Giappone", "Periodo Taisho", "Grande Depressione", "Manciuria", "Democrazia"]
 topic: "Giappone"
 category: "militarismo giapponese"
@@ -81,3 +82,15 @@ La strada verso la presa del potere totale da parte dei militari era ormai tracc
 ---
 
 ***Nel prossimo articolo:*** *Analizzeremo il clima di terrore politico degli anni '30, lo scontra tra fazioni militari, il fallito golpe del 1936 e l'ascesa del governo di Hideki Tōjō alla vigilia della guerra totale.*
+
+---
+
+## Fonti
+
+Riferimenti storiografici su cui si appoggia la ricostruzione di questo articolo.
+
+1. Peter Duus, *Party Rivalry and Political Change in Taishō Japan*, Harvard University Press, Cambridge (MA) 1968.
+2. Mark Metzler, *Lever of Empire: The International Gold Standard and the Crisis of Liberalism in Prewar Japan*, University of California Press, Berkeley 2006.
+3. Louise Young, *Japan's Total Empire: Manchuria and the Culture of Wartime Imperialism*, University of California Press, Berkeley 1998.
+4. Andrew Gordon, *A Modern History of Japan: From Tokugawa Times to the Present*, Oxford University Press, New York 2003.
+5. Andrea Revelant, *Il Giappone moderno: dall'Ottocento al 1945*, Einaudi, Torino 2018.

@@ -1,6 +1,8 @@
 ---
 title: "I semi del militarismo giapponese: come l'Epoca Meiji ha preparato la guerra"
 description: "Scopri come le riforme dell'Epoca Meiji (1868-1912), dalla Costituzione del 1889 alla leva obbligatoria, hanno gettato le basi per l'ascesa del militarismo in Giappone."
+pubDate: 2026-09-09
+order: 1
 tags: ["Giappone", "militarismo", "Periodo Meiji", "Colonialismo", "Conflitti"]
 topic: "Giappone"
 category: "militarismo giapponese"
@@ -95,3 +97,14 @@ Tuttavia, il prezzo di questa trasformazione fu altissimo. Il Paese si affacciav
 Quando negli anni '20 e '30 la crisi economica globale e le tensioni sociali travolgeranno l'esperimento democratico del periodo Taishō, i militari non dovranno fare altro che utilizzare gli strumenti istituzionali e ideologici che la Restaurazione Meiji aveva preparato per loro cinquant'anni prima.
 
 > **Nel prossimo articolo:** analizzeremo la breve e fragile parentesi della Democrazia Taishō, e vedremo come l'impatto devastante della Grande Depressione del 1929 farà crollare le istituzioni civili, spianando la strada all'occupazione autonoma della Manciuria da parte dell'Esercito.
+
+---
+
+## Fonti
+
+Riferimenti storiografici su cui si appoggia la ricostruzione di questo articolo.
+
+1. W. G. Beasley, *The Meiji Restoration*, Stanford University Press, Stanford 1972.
+2. Marius B. Jansen, *The Making of Modern Japan*, Harvard University Press, Cambridge (MA) 2000.
+3. Andrew Gordon, *A Modern History of Japan: From Tokugawa Times to the Present*, Oxford University Press, New York 2003.
+4. Andrea Revelant, *Il Giappone moderno: dall'Ottocento al 1945*, Einaudi, Torino 2018.

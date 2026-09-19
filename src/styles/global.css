@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800;900&family=Special+Elite&display=swap");
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
 	font-family: "Lora", serif;
@@ -28,6 +29,59 @@ h4,
 h5,
 h6 {
 	font-family: "Playfair Display", serif;
+}
+
+/*
+ * Long-form reading theme: Tailwind Typography mapped onto the old-paper palette
+ * (paper #efe6d3, charcoal #2b2622, antique gold #b98b3e, rust red #a13d2c).
+ * These rules sit outside @layer on purpose, so they win over the plugin's own.
+ */
+.prose {
+	--tw-prose-body: #44403c;
+	--tw-prose-headings: #2b2622;
+	--tw-prose-lead: #57534e;
+	--tw-prose-links: #a13d2c;
+	--tw-prose-bold: #2b2622;
+	--tw-prose-counters: #b98b3e;
+	--tw-prose-bullets: #b98b3e;
+	--tw-prose-hr: #d6d3d1;
+	--tw-prose-quotes: #2b2622;
+	--tw-prose-quote-borders: #b98b3e;
+	--tw-prose-captions: #78716c;
+	--tw-prose-code: #a13d2c;
+	--tw-prose-pre-code: #efe6d3;
+	--tw-prose-pre-bg: #2b2622;
+	--tw-prose-th-borders: #b98b3e;
+	--tw-prose-td-borders: #d6d3d1;
+}
+
+.prose :is(h1, h2, h3, h4, h5, h6) {
+	font-family: "Playfair Display", serif;
+	letter-spacing: -0.01em;
+	scroll-margin-top: 5.5rem;
+}
+
+.prose a:hover {
+	color: #8f3626;
+}
+
+/* Pull quotes read as set-apart notes rather than italic asides. */
+.prose blockquote {
+	font-style: normal;
+	border-inline-start-width: 3px;
+	border-radius: 0 0.75rem 0.75rem 0;
+	background: rgb(185 139 62 / 8%);
+	padding: 1rem 1.5rem;
+}
+
+.prose blockquote p:first-of-type::before,
+.prose blockquote p:last-of-type::after {
+	content: none;
+}
+
+/* The articles' ASCII diagrams are indented code blocks: give them a defined edge. */
+.prose pre {
+	border: 1px solid #44403c;
 }
 
 .font-dispatch {
