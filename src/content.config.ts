@@ -25,6 +25,12 @@ const articlesCollection = defineCollection({
     schema: z.object({
         title: z.string(),
         description: z.string(),
+        pubDate: z.date(),
+        updatedDate: z.date().optional(),
+        author: z.string().default("Elia Giolli"),
+        featured: z.boolean().default(false),
+        // Sequence inside a category, so a multi-part cycle reads in the intended order.
+        order: z.number(),
         tags: z.array(z.string()),
         topic: z.string(),
         category: z.string(),

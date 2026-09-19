@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import MainLayout from "../../core/layouts/MainLayout.astro";
+import { formatDate, readingTime } from "../../core/helpers";
 
 export async function getStaticPaths() {
 	const articles = await getCollection("articles");
@@ -13,6 +14,9 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content } = await render(article);
+
+const minutes = readingTime(article.body ?? "");
+const toIsoDate = (date: Date): string => date.toISOString().slice(0, 10);
 ---
 
 <MainLayout title={article.data.title} description={article.data.description}>
@@ -27,6 +31,28 @@ const { Content } = await render(article);
 			<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">{article.data.title}</h1>
 			<p class="mt-4 text-xl font-semibold text-amber-700">{article.data.category}</p>
 			<p class="mt-6 text-lg leading-8 text-stone-700">{article.data.description}</p>
+
+			<ul class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-dispatch text-sm uppercase tracking-[0.12em] text-stone-600" aria-label="Dettagli dell'articolo">
+				<li>{article.data.author}</li>
+				<li aria-hidden="true">·</li>
+				<li>
+					<time datetime={toIsoDate(article.data.pubDate)}>{formatDate(article.data.pubDate)}</time>
+				</li>
+				{article.data.updatedDate && (
+					<>
+						<li aria-hidden="true">·</li>
+						<li>
+							Aggiornato il <time datetime={toIsoDate(article.data.updatedDate)}>{formatDate(article.data.updatedDate)}</time>
+						</li>
+					</>
+				)}
+				{minutes > 0 && (
+					<>
+						<li aria-hidden="true">·</li>
+						<li>{minutes} min di lettura</li>
+					</>
+				)}
+			</ul>
 
 			<ul class="mt-6 flex flex-wrap gap-2" aria-label={`Argomenti di ${article.data.title}`}>
 				{article.data.tags.map((tag: string) => (
