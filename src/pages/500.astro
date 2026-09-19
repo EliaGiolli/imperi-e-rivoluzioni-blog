@@ -1,13 +1,33 @@
 ---
-import MainLayout from '../core/layouts/MainLayout.astro';
+import MainLayout from "../core/layouts/MainLayout.astro";
+import Button from "../shared/ui/Button.astro";
 
 interface Props {
-    error: unknown
+	error: unknown;
 }
 
 const { error } = Astro.props;
+
+// The raw message is never rendered to visitors: it only reaches the server logs.
+if (import.meta.env.DEV && error instanceof Error) {
+	console.error(error);
+}
 ---
 
-<MainLayout>
-    <div>{error instanceof Error ? error.message : "Unknown error"}</div>
+<MainLayout
+	title="500 - Errore del server | Imperi e Rivoluzioni"
+	description="Si è verificato un errore imprevisto. Torna alla home di Imperi e Rivoluzioni e riprova la navigazione."
+>
+	<main class="mx-auto flex max-w-3xl flex-col items-center gap-7 px-6 py-20 text-center lg:px-8 lg:py-28">
+		<p class="font-dispatch text-sm uppercase tracking-[0.2em] text-stone-600">Dispaccio interrotto</p>
+		<h1 class="text-4xl font-extrabold tracking-tight text-red-700 sm:text-5xl">500 - Errore del server</h1>
+		<p class="text-xl leading-8 text-stone-700">
+			Qualcosa si è inceppato nei nostri archivi e non siamo riusciti a completare la richiesta.
+			L'errore è stato registrato: se il problema persiste, scrivici pure.
+		</p>
+		<div class="mt-2 flex flex-wrap items-center justify-center gap-4">
+			<Button href="/" variant="primary">Torna alla home</Button>
+			<Button href="/contacts" variant="secondary">Segnala il problema</Button>
+		</div>
+	</main>
 </MainLayout>

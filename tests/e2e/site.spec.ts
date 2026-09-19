@@ -11,10 +11,18 @@ test.describe("public navigation", () => {
 		await expect(page).toHaveURL(/\/articles\/?$/);
 		await expect(page.getByRole("heading", { name: "Articoli", level: 1 })).toBeVisible();
 
-		await page.getByRole("link", { name: /Leggi l'articolo/ }).click();
+		await page.getByRole("link", { name: /Leggi l'articolo/ }).first().click();
 		await expect(page).toHaveURL(/\/articles\/i-semi-del-militarismo-giapponese\/?$/);
 		await expect(page.getByRole("heading", { level: 1 })).toContainText("I semi del militarismo giapponese");
 		await expect(page.getByRole("heading", { name: /Il motto Fukoku Kyōhei/ })).toBeVisible();
+	});
+
+	test("reaches the about page from the navbar", async ({ page }) => {
+		await page.goto("/");
+
+		await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Chi sono" }).click();
+		await expect(page).toHaveURL(/\/about\/?$/);
+		await expect(page.getByRole("heading", { name: "Chi sono e perché scrivo", level: 1 })).toBeVisible();
 	});
 
 	test("opens the mobile navigation", async ({ page }) => {
@@ -28,5 +36,6 @@ test.describe("public navigation", () => {
 		await expect(menuButton).toHaveAttribute("aria-expanded", "true");
 		await expect(page.locator("#mobile-navigation")).toBeVisible();
 		await expect(page.locator("#mobile-navigation").getByRole("link", { name: "Articoli" })).toBeVisible();
+		await expect(page.locator("#mobile-navigation").getByRole("link", { name: "Chi sono" })).toBeVisible();
 	});
 });
