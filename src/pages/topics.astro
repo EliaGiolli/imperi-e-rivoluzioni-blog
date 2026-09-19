@@ -1,21 +1,128 @@
 ---
 import { getCollection } from "astro:content";
-import MainLayout from "../core/layouts/MainLayout.astro";
-import ReadingTagFilters from "../features/readings/ReadingTagFilters.astro";
 
-const readings = await getCollection("readings");
+import MainLayout from "../core/layouts/MainLayout.astro";
+import { buildThemeIndex } from "../core/helpers";
+
+const [articles, readings] = await Promise.all([getCollection("articles"), getCollection("readings")]);
+const { topics, tags } = buildThemeIndex(articles, readings);
+
+const countLabel = (articleCount: number, readingCount: number): string =>
+	[
+		articleCount > 0 ? `${articleCount} ${articleCount === 1 ? "articolo" : "articoli"}` : null,
+		readingCount > 0 ? `${readingCount} ${readingCount === 1 ? "lettura" : "letture"}` : null,
+	]
+		.filter(Boolean)
+		.join(" · ");
 ---
 
 <MainLayout
-	title="Temi | Letture di storia e geopolitica | Imperi e Rivoluzioni"
-	description="Esplora le letture di Imperi e Rivoluzioni per tema: imperi, nazionalismi, conflitti, Medio Oriente, Giappone, URSS e Guerra fredda."
+	title="Temi | Articoli e letture per argomento | Imperi e Rivoluzioni"
+	description="L'indice tematico di Imperi e Rivoluzioni: articoli e letture consigliate raccolti per percorso storico e per tag, da imperi e nazionalismi al Medio Oriente, dal Giappone all'URSS."
 >
-	<main>
-		<ReadingTagFilters
-			readings={readings}
-			label="Temi"
-			title="Scegli una prospettiva"
-			description="Filtra la bibliografia per argomento e segui i fili che collegano imperi, nazionalismi, conflitti e trasformazioni dell'ordine internazionale."
-		/>
+	<main class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
+		<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700">Temi</p>
+		<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">L'indice dei percorsi</h1>
+		<p class="mt-6 max-w-3xl text-lg leading-8 text-stone-700">
+			Ogni tema raccoglie in un unico posto gli articoli del blog e le letture consigliate che lo attraversano.
+			Un modo per seguire un filo storico per intero, invece di leggere un pezzo alla volta.
+		</p>
+
+		<nav class="mt-10" aria-label="Vai a un tema">
+			<ul class="flex flex-wrap gap-2" role="list">
+				{topics.map((topic) => (
+					<li>
+						<a
+							href={`#tema-${topic.slug}`}
+							class="inline-flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm font-semibold text-stone-700 transition-colors hover:border-stone-900 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
+						>
+							<span>{topic.name}</span>
+							<span class="text-stone-500" aria-hidden="true">{topic.entries.length}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+
+		<section class="mt-16" aria-labelledby="paths-title">
+			<h2 id="paths-title" class="text-3xl font-extrabold text-stone-900">Percorsi</h2>
+			<p class="mt-3 max-w-3xl text-base leading-7 text-stone-700">
+				I grandi raggruppamenti tematici, con dentro sia gli articoli sia i libri che li accompagnano.
+			</p>
+
+			<div class="mt-10 space-y-12">
+				{topics.map((topic) => (
+					<article
+						id={`tema-${topic.slug}`}
+						class="rounded-2xl border border-stone-300 bg-white p-6 shadow-[6px_6px_0_rgba(185,139,62,0.12)] lg:p-8"
+						aria-labelledby={`tema-${topic.slug}-title`}
+					>
+						<div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-stone-200 pb-5">
+							<h3 id={`tema-${topic.slug}-title`} class="text-2xl font-extrabold text-stone-900">{topic.name}</h3>
+							<p class="font-dispatch text-sm uppercase tracking-[0.16em] text-stone-600">
+								{countLabel(topic.articleCount, topic.readingCount)}
+							</p>
+						</div>
+
+						<ul class="mt-6 space-y-5" role="list">
+							{topic.entries.map((entry) => (
+								<li class="border-l-2 border-stone-200 pl-4">
+									<p class="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
+										{entry.kind === "article" ? "Articolo" : "Lettura"} · {entry.subtitle}
+									</p>
+									<a
+										href={entry.href}
+										class="mt-1 inline-block text-lg font-bold text-stone-900 underline-offset-4 transition-colors hover:text-red-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
+									>
+										{entry.title}
+									</a>
+									<p class="mt-2 text-base leading-7 text-stone-700">{entry.description}</p>
+								</li>
+							))}
+						</ul>
+
+						<ul class="mt-6 flex flex-wrap gap-2" aria-label={`Tag del tema ${topic.name}`}>
+							{topic.tags.map((tag) => (
+								<li class="rounded-md border border-stone-300 bg-stone-100 px-3 py-1 text-sm font-medium text-stone-700">{tag}</li>
+							))}
+						</ul>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section class="mt-20" aria-labelledby="tag-index-title">
+			<h2 id="tag-index-title" class="text-3xl font-extrabold text-stone-900">Indice analitico</h2>
+			<p class="mt-3 max-w-3xl text-base leading-7 text-stone-700">
+				Tutti i tag usati nel blog, in ordine alfabetico, con i testi che li trattano.
+			</p>
+
+			<dl class="mt-10 grid gap-6 md:grid-cols-2">
+				{tags.map((tag) => (
+					<div class="border-t-2 border-stone-900 pt-4">
+						<dt class="flex flex-wrap items-baseline justify-between gap-2">
+							<span class="text-lg font-bold text-stone-900">{tag.name}</span>
+							<span class="font-dispatch text-sm uppercase tracking-[0.16em] text-stone-600">
+								{countLabel(tag.articleCount, tag.readingCount)}
+							</span>
+						</dt>
+						<dd class="mt-3">
+							<ul class="space-y-2" role="list">
+								{tag.entries.map((entry) => (
+									<li>
+										<a
+											href={entry.href}
+											class="text-base text-stone-700 underline-offset-4 transition-colors hover:text-red-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
+										>
+											{entry.title}
+										</a>
+									</li>
+								))}
+							</ul>
+						</dd>
+					</div>
+				))}
+			</dl>
+		</section>
 	</main>
 </MainLayout>
