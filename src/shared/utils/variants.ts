@@ -5,9 +5,11 @@ export const button = cva(
   {
     variants: {
       variant: {
+        // Antique gold on charcoal text carries its own contrast, so primary needs no dark pair.
         primary: "bg-amber-700 text-stone-900 hover:bg-amber-600",
-        secondary: "border border-stone-300 bg-stone-100 text-stone-900 hover:border-amber-700 hover:bg-stone-200",
-        ghost: "bg-transparent text-red-700 hover:bg-stone-200",
+        secondary:
+          "border border-stone-300 bg-stone-100 text-stone-900 hover:border-amber-700 hover:bg-stone-200 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-100 dark:hover:border-amber-500 dark:hover:bg-stone-700",
+        ghost: "bg-transparent text-red-700 hover:bg-stone-200 dark:text-amber-500 dark:hover:bg-stone-800",
       },
       size: {
         sm: "px-3 py-1.5 text-sm",

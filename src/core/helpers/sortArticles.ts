@@ -1,9 +1,4 @@
-export interface SortableArticle {
-	data: {
-		order: number;
-		pubDate: Date;
-	};
-}
+import type { SortableArticle } from "../../shared/types";
 
 /** Cycle order: the sequence the author intended a multi-part series to be read in. */
 export function byReadingOrder(first: SortableArticle, second: SortableArticle): number {

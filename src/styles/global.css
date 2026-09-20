@@ -1,18 +1,60 @@
-@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800;900&family=Special+Elite&display=swap");
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+/*
+ * The Google Fonts stylesheet is no longer @import-ed here: an @import inside the
+ * bundled CSS blocks rendering until the font request resolves. MainLayout now loads
+ * it from <head> with preconnect hints instead.
+ */
+
+/*
+ * Dark mode is driven by a `dark` class on <html>, not by the media query alone, so the
+ * navbar toggle can override the OS preference. The inline script in MainLayout sets the
+ * class before first paint; the Alpine store in Navbar keeps it in sync afterwards.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
 	font-family: "Lora", serif;
 	color: #2b2622;
 	background: #efe6d3;
+	color-scheme: light;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 }
 
+/* Old paper turned over: charcoal page, parchment ink, antique gold as the one accent. */
+:root.dark {
+	color: #efe6d3;
+	background: #1c1917;
+	color-scheme: dark;
+}
+
+/*
+ * Anchor jumps: the article Table of Contents and the /topics theme index both link to
+ * in-page ids, and the sticky header is 5.5rem tall, so targets need that much padding
+ * to clear it. The smooth easing is opt-in for anyone who has not asked for less motion.
+ */
 html {
-	scroll-behavior: smooth;
 	scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+/*
+ * View transitions: Astro already disables its own fallback animations under reduced
+ * motion, and repeating the guard here means any transition added later inherits it.
+ */
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
 }
 
 body {
@@ -20,6 +62,11 @@ body {
 	font-family: "Lora", serif;
 	background-color: #efe6d3;
 	color: #2b2622;
+}
+
+.dark body {
+	background-color: #1c1917;
+	color: #efe6d3;
 }
 
 h1,
@@ -55,6 +102,29 @@ h6 {
 	--tw-prose-td-borders: #d6d3d1;
 }
 
+/*
+ * The same theme on charcoal. Rust red only reaches 2.6:1 against #1c1917, so the
+ * accent moves to antique gold (amber-500, ~7.9:1) while the ink becomes parchment.
+ */
+.dark .prose {
+	--tw-prose-body: #d6d3d1;
+	--tw-prose-headings: #efe6d3;
+	--tw-prose-lead: #a8a29e;
+	--tw-prose-links: var(--color-amber-500);
+	--tw-prose-bold: #efe6d3;
+	--tw-prose-counters: var(--color-amber-500);
+	--tw-prose-bullets: var(--color-amber-600);
+	--tw-prose-hr: #44403c;
+	--tw-prose-quotes: #efe6d3;
+	--tw-prose-quote-borders: var(--color-amber-600);
+	--tw-prose-captions: #a8a29e;
+	--tw-prose-code: var(--color-amber-400);
+	--tw-prose-pre-code: #efe6d3;
+	--tw-prose-pre-bg: #0c0a09;
+	--tw-prose-th-borders: var(--color-amber-600);
+	--tw-prose-td-borders: #44403c;
+}
+
 .prose :is(h1, h2, h3, h4, h5, h6) {
 	font-family: "Playfair Display", serif;
 	letter-spacing: -0.01em;
@@ -63,6 +133,10 @@ h6 {
 
 .prose a:hover {
 	color: #8f3626;
+}
+
+.dark .prose a:hover {
+	color: var(--color-amber-400);
 }
 
 /* Pull quotes read as set-apart notes rather than italic asides. */
@@ -74,6 +148,10 @@ h6 {
 	padding: 1rem 1.5rem;
 }
 
+.dark .prose blockquote {
+	background: rgb(185 139 62 / 14%);
+}
+
 .prose blockquote p:first-of-type::before,
 .prose blockquote p:last-of-type::after {
 	content: none;
@@ -82,6 +160,10 @@ h6 {
 /* The articles' ASCII diagrams are indented code blocks: give them a defined edge. */
 .prose pre {
 	border: 1px solid #44403c;
+}
+
+.dark .prose pre {
+	border-color: #57534e;
 }
 
 .font-dispatch {

@@ -6,14 +6,7 @@
  * so these checks are what stands between an empty field and a useless email.
  */
 
-export type ContactField = "from_name" | "reply_to" | "subject" | "message";
-
-export interface ContactFieldError {
-	field: ContactField;
-	message: string;
-}
-
-export type ContactFormValues = Partial<Record<ContactField, string>>;
+import type { ContactField, ContactFieldError, ContactFormValues } from "../../shared/types";
 
 /** Deliberately permissive: one @, no spaces, and a dotted domain with a real TLD. */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
