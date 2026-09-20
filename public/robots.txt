@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://imperi-e-rivoluzioni-blog.vercel.app/sitemap-index.xml

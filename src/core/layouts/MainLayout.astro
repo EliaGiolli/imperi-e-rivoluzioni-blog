@@ -3,17 +3,49 @@ import Footer from "../../shared/components/Footer.astro";
 import Navbar from "../../shared/components/Navbar.astro";
 import "../../styles/global.css";
 
-import { BLOG_NAME } from "../../shared/utils/constants";
+import {
+	BLOG_DESCRIPTION,
+	BLOG_LOCALE,
+	BLOG_NAME,
+	OG_IMAGE_HEIGHT,
+	OG_IMAGE_PATH,
+	OG_IMAGE_WIDTH,
+} from "../../shared/utils/constants";
 
 interface Props {
 	title?: string;
 	description?: string;
+	/** "article" adds the article-specific Open Graph properties below. */
+	ogType?: "website" | "article";
+	publishedTime?: Date;
+	modifiedTime?: Date;
+	/** Keeps a page out of search results without hiding it from visitors. */
+	noindex?: boolean;
 }
 
 const {
 	title = BLOG_NAME,
-	description = "Imperi e Rivoluzioni: storia contemporanea, lungo XX secolo, geopolitica e rapporti di potere per capire il presente attraverso le sue radici storiche.",
+	description = BLOG_DESCRIPTION,
+	ogType = "website",
+	publishedTime,
+	modifiedTime,
+	noindex = false,
 } = Astro.props;
+
+// Pages pass their own part of the title; the blog name is appended once. The homepage
+// already carries it, so the check keeps it from being repeated.
+const pageTitle = title.includes(BLOG_NAME) ? title : `${title} | ${BLOG_NAME}`;
+
+// Astro.site comes from astro.config.mjs. Falling back to Astro.url keeps `astro dev`
+// and any future preview deployment from emitting a canonical pointing at production.
+const siteUrl = Astro.site ?? new URL(Astro.url.origin);
+
+// Astro emits directory-style routes, and both the sitemap and the RSS feed link them
+// with a trailing slash. The canonical has to agree, or the two disagree about which
+// URL is the real one.
+const path = Astro.url.pathname.replace(/\/+$/, "");
+const canonicalUrl = new URL(path === "" ? "/" : `${path}/`, siteUrl);
+const ogImageUrl = new URL(OG_IMAGE_PATH, siteUrl);
 ---
 
 <html lang="it" class="bg-stone-100 text-stone-900">
@@ -22,8 +54,32 @@ const {
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+
+		<title>{pageTitle}</title>
 		<meta name="description" content={description} />
-		<title>{title}</title>
+		<link rel="canonical" href={canonicalUrl.href} />
+		{noindex && <meta name="robots" content="noindex, follow" />}
+		<link rel="alternate" type="application/rss+xml" title={`${BLOG_NAME} — Articoli`} href="/rss.xml" />
+
+		<meta property="og:type" content={ogType} />
+		<meta property="og:site_name" content={BLOG_NAME} />
+		<meta property="og:locale" content={BLOG_LOCALE} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl.href} />
+		<meta property="og:image" content={ogImageUrl.href} />
+		<meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />
+		<meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />
+		<meta property="og:image:alt" content={`${BLOG_NAME} — storia contemporanea e geopolitica`} />
+		{publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+		{modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageUrl.href} />
+
+		<slot name="head" />
 	</head>
 	<body class="min-h-screen bg-stone-100 text-stone-900">
 		<Navbar />

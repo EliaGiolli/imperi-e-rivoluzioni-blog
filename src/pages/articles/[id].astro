@@ -1,7 +1,8 @@
 ---
 import { getCollection, render } from "astro:content";
 import MainLayout from "../../core/layouts/MainLayout.astro";
-import { formatDate, readingTime } from "../../core/helpers";
+import { buildArticleSchema, formatDate, readingTime } from "../../core/helpers";
+import { BLOG_NAME, OG_IMAGE_PATH } from "../../shared/utils/constants";
 
 export async function getStaticPaths() {
 	const articles = await getCollection("articles");
@@ -20,9 +21,39 @@ const toIsoDate = (date: Date): string => date.toISOString().slice(0, 10);
 
 // Only the section level matters for the outline: H1 is the page title, H4+ is detail.
 const tableOfContents = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+
+const siteUrl = Astro.site ?? new URL(Astro.url.origin);
+// Trailing slash to match the canonical, the sitemap and the RSS feed.
+const articleUrl = new URL(`/articles/${article.data.slug}/`, siteUrl).href;
+
+const articleSchema = buildArticleSchema({
+	title: article.data.title,
+	description: article.data.description,
+	author: article.data.author,
+	pubDate: article.data.pubDate,
+	updatedDate: article.data.updatedDate,
+	tags: article.data.tags,
+	url: articleUrl,
+	imageUrl: new URL(OG_IMAGE_PATH, siteUrl).href,
+	blogName: BLOG_NAME,
+	siteUrl: siteUrl.href,
+});
 ---
 
-<MainLayout title={article.data.title} description={article.data.description}>
+<MainLayout
+	title={article.data.title}
+	description={article.data.description}
+	ogType="article"
+	publishedTime={article.data.pubDate}
+	modifiedTime={article.data.updatedDate ?? article.data.pubDate}
+>
+	<script
+		slot="head"
+		type="application/ld+json"
+		is:inline
+		set:html={JSON.stringify(articleSchema)}
+	/>
+
 	<main class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
 		<a href="/articles" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-red-700 hover:text-red-800">
 			<span aria-hidden="true">←</span>
