@@ -38,4 +38,16 @@ test.describe("public navigation", () => {
 		await expect(page.locator("#mobile-navigation").getByRole("link", { name: "Articoli" })).toBeVisible();
 		await expect(page.locator("#mobile-navigation").getByRole("link", { name: "Chi sono" })).toBeVisible();
 	});
+
+	test("marks the open section in the navbar", async ({ page }) => {
+		const mainNav = page.getByRole("navigation", { name: "Main navigation" });
+
+		await page.goto("/articles");
+		await expect(mainNav.getByRole("link", { name: "Articoli" })).toHaveAttribute("aria-current", "page");
+		await expect(mainNav.getByRole("link", { name: "Temi" })).not.toHaveAttribute("aria-current", /.*/);
+
+		// A single article is not the archive, but the archive link still owns the section.
+		await page.goto("/articles/i-semi-del-militarismo-giapponese");
+		await expect(mainNav.getByRole("link", { name: "Articoli" })).toHaveAttribute("aria-current", "true");
+	});
 });

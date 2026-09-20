@@ -12,7 +12,7 @@ const emailJs = {
 <section id="contact" class="bg-stone-900 text-white" aria-labelledby="contact-title">
 	<div class="mx-auto grid max-w-6xl gap-10 px-6 py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:px-8 lg:py-24">
 		<div class="max-w-xl lg:sticky lg:top-28">
-			<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-amber-700">Supporto tecnico</p>
+			<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-amber-500">Supporto tecnico</p>
 			<h2 id="contact-title" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Hai un problema da risolvere?</h2>
 			<p class="mt-5 text-lg leading-8 text-stone-300">Scrivimi per il supporto tecnico. Anche un problema piccolo, come un menu che non si vede sullo schermo mobile, è un buon punto da cui iniziare.</p>
 		</div>
@@ -42,7 +42,7 @@ const emailJs = {
 				</Input>
 				<div class="grid gap-2">
 					<label for="contact-message" class="text-sm font-bold">Messaggio<span class="ml-1 text-red-700" aria-hidden="true">*</span><span class="sr-only"> obbligatorio</span></label>
-					<textarea id="contact-message" name="message" rows="6" placeholder="Descrivi brevemente il contesto..." required class="w-full resize-y rounded-lg border border-stone-300 bg-stone-100 px-3 py-3 text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-amber-700 focus:ring-2 focus:ring-amber-700/20"></textarea>
+					<textarea id="contact-message" name="message" rows="6" placeholder="Descrivi brevemente il contesto..." required class="w-full resize-y rounded-lg border border-stone-300 bg-stone-100 px-3 py-3 text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-amber-700 focus:ring-2 focus:ring-amber-700/20 aria-invalid:border-red-700 aria-invalid:ring-2 aria-invalid:ring-red-700/25"></textarea>
 				</div>
 				<div class="flex flex-wrap items-center gap-4">
 					<button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-amber-700 px-5 py-3 font-bold text-stone-900 transition-colors hover:bg-amber-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2">
@@ -58,28 +58,61 @@ const emailJs = {
 
 <script>
 	import emailjs from "@emailjs/browser";
+	import { contactErrorSummary, validateContactForm, type ContactField } from "../../core/helpers";
+
+	const FIELDS: ContactField[] = ["from_name", "reply_to", "subject", "message"];
 
 	const forms = document.querySelectorAll<HTMLFormElement>("[data-contact-form]");
 
 	forms.forEach((form) => {
-		form.addEventListener("submit", async (event) => {
-			const serviceId = form.dataset.serviceId;
-			const templateId = form.dataset.templateId;
-			const publicKey = form.dataset.publicKey;
-			const status = document.querySelector<HTMLElement>("#contact-status");
-			const submitLabel = form.querySelector<HTMLElement>("[data-submit-label]");
+		const status = form.querySelector<HTMLElement>("#contact-status");
+		const submitLabel = form.querySelector<HTMLElement>("[data-submit-label]");
+		const controlFor = (field: ContactField) =>
+			form.elements.namedItem(field) as HTMLInputElement | HTMLTextAreaElement | null;
 
-			if (!serviceId || !templateId || !publicKey) {
+		const emailJsConfigured = Boolean(form.dataset.serviceId && form.dataset.templateId && form.dataset.publicKey);
+
+		// The EmailJS path never reaches the browser's own validation, so take it over
+		// entirely rather than leaving the fields unchecked.
+		if (emailJsConfigured) {
+			form.noValidate = true;
+		}
+
+		const clearInvalid = (field: ContactField) => {
+			controlFor(field)?.removeAttribute("aria-invalid");
+		};
+
+		FIELDS.forEach((field) => {
+			controlFor(field)?.addEventListener("input", () => clearInvalid(field));
+		});
+
+		form.addEventListener("submit", async (event) => {
+			if (!emailJsConfigured) {
 				if (status) status.textContent = "Si aprirà il tuo client email per completare l'invio.";
 				return;
 			}
 
 			event.preventDefault();
+
+			const values = Object.fromEntries(FIELDS.map((field) => [field, controlFor(field)?.value ?? ""]));
+			const errors = validateContactForm(values);
+
+			FIELDS.forEach(clearInvalid);
+
+			if (errors.length > 0) {
+				errors.forEach(({ field }) => controlFor(field)?.setAttribute("aria-invalid", "true"));
+				if (status) status.textContent = contactErrorSummary(errors);
+				controlFor(errors[0].field)?.focus();
+				return;
+			}
+
 			if (status) status.textContent = "Invio in corso...";
 			if (submitLabel) submitLabel.textContent = "Invio...";
 
 			try {
-				await emailjs.sendForm(serviceId, templateId, form, { publicKey });
+				await emailjs.sendForm(form.dataset.serviceId!, form.dataset.templateId!, form, {
+					publicKey: form.dataset.publicKey!,
+				});
 				form.reset();
 				if (status) status.textContent = "Messaggio inviato. Grazie, ti risponderò presto.";
 			} catch {

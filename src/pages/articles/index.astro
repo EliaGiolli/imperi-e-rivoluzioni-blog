@@ -21,7 +21,7 @@ const articles = [...(await getCollection("articles"))].sort(byReadingOrder);
 				<div class="mt-6 grid gap-6 lg:grid-cols-2">
 					{articles
 						.filter((article) => article.data.topic === "Giappone" && article.data.category === "militarismo giapponese")
-						.map((article) => <ArticleCard article={article} />)}
+						.map((article) => <ArticleCard article={article} headingLevel="h4" />)}
 				</div>
 			</div>
 		</section>

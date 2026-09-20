@@ -103,15 +103,21 @@ h6 {
 	background: #a77d34 !important;
 }
 
+/*
+ * The secondary hero button is the only outlined control on the charcoal hero. At 25%
+ * white its border sat at 2.27:1 against the background and read as a flat block of
+ * text; 45% brings it to 4.48:1, past the 3:1 WCAG 1.4.11 bar for UI boundaries, and
+ * the denser fill keeps it legible as a control while white label text stays ~9.9:1.
+ */
 .hero-secondary {
-	border-color: rgb(255 255 255 / 25%) !important;
-	background: rgb(255 255 255 / 10%) !important;
+	border-color: rgb(255 255 255 / 45%) !important;
+	background: rgb(255 255 255 / 18%) !important;
 	color: white !important;
 }
 
 .hero-secondary:hover {
 	border-color: white !important;
-	background: rgb(255 255 255 / 15%) !important;
+	background: rgb(255 255 255 / 26%) !important;
 }
 
 [x-cloak] {

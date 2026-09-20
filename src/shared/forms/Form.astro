@@ -11,6 +11,11 @@ interface Props {
 const { id, action = "mailto:eliagiolli22@gmail.com", serviceId = "", templateId = "", publicKey = "", class: extraClass } = Astro.props;
 ---
 
+{/*
+	No `novalidate` here on purpose: without JavaScript the native validation is the only
+	thing guarding the mailto fallback. The submit handler turns it off at runtime once it
+	has taken over, so its own messages can drive the `role="status"` region instead.
+*/}
 <form
 	id={id}
 	action={action}
@@ -20,7 +25,6 @@ const { id, action = "mailto:eliagiolli22@gmail.com", serviceId = "", templateId
 	data-service-id={serviceId}
 	data-template-id={templateId}
 	data-public-key={publicKey}
-	novalidate={Boolean(serviceId && templateId && publicKey)}
 >
 	<slot />
 </form>
