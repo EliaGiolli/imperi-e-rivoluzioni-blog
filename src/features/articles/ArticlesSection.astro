@@ -6,12 +6,12 @@ import { byMostRecent } from "../../core/helpers";
 const articles = [...(await getCollection("articles"))].sort(byMostRecent);
 ---
 
-<section id="articles" class="border-b border-stone-300 bg-stone-200" aria-labelledby="articles-title">
+<section id="articles" class="border-b border-stone-300 bg-stone-200 dark:border-stone-700 dark:bg-stone-950" aria-labelledby="articles-title">
 	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
 		<div class="max-w-2xl">
-			<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-red-700">Scritti recenti</p>
-			<h2 id="articles-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Articoli</h2>
-			<p class="mt-4 text-lg leading-8 text-stone-700">Analisi e ricostruzioni per seguire le radici storiche dei conflitti e dei rapporti di potere.</p>
+			<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-red-700 dark:text-amber-500">Scritti recenti</p>
+			<h2 id="articles-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl dark:text-stone-100">Articoli</h2>
+			<p class="mt-4 text-lg leading-8 text-stone-700 dark:text-stone-300">Analisi e ricostruzioni per seguire le radici storiche dei conflitti e dei rapporti di potere.</p>
 		</div>
 
 		<div class="mt-12 grid gap-6 lg:grid-cols-2">

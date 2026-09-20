@@ -1,15 +1,9 @@
 ---
-import type { VariantProps } from "class-variance-authority";
+import type { ButtonProps } from "../types";
 import { cn } from "../lib/cn";
 import { button } from "../utils/variants";
 
-interface Props extends VariantProps<typeof button> {
-  href?: string;
-  type?: "button" | "submit" | "reset";
-  target?: string;
-  rel?: string;
-  class?: string;
-}
+type Props = ButtonProps;
 
 const { href, variant, size, type = "button", class: extraClass, ...rest } = Astro.props;
 

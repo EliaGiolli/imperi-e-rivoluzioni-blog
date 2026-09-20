@@ -4,20 +4,7 @@
  * rather than from anything the template happens to render.
  */
 
-export interface ArticleSchemaInput {
-	title: string;
-	description: string;
-	author: string;
-	pubDate: Date;
-	updatedDate?: Date;
-	tags: string[];
-	/** Absolute URL of the article itself. */
-	url: string;
-	/** Absolute URL of the social preview image. */
-	imageUrl: string;
-	blogName: string;
-	siteUrl: string;
-}
+import type { ArticleSchemaInput } from "../../shared/types";
 
 export function buildArticleSchema(article: ArticleSchemaInput): Record<string, unknown> {
 	return {

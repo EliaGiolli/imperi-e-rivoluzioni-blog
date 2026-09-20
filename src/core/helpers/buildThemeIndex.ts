@@ -1,48 +1,10 @@
-export interface ThemeIndexArticle {
-	data: {
-		title: string;
-		description: string;
-		tags: string[];
-		topic: string;
-		category: string;
-		slug: string;
-	};
-}
-
-export interface ThemeIndexReading {
-	id: string;
-	data: {
-		name: string;
-		author: string;
-		description: string;
-		tags: string[];
-		topic: string;
-	};
-}
-
-export interface ThemeEntry {
-	kind: "article" | "reading";
-	title: string;
-	subtitle: string;
-	description: string;
-	href: string;
-	tags: string[];
-	topic: string;
-}
-
-export interface ThemeGroup {
-	name: string;
-	slug: string;
-	entries: ThemeEntry[];
-	tags: string[];
-	articleCount: number;
-	readingCount: number;
-}
-
-export interface ThemeIndex {
-	topics: ThemeGroup[];
-	tags: ThemeGroup[];
-}
+import type {
+	ThemeEntry,
+	ThemeGroup,
+	ThemeIndex,
+	ThemeIndexArticle,
+	ThemeIndexReading,
+} from "../../shared/types";
 
 const compare = (first: string, second: string): number => first.localeCompare(second, "it");
 

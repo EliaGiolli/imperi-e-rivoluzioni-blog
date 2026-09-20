@@ -1,8 +1,11 @@
 ---
+import { ClientRouter } from "astro:transitions";
+
 import Footer from "../../shared/components/Footer.astro";
 import Navbar from "../../shared/components/Navbar.astro";
 import "../../styles/global.css";
 
+import type { MainLayoutProps } from "../../shared/types";
 import {
 	BLOG_DESCRIPTION,
 	BLOG_LOCALE,
@@ -12,16 +15,7 @@ import {
 	OG_IMAGE_WIDTH,
 } from "../../shared/utils/constants";
 
-interface Props {
-	title?: string;
-	description?: string;
-	/** "article" adds the article-specific Open Graph properties below. */
-	ogType?: "website" | "article";
-	publishedTime?: Date;
-	modifiedTime?: Date;
-	/** Keeps a page out of search results without hiding it from visitors. */
-	noindex?: boolean;
-}
+type Props = MainLayoutProps;
 
 const {
 	title = BLOG_NAME,
@@ -48,12 +42,43 @@ const canonicalUrl = new URL(path === "" ? "/" : `${path}/`, siteUrl);
 const ogImageUrl = new URL(OG_IMAGE_PATH, siteUrl);
 ---
 
-<html lang="it" class="bg-stone-100 text-stone-900">
+<html lang="it" class="bg-stone-100 text-stone-900 dark:bg-stone-900 dark:text-stone-100">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="color-scheme" content="light dark" />
+
+		{/*
+			Runs before the first paint so the stored theme is applied without a flash of the
+			wrong palette. It is deliberately inline and dependency-free; the Alpine store in
+			Navbar takes over once the page is interactive.
+		*/}
+		<script is:inline>
+			(() => {
+				try {
+					const stored = localStorage.getItem("theme");
+					const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+					document.documentElement.classList.toggle("dark", stored ? stored === "dark" : prefersDark);
+				} catch {
+					// localStorage throws in some privacy modes; the light theme is the safe fallback.
+				}
+			})();
+		</script>
+
+		{/*
+			Google Fonts as <link> rather than an @import in global.css: the two preconnects
+			open the font connections in parallel with the CSS request instead of after it.
+		*/}
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800;900&family=Special+Elite&display=swap"
+		/>
+
+		<ClientRouter />
 
 		<title>{pageTitle}</title>
 		<meta name="description" content={description} />
@@ -81,7 +106,7 @@ const ogImageUrl = new URL(OG_IMAGE_PATH, siteUrl);
 
 		<slot name="head" />
 	</head>
-	<body class="min-h-screen bg-stone-100 text-stone-900">
+	<body class="min-h-screen bg-stone-100 text-stone-900 dark:bg-stone-900 dark:text-stone-100">
 		<Navbar />
 		<slot />
 		<Footer />

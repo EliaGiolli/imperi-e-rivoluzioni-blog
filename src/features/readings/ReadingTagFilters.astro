@@ -1,16 +1,16 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { ReadingTagFiltersProps } from "../../shared/types";
 import ReadingCard from "./ReadingCard.astro";
 
-interface Props {
-	readings: CollectionEntry<"readings">[];
-	label: string;
-	title: string;
-	description: string;
-}
+type Props = ReadingTagFiltersProps;
 
 const { readings, label, title, description } = Astro.props;
 const tags = [...new Set(readings.flatMap((reading) => reading.data.tags))].sort((first, second) => first.localeCompare(second, "it"));
+
+// Alpine picks one of these per button, so both states are spelled out here rather than
+// inlined twice in the template. On charcoal the pressed tag becomes the parchment block.
+const TAG_ON = "border-stone-900 bg-stone-900 text-stone-100 dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900";
+const TAG_OFF = "border-stone-300 bg-white text-stone-700 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-300";
 ---
 
 <section
@@ -20,19 +20,19 @@ const tags = [...new Set(readings.flatMap((reading) => reading.data.tags))].sort
 >
 	<div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
 		<div class="max-w-3xl">
-			<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700">{label}</p>
-			<h1 id="reading-filter-title" class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">{title}</h1>
-			<p class="mt-6 text-lg leading-8 text-stone-700">{description}</p>
+			<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700 dark:text-amber-500">{label}</p>
+			<h1 id="reading-filter-title" class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-100">{title}</h1>
+			<p class="mt-6 text-lg leading-8 text-stone-700 dark:text-stone-300">{description}</p>
 		</div>
 
 		<nav class="lg:max-w-xl" aria-label="Filtra le letture per tag">
-			<p class="mb-3 text-sm font-bold text-stone-900">Esplora per tag</p>
+			<p class="mb-3 text-sm font-bold text-stone-900 dark:text-stone-100">Esplora per tag</p>
 			<ul class="flex flex-wrap gap-2" role="list">
 				<li>
 					<button
 						type="button"
-						class="rounded-lg border px-3 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
-						:class="activeTag === 'Tutti' ? 'border-stone-900 bg-stone-900 text-stone-100' : 'border-stone-300 bg-white text-stone-700'"
+						class="rounded-lg border px-3 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-900"
+						:class={`activeTag === 'Tutti' ? ${JSON.stringify(TAG_ON)} : ${JSON.stringify(TAG_OFF)}`}
 						:aria-pressed="activeTag === 'Tutti'"
 						x-on:click="activeTag = 'Tutti'"
 					>
@@ -43,8 +43,8 @@ const tags = [...new Set(readings.flatMap((reading) => reading.data.tags))].sort
 					<li>
 						<button
 							type="button"
-							class="rounded-lg border px-3 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
-							:class={`activeTag === ${JSON.stringify(tag)} ? 'border-stone-900 bg-stone-900 text-stone-100' : 'border-stone-300 bg-white text-stone-700'`}
+							class="rounded-lg border px-3 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-900"
+							:class={`activeTag === ${JSON.stringify(tag)} ? ${JSON.stringify(TAG_ON)} : ${JSON.stringify(TAG_OFF)}`}
 							:aria-pressed={`activeTag === ${JSON.stringify(tag)}`}
 							x-on:click={`activeTag = ${JSON.stringify(tag)}`}
 						>

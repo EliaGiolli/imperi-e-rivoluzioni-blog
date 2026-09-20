@@ -1,16 +1,18 @@
 ---
-interface Props {
-	as?: "div" | "article" | "section";
-	class?: string;
-	[key: string]: unknown;
-}
+import type { CardProps } from "../types";
 
-const { as = "div", class: extraClass, ...attributes } = Astro.props;
+type Props = CardProps;
+
+const { as = "div", class: extraClass, ...attributes }: Props = Astro.props;
 const Tag = as;
 ---
 
 <Tag
-	class:list={["rounded-2xl border border-stone-300 bg-white shadow-[8px_8px_0_rgba(185,139,62,0.12)]", extraClass]}
+	class:list={[
+		"rounded-2xl border border-stone-300 bg-white shadow-[8px_8px_0_rgba(185,139,62,0.12)]",
+		"dark:border-stone-700 dark:bg-stone-800 dark:shadow-[8px_8px_0_rgba(185,139,62,0.22)]",
+		extraClass,
+	]}
 	{...attributes}
 >
 	<slot />

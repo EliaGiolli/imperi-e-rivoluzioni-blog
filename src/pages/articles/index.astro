@@ -13,14 +13,14 @@ const articles = [...(await getCollection("articles"))].sort(byReadingOrder);
 	description="L'archivio degli articoli di Imperi e Rivoluzioni: ricostruzioni storiche sul lungo XX secolo, dai percorsi sul militarismo giapponese alle radici dei conflitti contemporanei."
 >
 	<main class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
-		<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700">Archivio</p>
-		<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">Articoli</h1>
-		<p class="mt-6 max-w-3xl text-lg leading-8 text-stone-700">Analisi storiche per leggere il presente attraverso le sue radici.</p>
+		<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700 dark:text-amber-500">Archivio</p>
+		<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-100">Articoli</h1>
+		<p class="mt-6 max-w-3xl text-lg leading-8 text-stone-700 dark:text-stone-300">Analisi storiche per leggere il presente attraverso le sue radici.</p>
 
 		<section class="mt-14" aria-labelledby="giappone-title">
-			<h2 id="giappone-title" class="text-3xl font-extrabold text-stone-900">Giappone</h2>
+			<h2 id="giappone-title" class="text-3xl font-extrabold text-stone-900 dark:text-stone-100">Giappone</h2>
 			<div class="mt-8">
-				<h3 class="text-2xl font-bold text-red-700">militarismo giapponese</h3>
+				<h3 class="text-2xl font-bold text-red-700 dark:text-amber-500">militarismo giapponese</h3>
 				<div class="mt-6 grid gap-6 lg:grid-cols-2">
 					{articles
 						.filter((article) => article.data.topic === "Giappone" && article.data.category === "militarismo giapponese")

@@ -16,42 +16,49 @@ const desktopLinkClass = (cta: boolean | undefined, current: string | undefined)
   cn(
     "rounded-full text-sm font-semibold no-underline transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700",
     cta
-      ? "bg-amber-700 px-4 py-2.5 text-stone-900 shadow-sm shadow-stone-200 hover:bg-amber-600"
-      : "px-3.5 py-2 text-stone-800 hover:bg-stone-200 hover:text-stone-900",
+      ? "bg-amber-700 px-4 py-2.5 text-stone-900 shadow-sm shadow-stone-200 hover:bg-amber-600 dark:shadow-none"
+      : "px-3.5 py-2 text-stone-800 hover:bg-stone-200 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-100",
     current && ACTIVE_UNDERLINE,
-    current && (cta ? "decoration-stone-900" : "bg-stone-200 text-stone-900 decoration-amber-800"),
+    current && (cta
+      ? "decoration-stone-900"
+      : "bg-stone-200 text-stone-900 decoration-amber-800 dark:bg-stone-800 dark:text-stone-100 dark:decoration-amber-500"),
   );
 
 const mobileLinkClass = (cta: boolean | undefined, current: string | undefined): string =>
   cn(
     "block rounded-2xl px-4 py-3 font-semibold no-underline transition-colors",
     cta
-      ? "mt-1 bg-amber-700 text-stone-900 shadow-sm shadow-stone-200 hover:bg-amber-600"
-      : "text-stone-800 hover:bg-stone-200 hover:text-stone-900",
+      ? "mt-1 bg-amber-700 text-stone-900 shadow-sm shadow-stone-200 hover:bg-amber-600 dark:shadow-none"
+      : "text-stone-800 hover:bg-stone-200 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-100",
     current && ACTIVE_UNDERLINE,
-    current && (cta ? "decoration-stone-900" : "bg-stone-200 text-stone-900 decoration-amber-800"),
+    current && (cta
+      ? "decoration-stone-900"
+      : "bg-stone-200 text-stone-900 decoration-amber-800 dark:bg-stone-800 dark:text-stone-100 dark:decoration-amber-500"),
   );
+
+// Both icon buttons in the bar share the same shape, so they line up at every width.
+const ICON_BUTTON = "h-11 w-11 rounded-xl border border-stone-300 bg-white p-0 text-amber-800 shadow-sm shadow-stone-200 transition-colors hover:bg-stone-100 dark:border-stone-700 dark:bg-stone-800 dark:text-amber-500 dark:shadow-none dark:hover:bg-stone-700";
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-stone-300 bg-stone-100/85 shadow-[0_10px_30px_rgba(43,38,34,0.08)] backdrop-blur-md"
+  class="sticky top-0 z-50 border-b border-stone-300 bg-stone-100/85 shadow-[0_10px_30px_rgba(43,38,34,0.08)] backdrop-blur-md dark:border-stone-700 dark:bg-stone-900/85 dark:shadow-[0_10px_30px_rgba(0,0,0,0.45)]"
   x-data="{ open: false }"
   @keydown.escape.window="open = false"
 >
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex min-h-19 items-center justify-between gap-4">
       <a
-        class="flex items-center gap-3 rounded-full px-2 py-1.5 text-amber-800 no-underline transition-transform duration-200 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-100"
+        class="flex items-center gap-3 rounded-full px-2 py-1.5 text-amber-800 no-underline transition-transform duration-200 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-100 dark:text-amber-500 dark:focus-visible:ring-offset-stone-900"
         href="/"
         aria-label="Homepage"
         aria-current={navLinkCurrent(pathname, "/")}
       >
-        <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-stone-300 bg-white shadow-sm shadow-stone-200">
+        <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-stone-300 bg-white shadow-sm shadow-stone-200 dark:border-stone-700 dark:bg-stone-800 dark:shadow-none">
           <Image src={Logo} width={44} height={44} alt={LOGO_ALT_TEXT} class="h-full w-full object-contain" />
         </div>
         <div class="hidden sm:block">
-          <div class="text-sm font-medium uppercase tracking-[0.2em] text-stone-500">Blog</div>
-          <div class="text-base font-bold text-amber-800">{BLOG_NAME}</div>
+          <div class="text-sm font-medium uppercase tracking-[0.2em] text-stone-500 dark:text-stone-400">Blog</div>
+          <div class="text-base font-bold text-amber-800 dark:text-amber-500">{BLOG_NAME}</div>
         </div>
         <h1 class="hidden" aria-label="main-title">{BLOG_NAME}</h1>
       </a>
@@ -70,29 +77,49 @@ const mobileLinkClass = (cta: boolean | undefined, current: string | undefined):
         </ul>
       </nav>
 
-      <div class="md:hidden">
+      <div class="flex items-center gap-2">
+        {/*
+          A toggle, not a three-way switch: `aria-pressed` says whether the dark theme is
+          on, so the label can stay stable. The icons swap in CSS off the `dark` class,
+          which the inline head script has already applied by the time this paints.
+        */}
         <Button
           variant="ghost"
           size="sm"
-          class="h-11 w-11 rounded-xl border border-stone-300 bg-white p-0 text-amber-800 shadow-sm shadow-stone-200 transition-colors hover:bg-stone-100"
-          aria-label="Apri il menu di navigazione"
-          :aria-expanded="open.toString()"
-          aria-controls="mobile-navigation"
-          x-on:click="open = !open"
+          class={ICON_BUTTON}
+          aria-label="Tema scuro"
+          aria-pressed="false"
+          :aria-pressed="$store.theme.dark.toString()"
+          x-on:click="$store.theme.toggle()"
         >
-          <span class="sr-only">Menu</span>
-          <span class="flex flex-col gap-1.5" aria-hidden="true">
-            <span class="block h-0.5 w-5 rounded-full bg-current transition-transform duration-200" :class="open ? 'translate-y-2 rotate-45' : ''"></span>
-            <span class="block h-0.5 w-5 rounded-full bg-current transition-opacity duration-200" :class="open ? 'opacity-0' : ''"></span>
-            <span class="block h-0.5 w-5 rounded-full bg-current transition-transform duration-200" :class="open ? '-translate-y-2 -rotate-45' : ''"></span>
-          </span>
+          <span class="text-lg leading-none dark:hidden" aria-hidden="true">☾</span>
+          <span class="hidden text-lg leading-none dark:inline" aria-hidden="true">☀</span>
         </Button>
+
+        <div class="md:hidden">
+          <Button
+            variant="ghost"
+            size="sm"
+            class={ICON_BUTTON}
+            aria-label="Apri il menu di navigazione"
+            :aria-expanded="open.toString()"
+            aria-controls="mobile-navigation"
+            x-on:click="open = !open"
+          >
+            <span class="sr-only">Menu</span>
+            <span class="flex flex-col gap-1.5" aria-hidden="true">
+              <span class="block h-0.5 w-5 rounded-full bg-current transition-transform duration-200" :class="open ? 'translate-y-2 rotate-45' : ''"></span>
+              <span class="block h-0.5 w-5 rounded-full bg-current transition-opacity duration-200" :class="open ? 'opacity-0' : ''"></span>
+              <span class="block h-0.5 w-5 rounded-full bg-current transition-transform duration-200" :class="open ? '-translate-y-2 -rotate-45' : ''"></span>
+            </span>
+          </Button>
+        </div>
       </div>
     </div>
 
     <nav
       id="mobile-navigation"
-      class="border-t border-stone-200 py-4 md:hidden"
+      class="border-t border-stone-200 py-4 md:hidden dark:border-stone-700"
       x-cloak
       x-show="open"
       x-transition.origin.top.duration.200ms
@@ -119,6 +146,53 @@ const mobileLinkClass = (cta: boolean | undefined, current: string | undefined):
 <script>
   // @ts-expect-error Alpine is used at runtime and its package has no declarations.
   import Alpine from "alpinejs";
+
+  const STORAGE_KEY = "theme";
+  const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+  /** localStorage throws in some privacy modes, so every access has to tolerate failure. */
+  const readChoice = (): string | null => {
+    try {
+      return localStorage.getItem(STORAGE_KEY);
+    } catch {
+      return null;
+    }
+  };
+
+  Alpine.store("theme", {
+    dark: readChoice() ? readChoice() === "dark" : systemDark.matches,
+
+    apply() {
+      document.documentElement.classList.toggle("dark", this.dark);
+    },
+
+    toggle() {
+      this.dark = !this.dark;
+
+      try {
+        localStorage.setItem(STORAGE_KEY, this.dark ? "dark" : "light");
+      } catch {
+        // The class still flips for this visit; only the preference is not remembered.
+      }
+
+      this.apply();
+    },
+  });
+
+  // Astro's view transitions copy the incoming document's <html> attributes over the live
+  // ones, which drops the class the inline head script set. This listener fires before the
+  // new page paints, so re-applying here is what keeps the theme from flashing on navigation.
+  document.addEventListener("astro:after-swap", () => Alpine.store("theme").apply());
+
+  // Follow the operating system only until the visitor has made a choice of their own.
+  systemDark.addEventListener("change", (event: MediaQueryListEvent) => {
+    if (readChoice()) {
+      return;
+    }
+
+    Alpine.store("theme").dark = event.matches;
+    Alpine.store("theme").apply();
+  });
 
   Alpine.start();
 </script>

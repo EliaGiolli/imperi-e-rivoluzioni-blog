@@ -14,16 +14,16 @@ readings.sort((first, second) => readingOrder.indexOf(first.id) - readingOrder.i
 
 <section
 	id="readings"
-	class="border-b border-stone-300 bg-stone-200"
+	class="border-b border-stone-300 bg-stone-200 dark:border-stone-700 dark:bg-stone-950"
 	aria-labelledby="readings-title"
 	x-data="{ activeReading: 0 }"
 >
 	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
 		<div class="mb-12 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
 			<div class="max-w-2xl">
-				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-red-700">Letture consigliate</p>
-				<h2 id="readings-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Libri per orientarsi</h2>
-				<p class="mt-4 text-lg leading-8 text-stone-700">
+				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-red-700 dark:text-amber-500">Letture consigliate</p>
+				<h2 id="readings-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl dark:text-stone-100">Libri per orientarsi</h2>
+				<p class="mt-4 text-lg leading-8 text-stone-700 dark:text-stone-300">
 					Le letture più recenti per seguire le connessioni tra imperi, ideologie, conflitti e ordine internazionale.
 				</p>
 			</div>
@@ -40,7 +40,7 @@ readings.sort((first, second) => readingOrder.indexOf(first.id) - readingOrder.i
 								:aria-selected={`activeReading === ${index}`}
 								x-on:click={`activeReading = ${index}`}
 								:class={`activeReading === ${index} ? 'reading-tab-active' : 'reading-tab-inactive'`}
-								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
+								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-950"
 							>
 								{index + 1}. {reading.data.name}
 							</button>
@@ -78,5 +78,18 @@ readings.sort((first, second) => readingOrder.indexOf(first.id) - readingOrder.i
 		border-color: #d6d3ce;
 		background: white;
 		color: #44403c;
+	}
+
+	/* Inverted on charcoal: the selected tab becomes the parchment block. */
+	.dark .reading-tab-active {
+		border-color: #efe6d3;
+		background: #efe6d3;
+		color: #1c1917;
+	}
+
+	.dark .reading-tab-inactive {
+		border-color: #57534e;
+		background: #292524;
+		color: #d6d3d1;
 	}
 </style>

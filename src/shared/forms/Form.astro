@@ -1,12 +1,7 @@
 ---
-interface Props {
-	id: string;
-	action?: string;
-	serviceId?: string;
-	templateId?: string;
-	publicKey?: string;
-	class?: string;
-}
+import type { FormProps } from "../types";
+
+type Props = FormProps;
 
 const { id, action = "mailto:eliagiolli22@gmail.com", serviceId = "", templateId = "", publicKey = "", class: extraClass } = Astro.props;
 ---
