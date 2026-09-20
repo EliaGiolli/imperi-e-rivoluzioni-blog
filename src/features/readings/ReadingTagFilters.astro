@@ -64,7 +64,7 @@ const tags = [...new Set(readings.flatMap((reading) => reading.data.tags))].sort
 				x-transition.opacity.duration.150ms
 				x-cloak
 			>
-				<ReadingCard reading={reading} />
+				<ReadingCard reading={reading} headingLevel="h2" />
 			</div>
 		))}
 	</div>
