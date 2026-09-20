@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Before doing anything, check:
+1. PROJECT_OVERVIEW.md
+2. PALETTE.md
+3. ROADMAP.md
+So that you'll have a complete overview of the project's current state
+
 ## Project
 
 "Imperi e Rivoluzioni" — a static Astro blog on contemporary history and geopolitics. All user-facing copy, content and content metadata is **in Italian**; code identifiers and comments are mostly English. Keep that split when adding code.
