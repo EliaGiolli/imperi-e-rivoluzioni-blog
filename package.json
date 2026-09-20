@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
     "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.3.3",
     "alpinejs": "^3.17.1",

@@ -6,7 +6,11 @@ import MainLayout from "../core/layouts/MainLayout.astro";
 import Button from "../shared/ui/Button.astro";
 ---
 
-<MainLayout>
+<MainLayout
+	title="Pagina non trovata"
+	description="La pagina che cercavi non esiste o è stata spostata. Torna alla home di Imperi e Rivoluzioni per riprendere la navigazione."
+	noindex
+>
     <Button href="/" variant="primary" class="mx-10 mt-10">Torna alla home</Button>
     <div class="flex flex-col items-center justify-items-center gap-7">
         <Image 

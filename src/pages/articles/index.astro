@@ -8,7 +8,10 @@ import { byReadingOrder } from "../../core/helpers";
 const articles = [...(await getCollection("articles"))].sort(byReadingOrder);
 ---
 
-<MainLayout>
+<MainLayout
+	title="Articoli"
+	description="L'archivio degli articoli di Imperi e Rivoluzioni: ricostruzioni storiche sul lungo XX secolo, dai percorsi sul militarismo giapponese alle radici dei conflitti contemporanei."
+>
 	<main class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
 		<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700">Archivio</p>
 		<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl">Articoli</h1>

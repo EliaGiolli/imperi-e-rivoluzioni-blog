@@ -15,7 +15,10 @@ const { reading } = Astro.props;
 const { Content } = await render(reading);
 ---
 
-<MainLayout>
+<MainLayout
+	title={`${reading.data.name} — ${reading.data.author}`}
+	description={reading.data.description}
+>
 	<main class="mx-auto max-w-4xl px-6 py-16 lg:px-8 lg:py-24">
 		<a href="/readings" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-red-700 hover:text-red-800">
 			<span aria-hidden="true">←</span>

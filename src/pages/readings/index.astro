@@ -6,7 +6,10 @@ import ReadingTagFilters from "../../features/readings/ReadingTagFilters.astro";
 const readings = await getCollection("readings");
 ---
 
-<MainLayout>
+<MainLayout
+	title="Letture consigliate"
+	description="La bibliografia di Imperi e Rivoluzioni: libri di storia contemporanea e geopolitica per orientarsi tra imperi, nazionalismi, conflitti e ordine internazionale."
+>
 	<main>
 		<ReadingTagFilters
 			readings={readings}
