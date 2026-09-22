@@ -1,22 +1,20 @@
 ---
 import { getCollection } from "astro:content";
 import { byMostRecentlyAdded } from "../../core/helpers";
+import { HOME_PREVIEW_COUNT } from "../../shared/utils/constants";
+import Button from "../../shared/ui/Button.astro";
+import Tabs from "../../shared/ui/Tabs.astro";
+import TabPanel from "../../shared/ui/TabPanel.astro";
 import ReadingCard from "./ReadingCard.astro";
 
-const readings = await getCollection("readings");
-readings.sort(byMostRecentlyAdded);
-
-// Mirrors Tabs.astro's TAB_ACTIVE/TAB_INACTIVE: both states spelled out here rather than
-// relying on the global CSS classes the previous `<style is="global">` block defined.
-const TAB_ACTIVE = "border-stone-900 bg-stone-900 text-stone-100 dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900";
-const TAB_INACTIVE = "border-stone-300 bg-white text-stone-700 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-300";
+const readings = [...(await getCollection("readings"))].sort(byMostRecentlyAdded).slice(0, HOME_PREVIEW_COUNT);
+const tabs = readings.map((reading, index) => ({ id: reading.id, label: `${index + 1}. ${reading.data.name}` }));
 ---
 
 <section
 	id="readings"
 	class="border-b border-stone-300 bg-stone-200 dark:border-stone-700 dark:bg-stone-950"
 	aria-labelledby="readings-title"
-	x-data="{ activeReading: 0 }"
 >
 	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
 		<div class="mb-12 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -28,41 +26,17 @@ const TAB_INACTIVE = "border-stone-300 bg-white text-stone-700 dark:border-stone
 				</p>
 			</div>
 
-			<nav aria-label="Seleziona una lettura">
-				<ul class="flex flex-wrap gap-2" role="tablist">
-					{readings.map((reading, index) => (
-						<li role="presentation">
-							<button
-								type="button"
-								role="tab"
-								id={`reading-tab-${reading.id}`}
-								aria-controls={`reading-panel-${reading.id}`}
-								:aria-selected={`activeReading === ${index}`}
-								x-on:click={`activeReading = ${index}`}
-								:class={`activeReading === ${index} ? ${JSON.stringify(TAB_ACTIVE)} : ${JSON.stringify(TAB_INACTIVE)}`}
-								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-950"
-							>
-								{index + 1}. {reading.data.name}
-							</button>
-						</li>
-					))}
-				</ul>
-			</nav>
+			<Button href="/readings" variant="secondary">Tutte le letture</Button>
 		</div>
 
-		<div aria-live="polite">
-			{readings.map((reading, index) => (
-				<div
-					id={`reading-panel-${reading.id}`}
-					role="tabpanel"
-					aria-labelledby={`reading-tab-${reading.id}`}
-					x-show={`activeReading === ${index}`}
-					x-cloak
-					x-transition.opacity.duration.200ms
-				>
-					<ReadingCard reading={reading} />
-				</div>
-			))}
-		</div>
+		<Tabs idPrefix="reading" tabs={tabs} ariaLabel="Seleziona una lettura">
+			<div class="mt-8">
+				{readings.map((reading, index) => (
+					<TabPanel idPrefix="reading" id={reading.id} index={index}>
+						<ReadingCard reading={reading} />
+					</TabPanel>
+				))}
+			</div>
+		</Tabs>
 	</div>
 </section>
