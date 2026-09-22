@@ -8,7 +8,7 @@ const { article, headingLevel = "h3" } = Astro.props;
 const Heading = headingLevel;
 ---
 
-<Card as="article" class="flex h-full flex-col bg-white p-6 lg:p-8 dark:bg-stone-800" aria-labelledby={`article-card-title-${article.data.slug}`}>
+<Card as="article" class="flex h-full flex-col p-6 lg:p-8" aria-labelledby={`article-card-title-${article.data.slug}`}>
 	<p class="text-sm font-bold uppercase tracking-[0.16em] text-red-700 dark:text-amber-500">Articolo</p>
 	<Heading id={`article-card-title-${article.data.slug}`} class="mt-3 text-2xl font-extrabold text-stone-900 dark:text-stone-100">{article.data.title}</Heading>
 	<p class="mt-4 grow text-base leading-7 text-stone-700 dark:text-stone-300">{article.data.description}</p>

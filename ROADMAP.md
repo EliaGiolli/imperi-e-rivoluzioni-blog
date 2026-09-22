@@ -27,7 +27,7 @@ Grounded in the four questions raised after the third round closed. Full design,
 - [x] - server-render tab 0's active classes and leave panel 0 uncloaked, so the sections are not blank before Alpine hydrates and still render without JavaScript
 - [x] - delete `ReadingSection.astro`'s `<style>` block in the process — line 70 reads `<style is="global">`, a plain HTML attribute rather than Astro's `is:global` directive, and works only by accident of scoping
 - [x] - add `HOME_PREVIEW_COUNT = 3` to `shared/utils/constants.ts` and rewire both sections to `.slice(0, HOME_PREVIEW_COUNT)` through `Tabs`/`TabPanel`, each with a CTA to its archive ("Tutti gli articoli" / "Tutte le letture")
-- [ ] - unify the card surface (`ArticleCard` is `bg-white`, `ReadingCard` is `bg-stone-100` — drop both and let `Card.astro` govern) and alternate the two adjacent identical `bg-stone-200` bands
+- [x] - unify the card surface (`ArticleCard` is `bg-white`, `ReadingCard` is `bg-stone-100` — drop both and let `Card.astro` govern) and alternate the two adjacent identical `bg-stone-200` bands
 
 ## Phase 3 — Keystatic go/no-go spike
 - [ ] - timeboxed spike on a throwaway branch with `storage: { kind: 'local' }` and the readings collection only. Gates: `npm run build` exits 0 → record where static output lands → `test:integration` still passes → no React in `dist/index.html` → `/keystatic` renders → editing a reading produces a one-line `git diff` → rebuild still validates against Zod
