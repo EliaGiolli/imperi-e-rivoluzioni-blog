@@ -5,6 +5,11 @@ import ReadingCard from "./ReadingCard.astro";
 
 const readings = await getCollection("readings");
 readings.sort(byMostRecentlyAdded);
+
+// Mirrors Tabs.astro's TAB_ACTIVE/TAB_INACTIVE: both states spelled out here rather than
+// relying on the global CSS classes the previous `<style is="global">` block defined.
+const TAB_ACTIVE = "border-stone-900 bg-stone-900 text-stone-100 dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900";
+const TAB_INACTIVE = "border-stone-300 bg-white text-stone-700 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-300";
 ---
 
 <section
@@ -34,7 +39,7 @@ readings.sort(byMostRecentlyAdded);
 								aria-controls={`reading-panel-${reading.id}`}
 								:aria-selected={`activeReading === ${index}`}
 								x-on:click={`activeReading = ${index}`}
-								:class={`activeReading === ${index} ? 'reading-tab-active' : 'reading-tab-inactive'`}
+								:class={`activeReading === ${index} ? ${JSON.stringify(TAB_ACTIVE)} : ${JSON.stringify(TAB_INACTIVE)}`}
 								class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-950"
 							>
 								{index + 1}. {reading.data.name}
@@ -61,30 +66,3 @@ readings.sort(byMostRecentlyAdded);
 		</div>
 	</div>
 </section>
-
-<style is="global">
-	.reading-tab-active {
-		border-color: #2b2622;
-		background: #2b2622;
-		color: white;
-	}
-
-	.reading-tab-inactive {
-		border-color: #d6d3ce;
-		background: white;
-		color: #44403c;
-	}
-
-	/* Inverted on charcoal: the selected tab becomes the parchment block. */
-	.dark .reading-tab-active {
-		border-color: #efe6d3;
-		background: #efe6d3;
-		color: #1c1917;
-	}
-
-	.dark .reading-tab-inactive {
-		border-color: #57534e;
-		background: #292524;
-		color: #d6d3d1;
-	}
-</style>
