@@ -1,9 +1,10 @@
 ---
 import { getCollection } from "astro:content";
+import { byMostRecentlyAdded } from "../../core/helpers";
 import ReadingCard from "./ReadingCard.astro";
 
 const readings = await getCollection("readings");
-readings.sort((first, second) => second.data.addedDate.getTime() - first.data.addedDate.getTime());
+readings.sort(byMostRecentlyAdded);
 ---
 
 <section

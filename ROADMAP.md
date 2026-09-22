@@ -22,7 +22,7 @@ Grounded in the four questions raised after the third round closed. Full design,
 
 ## Phase 2 — Homepage: shared accessible tabs & latest-N
 - [x] - add `addedDate: z.date()` to the readings schema, backfill the 3 existing files preserving today's order, and delete the hardcoded `readingOrder` array from `ReadingSection.astro`
-- [ ] - add `SortableReading` to `shared/types/content.ts` and a `byMostRecentlyAdded` comparator in `core/helpers/sortReadings.ts` (tie-break on `name.localeCompare(…, "it")`), re-exported from `helpers/index.ts` — do **not** generalise `byMostRecent`, which is typed to articles' `order`/`pubDate`
+- [x] - add `SortableReading` to `shared/types/content.ts` and a `byMostRecentlyAdded` comparator in `core/helpers/sortReadings.ts` (tie-break on `name.localeCompare(…, "it")`), re-exported from `helpers/index.ts` — do **not** generalise `byMostRecent`, which is typed to articles' `order`/`pubDate`
 - [ ] - build `shared/ui/Tabs.astro` + `shared/ui/TabPanel.astro` implementing the WAI-ARIA tabs pattern properly: arrow keys with wrap, Home/End, roving tabindex, one Alpine scope per group via `idPrefix`. Types go in `shared/types/ui.ts`
 - [ ] - server-render tab 0's active classes and leave panel 0 uncloaked, so the sections are not blank before Alpine hydrates and still render without JavaScript
 - [ ] - delete `ReadingSection.astro`'s `<style>` block in the process — line 70 reads `<style is="global">`, a plain HTML attribute rather than Astro's `is:global` directive, and works only by accident of scoping

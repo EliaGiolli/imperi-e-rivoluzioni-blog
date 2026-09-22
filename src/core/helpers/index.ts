@@ -4,5 +4,6 @@ export * from './formatDate';
 export * from './navigation';
 export * from './readingTime';
 export * from './sortArticles';
+export * from './sortReadings';
 export * from './structuredData';
 export * from './validateContact';

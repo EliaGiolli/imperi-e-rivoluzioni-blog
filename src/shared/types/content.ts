@@ -60,6 +60,14 @@ export interface SortableArticle {
 	};
 }
 
+/** The frontmatter fields the reading comparator orders on. */
+export interface SortableReading {
+	data: {
+		name: string;
+		addedDate: Date;
+	};
+}
+
 /** Everything the JSON-LD `BlogPosting` payload is built from. */
 export interface ArticleSchemaInput {
 	title: string;
