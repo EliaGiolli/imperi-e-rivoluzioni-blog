@@ -1,0 +1,21 @@
+---
+import type { TabPanelProps } from "../types";
+import { cn } from "../lib/cn";
+
+type Props = TabPanelProps;
+
+const { idPrefix, id, index, class: extraClass } = Astro.props;
+---
+
+<div
+	id={`${idPrefix}-panel-${id}`}
+	role="tabpanel"
+	aria-labelledby={`${idPrefix}-tab-${id}`}
+	tabindex="0"
+	x-show={`active === ${index}`}
+	x-cloak
+	x-transition.opacity.duration.200ms
+	class={cn("rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2", extraClass)}
+>
+	<slot />
+</div>
