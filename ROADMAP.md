@@ -17,7 +17,7 @@ Grounded in the four questions raised after the third round closed. Full design,
 
 ## Phase 1 — Analytics & Search Console
 - [ x ] - move `googleebfa12ca84c3f0f0.html` from the project root into `public/` — it is never copied to `dist/` today, which is the whole reason verification fails
-- [ ] - install `@vercel/analytics` and render `<Analytics />` from `@vercel/analytics/astro` in `MainLayout`'s `<head>`, before `<slot name="head" />`
+- [x] - install `@vercel/analytics` and render `<Analytics />` from `@vercel/analytics/astro` in `MainLayout`'s `<head>`, before `<slot name="head" />`
 - [ ] - add `Disallow: /keystatic` and `Disallow: /api/keystatic` to `public/robots.txt` (harmless before the CMS exists)
 
 ## Phase 2 — Homepage: shared accessible tabs & latest-N
