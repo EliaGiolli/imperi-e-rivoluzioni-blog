@@ -14,6 +14,9 @@ export const OG_IMAGE_PATH = "/og-image.png"
 export const OG_IMAGE_WIDTH = 1200
 export const OG_IMAGE_HEIGHT = 630
 
+/** How many entries the homepage's article/reading tab carousels show before linking to the archive. */
+export const HOME_PREVIEW_COUNT = 3
+
 // Socials
 
 export const INSTAGRAM_URL = 'https://www.instagram.com/imperierivoluzioni/';

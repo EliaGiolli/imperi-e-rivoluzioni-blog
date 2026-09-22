@@ -5,6 +5,7 @@ description: "Un'indagine sul ruolo decisivo dell'Unione Sovietica di Stalin nel
 tags: ["URSS", "Stalin", "Israele", "Medio Oriente", "Guerra fredda"]
 topic: "URSS e nascita di Israele"
 amazonUrl: "https://amzn.eu/d/01Zk7uTy"
+addedDate: 2026-09-22
 ---
 
 Leonid Mlecin ricostruisce il sostegno diplomatico e militare con cui l'Unione Sovietica di Stalin contribuì alla creazione e alla difesa iniziale di Israele. Il libro segue il ruolo di Mosca nella risoluzione ONU del 1947 e nell'armamento del nuovo Stato nel contesto della crisi dell'impero britannico in Medio Oriente.

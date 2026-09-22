@@ -80,3 +80,26 @@ export interface ReadingTagFiltersProps {
 export interface ServerErrorPageProps {
 	error: unknown;
 }
+
+/** One tab button; `id` is the stable key its panel is matched against, not the DOM id. */
+export interface TabItem {
+	id: string;
+	label: string;
+}
+
+export interface TabsProps {
+	/** Namespaces this group's DOM ids and Alpine scope so several tab groups can share a page. */
+	idPrefix: string;
+	tabs: TabItem[];
+	ariaLabel: string;
+	class?: string;
+}
+
+export interface TabPanelProps {
+	idPrefix: string;
+	/** Must match the `id` of the corresponding entry in the sibling `<Tabs>`'s `tabs` prop. */
+	id: string;
+	/** Position in that same `tabs` array — what `<Tabs>`'s active state is compared against. */
+	index: number;
+	class?: string;
+}

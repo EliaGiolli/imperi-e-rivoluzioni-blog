@@ -2,20 +2,35 @@
 import { getCollection } from "astro:content";
 import ArticleCard from "./ArticleCard.astro";
 import { byMostRecent } from "../../core/helpers";
+import { HOME_PREVIEW_COUNT } from "../../shared/utils/constants";
+import Button from "../../shared/ui/Button.astro";
+import Tabs from "../../shared/ui/Tabs.astro";
+import TabPanel from "../../shared/ui/TabPanel.astro";
 
-const articles = [...(await getCollection("articles"))].sort(byMostRecent);
+const articles = [...(await getCollection("articles"))].sort(byMostRecent).slice(0, HOME_PREVIEW_COUNT);
+const tabs = articles.map((article, index) => ({ id: article.id, label: `${index + 1}. ${article.data.title}` }));
 ---
 
-<section id="articles" class="border-b border-stone-300 bg-stone-200 dark:border-stone-700 dark:bg-stone-950" aria-labelledby="articles-title">
+<section id="articles" class="border-b border-stone-300 bg-stone-100 dark:border-stone-700 dark:bg-stone-900" aria-labelledby="articles-title">
 	<div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
-		<div class="max-w-2xl">
-			<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-red-700 dark:text-amber-500">Scritti recenti</p>
-			<h2 id="articles-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl dark:text-stone-100">Articoli</h2>
-			<p class="mt-4 text-lg leading-8 text-stone-700 dark:text-stone-300">Analisi e ricostruzioni per seguire le radici storiche dei conflitti e dei rapporti di potere.</p>
+		<div class="mb-12 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+			<div class="max-w-2xl">
+				<p class="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-red-700 dark:text-amber-500">Scritti recenti</p>
+				<h2 id="articles-title" class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl dark:text-stone-100">Articoli</h2>
+				<p class="mt-4 text-lg leading-8 text-stone-700 dark:text-stone-300">Analisi e ricostruzioni per seguire le radici storiche dei conflitti e dei rapporti di potere.</p>
+			</div>
+
+			<Button href="/articles" variant="secondary">Tutti gli articoli</Button>
 		</div>
 
-		<div class="mt-12 grid gap-6 lg:grid-cols-2">
-			{articles.map((article) => <ArticleCard article={article} />)}
-		</div>
+		<Tabs idPrefix="article" tabs={tabs} ariaLabel="Seleziona un articolo">
+			<div class="mt-8">
+				{articles.map((article, index) => (
+					<TabPanel idPrefix="article" id={article.id} index={index}>
+						<ArticleCard article={article} />
+					</TabPanel>
+				))}
+			</div>
+		</Tabs>
 	</div>
 </section>

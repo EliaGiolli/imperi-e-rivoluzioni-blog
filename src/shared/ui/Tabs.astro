@@ -1,0 +1,77 @@
+---
+import type { TabsProps } from "../types";
+import { cn } from "../lib/cn";
+
+type Props = TabsProps;
+
+const { idPrefix, tabs, ariaLabel, class: extraClass } = Astro.props;
+
+// Mirrors ReadingTagFilters' TAG_ON/TAG_OFF pattern: both states spelled out once here
+// rather than inlined twice in the template.
+const TAB_ACTIVE = "border-stone-900 bg-stone-900 text-stone-100 dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900";
+const TAB_INACTIVE = "border-stone-300 bg-white text-stone-700 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-300";
+---
+
+<div
+	x-data={`{
+		active: 0,
+		count: ${tabs.length},
+		select(index) {
+			this.active = index;
+		},
+		focusTab(index) {
+			this.$refs['${idPrefix}-tab-' + index]?.focus();
+		},
+		next() {
+			this.select((this.active + 1) % this.count);
+			this.$nextTick(() => this.focusTab(this.active));
+		},
+		prev() {
+			this.select((this.active - 1 + this.count) % this.count);
+			this.$nextTick(() => this.focusTab(this.active));
+		},
+		first() {
+			this.select(0);
+			this.$nextTick(() => this.focusTab(this.active));
+		},
+		last() {
+			this.select(this.count - 1);
+			this.$nextTick(() => this.focusTab(this.active));
+		},
+	}`}
+	class={cn(extraClass)}
+>
+	<div role="tablist" aria-label={ariaLabel} class="flex flex-wrap gap-2">
+		{tabs.map((tab, index) => {
+			const isActive = index === 0;
+
+			return (
+				<button
+					type="button"
+					role="tab"
+					id={`${idPrefix}-tab-${tab.id}`}
+					aria-controls={`${idPrefix}-panel-${tab.id}`}
+					x-ref={`${idPrefix}-tab-${index}`}
+					aria-selected={isActive ? "true" : "false"}
+					:aria-selected={`(active === ${index}).toString()`}
+					tabindex={isActive ? "0" : "-1"}
+					:tabindex={`active === ${index} ? '0' : '-1'`}
+					x-on:click={`select(${index})`}
+					@keydown.right.prevent="next()"
+					@keydown.left.prevent="prev()"
+					@keydown.home.prevent="first()"
+					@keydown.end.prevent="last()"
+					class={cn(
+						"rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-950",
+						isActive ? TAB_ACTIVE : TAB_INACTIVE,
+					)}
+					:class={`active === ${index} ? ${JSON.stringify(TAB_ACTIVE)} : ${JSON.stringify(TAB_INACTIVE)}`}
+				>
+					{tab.label}
+				</button>
+			);
+		})}
+	</div>
+
+	<slot />
+</div>
