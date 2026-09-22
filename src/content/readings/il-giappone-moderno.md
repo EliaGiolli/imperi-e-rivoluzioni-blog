@@ -5,6 +5,7 @@ description: "Una storia del Giappone imperiale dalla crisi dello shogunato Toku
 tags: ["Giappone", "Impero", "Modernizzazione", "Nazionalismo"]
 topic: "Asia orientale e imperialismo"
 amazonUrl: "https://amzn.eu/d/0gsslFQt"
+addedDate: 2026-09-08
 ---
 
 Andrea Revelant ricostruisce la parabola del Giappone moderno collocandola nel contesto regionale e globale. La lettura segue la costruzione dello Stato-nazione, l'età Meiji, l'espansione imperiale, la crisi del liberalismo e l'avvento dell'autoritarismo fino alla Seconda guerra mondiale.

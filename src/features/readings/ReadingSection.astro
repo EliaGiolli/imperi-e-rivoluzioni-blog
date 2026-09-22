@@ -2,14 +2,8 @@
 import { getCollection } from "astro:content";
 import ReadingCard from "./ReadingCard.astro";
 
-const readingOrder = [
-	"perche-stalin-creo-israele",
-	"brevissima-storia-conflitto-israele-palestina",
-	"il-giappone-moderno",
-];
-
 const readings = await getCollection("readings");
-readings.sort((first, second) => readingOrder.indexOf(first.id) - readingOrder.indexOf(second.id));
+readings.sort((first, second) => second.data.addedDate.getTime() - first.data.addedDate.getTime());
 ---
 
 <section

@@ -14,6 +14,7 @@ const readingsCollection = defineCollection({
         tags: z.array(z.string()),
         topic: z.string(),
         amazonUrl: z.string().url(),
+        addedDate: z.date(),
     })
 });
 

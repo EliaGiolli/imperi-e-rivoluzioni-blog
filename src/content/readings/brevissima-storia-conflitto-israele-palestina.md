@@ -5,6 +5,7 @@ description: "Una sintesi delle origini e degli sviluppi del conflitto israelo-p
 tags: ["Medio Oriente", "Palestina", "Israele", "Colonialismo", "Conflitti"]
 topic: "Medio Oriente e questione israelo-palestinese"
 amazonUrl: "https://amzn.eu/d/0hpLEycV"
+addedDate: 2026-09-15
 ---
 
 Ilan Pappé ricostruisce la storia del conflitto israelo-palestinese a partire dal 1882, mostrando come le sue radici precedano il 1948, il 1967 e gli eventi più recenti.
