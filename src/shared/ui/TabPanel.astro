@@ -13,7 +13,7 @@ const { idPrefix, id, index, class: extraClass } = Astro.props;
 	aria-labelledby={`${idPrefix}-tab-${id}`}
 	tabindex="0"
 	x-show={`active === ${index}`}
-	x-cloak
+	x-cloak={index !== 0 ? true : undefined}
 	x-transition.opacity.duration.200ms
 	class={cn("rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2", extraClass)}
 >

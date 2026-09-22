@@ -42,26 +42,35 @@ const TAB_INACTIVE = "border-stone-300 bg-white text-stone-700 dark:border-stone
 	class={cn(extraClass)}
 >
 	<div role="tablist" aria-label={ariaLabel} class="flex flex-wrap gap-2">
-		{tabs.map((tab, index) => (
-			<button
-				type="button"
-				role="tab"
-				id={`${idPrefix}-tab-${tab.id}`}
-				aria-controls={`${idPrefix}-panel-${tab.id}`}
-				x-ref={`${idPrefix}-tab-${index}`}
-				:aria-selected={`(active === ${index}).toString()`}
-				:tabindex={`active === ${index} ? '0' : '-1'`}
-				:class={`active === ${index} ? ${JSON.stringify(TAB_ACTIVE)} : ${JSON.stringify(TAB_INACTIVE)}`}
-				x-on:click={`select(${index})`}
-				@keydown.right.prevent="next()"
-				@keydown.left.prevent="prev()"
-				@keydown.home.prevent="first()"
-				@keydown.end.prevent="last()"
-				class="rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-950"
-			>
-				{tab.label}
-			</button>
-		))}
+		{tabs.map((tab, index) => {
+			const isActive = index === 0;
+
+			return (
+				<button
+					type="button"
+					role="tab"
+					id={`${idPrefix}-tab-${tab.id}`}
+					aria-controls={`${idPrefix}-panel-${tab.id}`}
+					x-ref={`${idPrefix}-tab-${index}`}
+					aria-selected={isActive ? "true" : "false"}
+					:aria-selected={`(active === ${index}).toString()`}
+					tabindex={isActive ? "0" : "-1"}
+					:tabindex={`active === ${index} ? '0' : '-1'`}
+					x-on:click={`select(${index})`}
+					@keydown.right.prevent="next()"
+					@keydown.left.prevent="prev()"
+					@keydown.home.prevent="first()"
+					@keydown.end.prevent="last()"
+					class={cn(
+						"rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-950",
+						isActive ? TAB_ACTIVE : TAB_INACTIVE,
+					)}
+					:class={`active === ${index} ? ${JSON.stringify(TAB_ACTIVE)} : ${JSON.stringify(TAB_INACTIVE)}`}
+				>
+					{tab.label}
+				</button>
+			);
+		})}
 	</div>
 
 	<slot />
