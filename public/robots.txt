@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /keystatic
+Disallow: /api/keystatic
 
 Sitemap: https://imperi-e-rivoluzioni-blog.vercel.app/sitemap-index.xml

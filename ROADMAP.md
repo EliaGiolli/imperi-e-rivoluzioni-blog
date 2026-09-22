@@ -7,6 +7,52 @@ After you complete the task, come back here and mark it as completed
 
 ---
 
+# Fourth round — analytics, admin CMS & homepage scaling
+
+Grounded in the four questions raised after the third round closed. Full design, code sketches and risk table live in the approved plan at `C:\Users\elia_\.claude\plans\i-d-like-to-plan-pure-lovelace.md`.
+
+**Decisions taken:** Vercel Web Analytics (cookieless, no consent banner) over GA4 · **keep Alpine** — four trivial behaviours don't justify a React/Vue runtime; React enters for the admin route only · Keystatic in GitHub mode over a hand-rolled `/api/dashboard` · readings get an `addedDate` ordering key · both homepage sections become tab carousels capped at the latest 3.
+
+**Verified while planning:** Keystatic *does* support Astro 7 (`@keystatic/astro@6.0.0` peers `astro: '5 || 6 || 7'`) — the earlier compatibility worry was wrong. The real risks are the Vercel adapter breaking `astro preview`/`dist/`, and Keystatic stripping the frontmatter `slug` key that two live article URLs depend on.
+
+## Phase 1 — Analytics & Search Console
+- [ x ] - move `googleebfa12ca84c3f0f0.html` from the project root into `public/` — it is never copied to `dist/` today, which is the whole reason verification fails
+- [x] - install `@vercel/analytics` and render `<Analytics />` from `@vercel/analytics/astro` in `MainLayout`'s `<head>`, before `<slot name="head" />`
+- [x] - add `Disallow: /keystatic` and `Disallow: /api/keystatic` to `public/robots.txt` (harmless before the CMS exists)
+
+## Phase 2 — Homepage: shared accessible tabs & latest-N
+- [ ] - add `addedDate: z.date()` to the readings schema, backfill the 3 existing files preserving today's order, and delete the hardcoded `readingOrder` array from `ReadingSection.astro`
+- [ ] - add `SortableReading` to `shared/types/content.ts` and a `byMostRecentlyAdded` comparator in `core/helpers/sortReadings.ts` (tie-break on `name.localeCompare(…, "it")`), re-exported from `helpers/index.ts` — do **not** generalise `byMostRecent`, which is typed to articles' `order`/`pubDate`
+- [ ] - build `shared/ui/Tabs.astro` + `shared/ui/TabPanel.astro` implementing the WAI-ARIA tabs pattern properly: arrow keys with wrap, Home/End, roving tabindex, one Alpine scope per group via `idPrefix`. Types go in `shared/types/ui.ts`
+- [ ] - server-render tab 0's active classes and leave panel 0 uncloaked, so the sections are not blank before Alpine hydrates and still render without JavaScript
+- [ ] - delete `ReadingSection.astro`'s `<style>` block in the process — line 70 reads `<style is="global">`, a plain HTML attribute rather than Astro's `is:global` directive, and works only by accident of scoping
+- [ ] - add `HOME_PREVIEW_COUNT = 3` to `shared/utils/constants.ts` and rewire both sections to `.slice(0, HOME_PREVIEW_COUNT)` through `Tabs`/`TabPanel`, each with a CTA to its archive ("Tutti gli articoli" / "Tutte le letture")
+- [ ] - unify the card surface (`ArticleCard` is `bg-white`, `ReadingCard` is `bg-stone-100` — drop both and let `Card.astro` govern) and alternate the two adjacent identical `bg-stone-200` bands
+
+## Phase 3 — Keystatic go/no-go spike
+- [ ] - timeboxed spike on a throwaway branch with `storage: { kind: 'local' }` and the readings collection only. Gates: `npm run build` exits 0 → record where static output lands → `test:integration` still passes → no React in `dist/index.html` → `/keystatic` renders → editing a reading produces a one-line `git diff` → rebuild still validates against Zod
+- [ ] - decide go/no-go. Fallback if it fails: Sveltia CMS on a static `public/admin/` page — no adapter, no React, no rendering-mode change
+
+## Phase 4 — Keystatic (GitHub mode)
+- [ ] - install `@keystatic/core`, `@keystatic/astro`, `@astrojs/react`, `react`, `react-dom`, `@astrojs/vercel`
+- [ ] - to better sanitize the env (.env), create a core/config folder and inside of it create envParser.ts that relies on a core/schemas/envSchema.ts with Zod
+- [ ] - env-gate the adapter and the CMS integrations in `astro.config.mjs` (`VERCEL=1 || KEYSTATIC=1`) so the default build, `astro preview` and both test suites stay on the plain static path; leave `output` unset and write no `prerender` lines — the integration injects its routes already marked `prerender: false`
+- [ ] - write `keystatic.config.ts` mirroring both Zod schemas field-for-field: articles at `src/content/articles/**`, readings flat at `src/content/readings/*`
+- [ ] - declare the articles `slug` as an ordinary required `fields.text`, with a *separate* `fields.slug` for the file path — two articles have a frontmatter slug that differs from their filename, and those are the live URLs
+- [ ] - set up the GitHub App via Keystatic's own flow, installed on this repo only (Contents R/W, Metadata R), the four env vars in Vercel, and a committed `.env.example` listing their names
+- [ ] - accept `fields.array(fields.text())` for tags: real CRUD per entry, but no shared vocabulary, autocomplete or rename-everywhere until tags become a real collection
+
+## Phase 5 — Verification & docs
+- [ ] - add `tests/unit/sortReadings.test.ts`, mirroring `sortArticles.test.ts`
+- [ ] - extend `tests/integration/build.test.ts`: the Search Console file reaches `dist/`, the homepage has 2 tablists and `HOME_PREVIEW_COUNT * 2` tabpanels, exactly 2 tabs carry `tabindex="0"`, both CTAs render. Leave the existing `dist/articles/…` assertion untouched — it is the canary for the adapter relocating output
+- [ ] - add e2e coverage for keyboard tab navigation on both homepage groups
+- [ ] - fix the fragile locator in "navigates from the homepage to an article": `getByRole("link", { name: "Articoli" }).first()` is a substring match the new CTA would also match
+- [ ] - update `CLAUDE.md` (it still claims three collections including the deleted `projects`) and the README's analytics and CMS sections
+- [ ] - confirm `npx astro check` and `npm run build` run clean as the exit criterion for each phase above
+- [ ] - update the `README.md`
+
+---
+
 # Third round — audit-driven improvements
 
 The site has moved on from the old one-page portfolio (Phases 1–9 and the CV task above are obsolete and kept only as history). It is now "Imperi e Rivoluzioni", a multi-page historical/geopolitical blog. This round is grounded in a deep codebase audit (Astro/TypeScript/SEO/perf best practices + UX/accessibility review) plus `PROJECT_OVERVIEW.md`'s editorial and technical vision.
