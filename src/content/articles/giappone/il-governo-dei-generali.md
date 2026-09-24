@@ -64,11 +64,13 @@ L'ascesa di **Hideki Tōjō** (1884-1948) rappresenta il punto d'arrivo di quest
 
 Ufficiale rigoroso e meticoloso, apoditticamente soprannominato *"Kamisori"* ("Il Rasoio") per le sue capacità amministrative, Tōjō si era distinto come comandante del *Kempeitai* (la polizia militare) e Capo di Stato Maggiore dell'Armata del Kwantung in Manciuria.
 
-       [ HIDEKI TŌJŌ ]
-       - Comandante Kempeitai in Manciuria (1935)
-       - Capo Stato Maggiore Armata Kwantung (1937)
-       - Ministro della Guerra nel Governo Konoe (1940)
-       - Primo Ministro del Giappone (Ottobre 1941)
+```
+   [ HIDEKI TŌJŌ ]
+   - Comandante Kempeitai in Manciuria (1935)
+   - Capo Stato Maggiore Armata Kwantung (1937)
+   - Ministro della Guerra nel Governo Konoe (1940)
+   - Primo Ministro del Giappone (Ottobre 1941)
+```
 
 ### La crisi dell'autunno 1941
 Nel 1940-1941, le sanzioni economiche e l'embargo petrolifero imposto dagli Stati Uniti in risposta all'occupazione dell'Indocina misero il Giappone di fronte a un bivio: accettare le condizioni americane (ritirando le truppe dalla Cina) o entrare in guerra per il controllo delle risorse del Sud-est asiatico.

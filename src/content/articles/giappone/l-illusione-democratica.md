@@ -57,15 +57,17 @@ Nella cultura militare dell'epoca si diffuse la pratica del ***Gekokujō*** ("l'
 
 Il **18 settembre 1931**, ufficiali dell'Armata del Kwantung organizzarono un finto attentato dinamitardo lungo i binari della ferrovia vicino a Mukden (**Incidente di Mukden**). Accusando dell'attacco i soldati cinesi, l'Esercito avviò l'invasione sistematica dell'intera Manciuria.
 
-      [ GOVERNO CIVILE DI TOKYO ]
-      (Informa la Società delle Nazioni)
-                  |
-                  v
-      [ TENTA DI FERMARE LE TRUPPE ]
-                  |
-                  v (Insubordinazione / Gekokujō)
-      [ ARMATA DEL KWANTUNG ]
-      (Occupazione autonoma della Manciuria)
+```
+  [ GOVERNO CIVILE DI TOKYO ]
+  (Informa la Società delle Nazioni)
+              |
+              v
+  [ TENTA DI FERMARE LE TRUPPE ]
+              |
+              v (Insubordinazione / Gekokujō)
+  [ ARMATA DEL KWANTUNG ]
+  (Occupazione autonoma della Manciuria)
+```
 
 Il governo civile di Tokyo cercò di fermare le operazioni militari tramite la diplomazia, ma lo Stato Maggiore ignorò le direttive e completò l'occupazione della regione. Nel 1932, l'Esercito proclamò la nascita dello Stato fantoccio del **Manchukuo**, mettendo sul trono l'ultimo imperatore della dinastia Qing, Pu Yi.
 
