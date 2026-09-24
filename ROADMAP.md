@@ -30,8 +30,23 @@ Grounded in the four questions raised after the third round closed. Full design,
 - [x] - unify the card surface (`ArticleCard` is `bg-white`, `ReadingCard` is `bg-stone-100` — drop both and let `Card.astro` govern) and alternate the two adjacent identical `bg-stone-200` bands
 
 ## Phase 3 — Keystatic go/no-go spike
-- [ ] - timeboxed spike on a throwaway branch with `storage: { kind: 'local' }` and the readings collection only. Gates: `npm run build` exits 0 → record where static output lands → `test:integration` still passes → no React in `dist/index.html` → `/keystatic` renders → editing a reading produces a one-line `git diff` → rebuild still validates against Zod
-- [ ] - decide go/no-go. Fallback if it fails: Sveltia CMS on a static `public/admin/` page — no adapter, no React, no rendering-mode change
+- [x] - timeboxed spike on a throwaway branch with `storage: { kind: 'local' }` and the readings collection only. Gates: `npm run build` exits 0 → record where static output lands → `test:integration` still passes → no React in `dist/index.html` → `/keystatic` renders → editing a reading produces a one-line `git diff` → rebuild still validates against Zod
+  - **Spike results** (branch `spike/keystatic`, uncommitted; `@keystatic/core` + `@keystatic/astro@6.0.0`, `@astrojs/react@7`, `@astrojs/vercel@11.0.11`):
+    - ✅ default build (gate off): exit 0, 14 pages, output in `dist/` exactly as before
+    - ✅ `KEYSTATIC=1` build: exit 0, but output **moves** — static pages to `.vercel/output/static`, `dist/` holds only `client/`. The env gate is therefore mandatory, not optional
+    - ✅ only `/keystatic`, `/api/keystatic` and `/_image` route to the function; every public page stays static
+    - ✅ `test:integration` 2/2 and `test:unit` 52/52 pass on the gated-off path
+    - ✅ no React in any public HTML page; sitemap excludes `/keystatic`
+    - ✅ `/keystatic` renders under `KEYSTATIC=1 astro dev`, all reading fields load correctly
+    - ⚠️ one-line diff: **fails on the first save only** — Keystatic re-serialises the whole YAML frontmatter (single quotes, folded `description`, block-list `tags`, drops the blank line after `---`). A second save is exactly one line. One-time normalisation, not recurring churn
+    - ✅ rebuild after saves validates against Zod and renders the edited value
+  - **Extra probe — Risk B on an article body:**
+    - ❌ `fields.markdoc`: GFM table → `{% table %}` tag (would render as literal text), indented block flattened, a line moved, `## Fonti` renumbered `1. 1. 1.`. Not usable
+    - ✅ `fields.mdx({ extension: "md" })`: tables stay GFM (only column padding), ordered lists kept, trailing spaces trimmed. Only lossy change: the **indented code block** (the Tōjō career box in `il-governo-dei-generali.md`) becomes paragraph + list — convert it to a fenced block first
+    - ✅ frontmatter `slug:` as a plain `fields.text` survives the save; URL unchanged
+    - ⚠️ a separate `fields.slug` named `fileName` wrote a stray `fileName: ''` key (harmless to Zod, but noise) — put `fields.slug` on `title` instead, as the plan says. Keystatic also writes `featured: false` explicitly
+    - ⚠️ `npm audit`: 3 high, all `path-to-regexp` ReDoS via `@astrojs/vercel` → `@vercel/routing-utils` (build-time route generation)
+- [x] - decide go/no-go. **Decision: go**, with three amendments to Phase 4: article/reading bodies use `fields.mdx({ extension: "md" })`, not `fields.markdoc`; convert the indented Tōjō code block to a fenced one, then land a single normalisation commit re-serialising all 6 content files as Keystatic writes them; `fields.slug` goes on `title` (no separate slug-named field). Fallback if it fails: Sveltia CMS on a static `public/admin/` page — no adapter, no React, no rendering-mode change
 
 ## Phase 4 — Keystatic (GitHub mode)
 - [ ] - install `@keystatic/core`, `@keystatic/astro`, `@astrojs/react`, `react`, `react-dom`, `@astrojs/vercel`
