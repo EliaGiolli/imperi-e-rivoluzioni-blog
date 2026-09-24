@@ -7,9 +7,12 @@ import react from "@astrojs/react";
 import keystatic from "@keystatic/astro";
 import vercel from "@astrojs/vercel";
 
+import { isCmsEnabled, parseEnv } from "./src/core/config/envParser.ts";
+
 // The CMS needs on-demand routes, hence an adapter. Gate both so the default build,
-// `astro preview` and the test suites stay on the plain static path.
-const withCms = process.env.VERCEL === "1" || process.env.KEYSTATIC === "1";
+// `astro preview` and the test suites stay on the plain static path. Output stays
+// 'static': Keystatic injects its own routes already marked `prerender: false`.
+const withCms = isCmsEnabled(parseEnv());
 
 // https://astro.build/config
 export default defineConfig({
