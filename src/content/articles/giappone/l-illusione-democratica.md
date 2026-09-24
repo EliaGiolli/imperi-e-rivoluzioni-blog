@@ -1,14 +1,22 @@
 ---
-title: "L'illusione democratica: La crisi Taishō e il crollo delle istituzioni"
-description: "Dalla parentesi della Democrazia Taishō alla Grande Depressione del 1929: come la corruzione e la crisi economica hanno travolto le istituzioni civili giapponesi."
+title: 'L''illusione democratica: La crisi Taishō e il crollo delle istituzioni'
+description: >-
+  Dalla parentesi della Democrazia Taishō alla Grande Depressione del 1929: come
+  la corruzione e la crisi economica hanno travolto le istituzioni civili
+  giapponesi.
 pubDate: 2026-09-13
+featured: false
 order: 2
-tags: ["Giappone", "Periodo Taisho", "Grande Depressione", "Manciuria", "Democrazia"]
-topic: "Giappone"
-category: "militarismo giapponese"
+tags:
+  - Giappone
+  - Periodo Taisho
+  - Grande Depressione
+  - Manciuria
+  - Democrazia
+topic: Giappone
+category: militarismo giapponese
 slug: l-illusione-democratica-crisi-taisho
 ---
-
 ## Introduzione: La fragile parentesi della Democrazia Taishō
 
 Agli occhi degli osservatori internazionali dei primi anni '20, il Giappone sembrava aver intrapreso un cammino di progressiva democratizzazione. Il **periodo Taishō (1912-1926)** fu caratterizzato dall'espansione della cultura urbana, dalla nascita di movimenti sindacali e femministi e dall'affermazione di governi guidati da partiti politici civili anziché dalle vecchie élite oligarchiche.
@@ -22,9 +30,11 @@ Tuttavia, questa stagione, passata alla storia come "Democrazia Taishō", poggia
 Durante gli anni '20, la scena politica giapponese fu dominata da due grandi partiti parlamentari: il *Seiyūkai* e il *Minseitō*. Nonostante il mantenimento delle apparenze democratiche, il sistema soffriva di una profonda crisi di legittimità agli occhi della popolazione.
 
 ### Il legame con i *Zaibatsu*
+
 I partiti politici erano fortemente condizionati dai **Zaibatsu**, i grandi conglomerati economico-finanziari come Mitsui, Mitsubishi, Sumitomo e Yasuda. Le decisioni di governo favorivano regolarmente gli interessi dei colossi industriali a scapito dei lavoratori urbani e dei contadini delle campagne. La percezione di una classe politica corrotta e asservita all'alta finanza generò un profondo risentimento popolare.
 
 ### La doppia faccia del 1925: Suffragio e Repressione
+
 Nel **1925** il Parlamento approvò una storica riforma che introduceva il **suffragio universale maschile**, quadruplicando il numero degli elettori. Tuttavia, per bilanciare questa apertura democratica ed evitare la diffusione delle idee socialiste e comuniste diffuse dopo la Rivoluzione Russa del 1917, lo stesso esecutivo fece approvare la **Legge sulla Preservazione dell'Ordine Pubblico** (*Chintō Keisatsu Hō*).
 
 Questa normativa puniva severamente chiunque tentasse di alterare il *Kokutai* (la struttura dello Stato basata sull'autorità imperiale) o di abolire la proprietà privata. La legge creò l'apparato della *Tokkō* (la polizia politica delle idee), restringendo drasticamente le libertà civili e paralizzando la sinistra politica.
@@ -41,7 +51,6 @@ Le tensioni sociali esplosero a causa di una sequenza prolungata di shock econom
 
 Crisi del 1929 -> Crollo export seta -> Carestia nelle campagne -> Radicalizzazione dei soldati-contadini
 
-
 I giovani coscritti dell'Esercito Imperiale provengono in gran parte dai villaggi rurali colpiti dalla crisi. Vedendo le proprie famiglie ridotte alla fame mentre gli industriali delle città mantenevano i propri privilegi, la truppa e i giovani ufficiali svilupparono un odio viscerale verso il capitalismo, il parlamentarismo e la diplomazia civile.
 
 ---
@@ -53,6 +62,7 @@ Nel clima di disperazione economica, l'Esercito presentò l'espansione territori
 Nel nord-est della Cina, l'**Armata del Kwantung** — la forza militare giapponese di stanza a protezione della ferrovia della Manciuria meridionale — agiva in maniera sempre più autonoma rispetto al governo di Tokyo.
 
 ### Il meccanismo del *Gekokujō*
+
 Nella cultura militare dell'epoca si diffuse la pratica del ***Gekokujō*** ("l'insubordinazione dal basso"), secondo cui gli ufficiali di grado medio-basso si ritenevano legittimati a disubbidire ai comandi civili e superiori in nome di un presunto "bene superiore dell'Imperatore e della Patria".
 
 Il **18 settembre 1931**, ufficiali dell'Armata del Kwantung organizzarono un finto attentato dinamitardo lungo i binari della ferrovia vicino a Mukden (**Incidente di Mukden**). Accusando dell'attacco i soldati cinesi, l'Esercito avviò l'invasione sistematica dell'intera Manciuria.
