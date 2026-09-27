@@ -14,7 +14,7 @@
 
 ---
 
-A static site built with Astro, with no UI-framework integrations and zero JavaScript by default. Content lives in typed content collections; interactivity is handed to Alpine.js only where it genuinely earns its place.
+A static site built with Astro, with no UI-framework integrations on the public pages and zero JavaScript by default. Content lives in typed content collections, edited as Markdown or through a git-backed Keystatic admin; interactivity is handed to Alpine.js only where it genuinely earns its place.
 
 > **Editorial focus** — how democracies are hollowed out from within, state militarism, authoritarian transitions and neglected geopolitical dynamics: Meiji and Shōwa Japan, Weimar Germany, interwar autocracies, the post-colonial Middle East.
 
@@ -26,17 +26,19 @@ A static site built with Astro, with no UI-framework integrations and zero JavaS
 - [Architecture and conventions](#-architecture-and-conventions)
 - [Design system](#-design-system)
 - [SEO and discoverability](#-seo-and-discoverability)
+- [Analytics](#-analytics)
+- [Content management (Keystatic)](#%EF%B8%8F-content-management-keystatic)
 - [Stack](#-stack)
 - [Running locally](#-running-locally)
 - [Testing and verification](#-testing-and-verification)
-- [EmailJS configuration](#-emailjs-configuration)
+- [Environment variables](#-environment-variables)
 - [Accessibility](#-accessibility)
 
 ## 🧭 Site pages
 
 | Route | Page | What it does |
 | --- | --- | --- |
-| `/` | 🏠 Home | Hero, editorial promise, readings, articles and contact form on a single page |
+| `/` | 🏠 Home | Hero, editorial promise, the latest readings and articles as keyboard-accessible tab carousels, and the contact form |
 | `/about` | 👤 About | Bio, working method and editorial line — labelled "Chi sono", the first item in the navbar |
 | `/articles` | 📜 Archive | Articles grouped by topic and category, ordered by cycle sequence |
 | `/articles/[id]` | 📖 Article | Full text with a sticky side table of contents, date, author and reading time |
@@ -47,6 +49,7 @@ A static site built with Astro, with no UI-framework integrations and zero JavaS
 | `/rss.xml` | 📡 Feed | RSS feed of the `articles` collection, newest first |
 | `/sitemap-index.xml` | 🗺️ Sitemap | Generated at build time by `@astrojs/sitemap` |
 | `/404`, `/500` | ⚠️ Errors | Error pages in Italian, consistent with the site's identity |
+| `/keystatic` | ✏️ Admin | Keystatic CMS — only in CMS-enabled builds, disallowed in `robots.txt` and left out of the sitemap |
 
 ## 🗂️ Project structure
 
@@ -55,17 +58,20 @@ The project follows a **feature-based** layout: routes hold no reusable logic, d
 ```text
 .
 ├── public/
+│   ├── googleebfa12ca84c3f0f0.html # Google Search Console ownership proof
 │   ├── logo.svg                  # Favicon
 │   ├── og-image.png              # Social preview card (1200×630)
-│   └── robots.txt                # Points crawlers at the sitemap
+│   └── robots.txt                # Points crawlers at the sitemap, keeps them off /keystatic
 ├── src/
 │   ├── content/
 │   │   ├── articles/             # Markdown essays, in per-topic subfolders
 │   │   └── readings/             # Recommended-reading entries
 │   ├── content.config.ts         # Zod schemas for the collections
 │   ├── core/
+│   │   ├── config/               # envParser: loads and validates the environment
 │   │   ├── helpers/              # Pure functions, re-exported from index.ts
-│   │   └── layouts/              # MainLayout: the site's only layout
+│   │   ├── layouts/              # MainLayout: the site's only layout
+│   │   └── schemas/              # envSchema: Zod schema for every environment variable
 │   ├── features/
 │   │   ├── articles/             # ArticlesSection + ArticleCard
 │   │   ├── contact/              # ContactMe and the EmailJS handler
@@ -81,14 +87,16 @@ The project follows a **feature-based** layout: routes hold no reusable logic, d
 │   │   ├── forms/                # Form, Input
 │   │   ├── lib/                  # cn(): clsx + tailwind-merge
 │   │   ├── types/                # Every type and interface in the codebase
-│   │   ├── ui/                   # Button, Card
+│   │   ├── ui/                   # Button, Card, Tabs, TabPanel
 │   │   └── utils/                # Constants and CVA variants
 │   └── styles/                   # global.css: the single Tailwind entry
 ├── tests/
 │   ├── unit/                     # Vitest over the helpers
 │   ├── integration/              # Vitest over a real build
 │   └── e2e/                      # Playwright over the served site
-├── astro.config.mjs
+├── .env.example                  # Every environment variable, documented
+├── astro.config.mjs              # Validates the env; adds the CMS only when enabled
+├── keystatic.config.ts           # Keystatic schema, mirroring content.config.ts
 ├── playwright.config.ts
 └── package.json
 ```
@@ -107,7 +115,7 @@ src/content/articles/**/*.md
           ▼
    content.config.ts  ──  schema validation
           │
-          ├── ArticlesSection → ArticleCard          (home, newest first)
+          ├── ArticlesSection → Tabs → ArticleCard   (home, latest 3)
           ├── /articles        → ArticleCard          (archive, by cycle sequence)
           ├── /articles/[id]   → Markdown + TOC       (routed on the slug field)
           ├── /topics          → thematic index       (crossed with the readings)
@@ -128,6 +136,8 @@ src/content/articles/**/*.md
 
 > ⚠️ The subfolder under `src/content/articles/` is organisational only: the grouping in the UI comes from `topic` and `category`.
 
+> ⚠️ Two articles have a `slug` that differs from their filename. Those slugs are live URLs: never rename one after publication.
+
 ### 📚 `readings`
 
 ```text
@@ -136,7 +146,7 @@ src/content/readings/*.md
           ▼
    content.config.ts
           │
-          ├── ReadingSection    → ReadingCard → /readings/[id]
+          ├── ReadingSection    → Tabs → ReadingCard (home, latest 3 added)
           ├── ReadingTagFilters → client-side tag filter (Alpine)
           └── /topics           → crossed with the articles by topic and tag
 ```
@@ -147,6 +157,7 @@ src/content/readings/*.md
 | `tags` | `string[]` | |
 | `topic` | `string` | |
 | `amazonUrl` | `string` | Validated as a URL |
+| `addedDate` | `date` | When the book entered the bibliography — orders the homepage section, not the publication date |
 
 Reading routes use the **id Astro generates**, not a frontmatter field.
 
@@ -161,7 +172,8 @@ Pure functions live in `core/helpers/` and are re-exported from `helpers/index.t
 | `formatDate` | Dates in the long Italian format |
 | `capitalizeFirstLetter` | Leading capital |
 | `readingTime` | Word-count reading estimate, ignoring code, diagrams and Markdown syntax |
-| `byReadingOrder` / `byMostRecent` | Comparators for ordering the listings |
+| `byReadingOrder` / `byMostRecent` | Comparators for ordering the article listings |
+| `byMostRecentlyAdded` | Newest-added-first comparator for the readings, tie-broken on the Italian-collated title |
 | `buildThemeIndex`, `slugifyTheme` | Build the `/topics` index by crossing articles and readings |
 | `navLinkCurrent` | The `aria-current` value a navbar link deserves for the current route |
 | `validateContactForm`, `contactErrorSummary` | Contact-form rules and the single line announced to screen readers |
@@ -169,7 +181,7 @@ Pure functions live in `core/helpers/` and are re-exported from `helpers/index.t
 
 ### 🏷️ Types
 
-Every `type` and `interface` lives in `shared/types/`, split by domain — `content.ts`, `navigation.ts`, `contact.ts`, `ui.ts` — behind a type-only barrel. Components keep just the local alias Astro needs:
+Every `type` and `interface` lives in `shared/types/`, split by domain — `content.ts`, `env.ts`, `navigation.ts`, `contact.ts`, `ui.ts` — behind a type-only barrel. Components keep just the local alias Astro needs:
 
 ```astro
 ---
@@ -181,10 +193,19 @@ type Props = CardProps;
 
 ### ⚡ Interactivity
 
-No UI-framework integrations. Two mechanisms only:
+No UI-framework integrations on the public pages — React is loaded only inside the `/keystatic` admin. Two mechanisms only:
 
-- **Alpine.js** for anything in-page: mobile menu, tag filter, active card state, theme toggle. Alpine is imported and started with a single `Alpine.start()` inside `Navbar.astro` — which, appearing on every page through `MainLayout`, bootstraps it site-wide. **Do not add a second `Alpine.start()`.**
+- **Alpine.js** for anything in-page: mobile menu, tag filter, homepage tab carousels, theme toggle. Alpine is imported and started with a single `Alpine.start()` inside `Navbar.astro` — which, appearing on every page through `MainLayout`, bootstraps it site-wide. **Do not add a second `Alpine.start()`.**
 - **Plain `<script>` modules** for non-UI work, such as the EmailJS handler in `ContactMe.astro`.
+
+### 🗂️ Tabs
+
+`shared/ui/Tabs.astro` and `TabPanel.astro` implement the [WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) and back both homepage carousels, capped at `HOME_PREVIEW_COUNT` (3) entries each:
+
+- **roving tabindex** — only the selected tab is in the tab order, so Tab moves straight from the tablist into the open panel;
+- **←/→** move between tabs and wrap at either end; **Home**/**End** jump to the first and last;
+- one Alpine scope per group, keyed by `idPrefix` so the two groups' ids never collide;
+- tab 0's active state is **server-rendered** and panel 0 is never cloaked, so each group renders correctly before Alpine starts — and without JavaScript at all.
 
 ### 🔀 View transitions
 
@@ -272,6 +293,51 @@ Smooth scrolling is opt-in, behind `prefers-reduced-motion: no-preference`. `scr
 | JSON-LD | `BlogPosting` on article pages, built by `buildArticleSchema` from the frontmatter rather than from the rendered markup |
 | `robots.txt` | `public/robots.txt`, pointing at the sitemap |
 
+## 📈 Analytics
+
+[Vercel Web Analytics](https://vercel.com/docs/analytics) is rendered by `<Analytics />` in `MainLayout`'s head. It is cookieless, so there is no consent banner. The script only reports from a Vercel production deployment; locally it is inert.
+
+Google Search Console ownership is proven by `public/googleebfa12ca84c3f0f0.html`, which the build copies to the site root.
+
+## ✏️ Content management (Keystatic)
+
+[Keystatic](https://keystatic.com/) provides an admin UI at `/keystatic` that reads and writes the same Markdown files as the rest of the site. It is **git-backed**: locally it writes to `src/content/`, and in production it commits to this repository through a GitHub App, so every edit is an ordinary, reviewable commit.
+
+```sh
+npm run dev:cms   # then open http://localhost:4321/keystatic
+```
+
+`keystatic.config.ts` mirrors the Zod schemas in `content.config.ts` field for field, **in the same order** — change the two together. Zod remains the source of truth and re-validates everything Keystatic writes on the next build.
+
+| Keystatic behaviour | How the config deals with it |
+| --- | --- |
+| The `slugField` is stored in the **filename**, never in frontmatter | The article URL is a separate, required `slug` text field; `fields.slug` on the title only names the file |
+| Frontmatter keys missing from its schema are **stripped on save** | Every Zod field has a Keystatic counterpart |
+| `fields.markdoc` rewrites GFM tables into `{% table %}` tags | Bodies use `fields.mdx({ extension: "md" })`, which round-trips plain Markdown |
+| Its editor has no indented-code node | Code blocks and ASCII diagrams must be **fenced**, or the next save flattens them |
+| It re-serialises YAML in its own style | All content is already normalised, so an edit is a one-line diff |
+
+> ⚠️ Tags are a free-text list per entry: there is no shared vocabulary or autocomplete. `Colonialismo` and `colonialismo` become two different filters, so match the case of existing tags.
+
+### How the CMS is switched on
+
+The CMS needs server routes, hence the Vercel adapter. Both are added **only** when `isCmsEnabled()` says so:
+
+| Context | CMS | Output |
+| --- | --- | --- |
+| `npm run dev` / `build` / `preview`, both test suites | off | static `dist/` |
+| `npm run dev:cms` (`KEYSTATIC=1`) | on, local storage | dev server |
+| Vercel without `PUBLIC_KEYSTATIC_STORAGE=github` | off | static — the site deploys as before |
+| Vercel with `PUBLIC_KEYSTATIC_STORAGE=github` | on, GitHub storage | `.vercel/output/`; only `/keystatic` and `/api/keystatic` are server-rendered |
+
+### Production setup (one-off)
+
+1. Audit the repository's collaborators with write access — they are exactly the people who can sign in to `/keystatic`.
+2. Locally, set `PUBLIC_KEYSTATIC_STORAGE=github` in `.env`, run `npm run dev:cms`, open `/keystatic` and follow Keystatic's *Create GitHub App* flow. It writes the four `KEYSTATIC_*` credentials into `.env` — never commit them.
+3. In the GitHub App's settings, add the production callback `https://imperi-e-rivoluzioni-blog.vercel.app/api/keystatic/github/oauth/callback` and install it on **this repository only**, with Contents read/write and Metadata read.
+4. In Vercel (Production), set `PUBLIC_KEYSTATIC_STORAGE=github` plus the four credentials, and redeploy.
+5. Enable two-factor authentication on the Vercel account: it is now part of the repository's security boundary.
+
 ## 🛠️ Stack
 
 | Technology | Role |
@@ -283,6 +349,10 @@ Smooth scrolling is opt-in, behind `prefers-reduced-motion: no-preference`. `scr
 | [TypeScript](https://www.typescriptlang.org/) | Configuration, helpers, component contracts |
 | [`@astrojs/sitemap`](https://docs.astro.build/en/guides/integrations-guide/sitemap/) + [`@astrojs/rss`](https://docs.astro.build/en/recipes/rss/) | Sitemap and feed |
 | [EmailJS](https://www.emailjs.com/) | Contact-form delivery from the browser |
+| [Keystatic](https://keystatic.com/) + React | Git-backed admin UI at `/keystatic` (React is confined to the admin) |
+| [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/) | Adapter for the CMS routes, added only in CMS-enabled builds |
+| [Vercel Web Analytics](https://vercel.com/docs/analytics) | Cookieless page-view analytics |
+| [Zod](https://zod.dev/) | Content schemas and environment validation |
 | [`sharp`](https://sharp.pixelplumbing.com/) | Astro's image optimisation |
 | `cva`, `clsx`, `tailwind-merge` | UI class composition |
 | [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/) | Unit, integration and end-to-end tests |
@@ -301,6 +371,7 @@ The site is served at `http://localhost:4321`.
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Development server |
+| `npm run dev:cms` | Development server with the Keystatic admin at `/keystatic` |
 | `npm run build` | Static build into `dist/` |
 | `npm run preview` | Serve the local build |
 | `npx astro check` | Template and type diagnostics |
@@ -321,9 +392,9 @@ npm test                   # All three in sequence
 
 | Suite | Covers |
 | --- | --- |
-| 🔬 Unit | `formatDate`, `capitalizeFirstLetter`, `readingTime`, the sort comparators, `buildThemeIndex`, `navLinkCurrent`, the contact-form rules, the JSON-LD builder and `cn()` |
-| 🔗 Integration | A real `astro build`, asserting on the emitted `dist/` HTML |
-| 🎭 End-to-end | Every navbar link resolving to the right page, the mobile menu, `aria-current`, the theme toggle surviving navigation and reloads, and Alpine still driving markup that view transitions swap in |
+| 🔬 Unit | `formatDate`, `capitalizeFirstLetter`, `readingTime`, the sort comparators, `buildThemeIndex`, `navLinkCurrent`, the contact-form rules, the JSON-LD builder, `cn()`, and the environment schema with the CMS gate |
+| 🔗 Integration | A real `astro build`, asserting on the emitted `dist/` HTML: the article route, the Search Console file, and the homepage tab carousels (two tablists, `HOME_PREVIEW_COUNT` tabs each, a server-rendered roving tabindex, only the first panels uncloaked, both archive CTAs) |
+| 🎭 End-to-end | Every navbar link resolving to the right page, the mobile menu, `aria-current`, the WAI-ARIA keyboard pattern on both homepage tab groups, the theme toggle surviving navigation and reloads, and Alpine still driving markup that view transitions swap in |
 
 Running a single test:
 
@@ -339,7 +410,9 @@ npx playwright test -g "resolves every link in the navbar"
 > npm run test:e2e
 > ```
 
-> ℹ️ `tests/integration/build.test.ts` shells out to a real `astro build` at module load: it is slow and it **overwrites `dist/`**.
+> ℹ️ `tests/integration/build.test.ts` shells out to a real `astro build` at module load: it is slow and it **overwrites `dist/`**. It forces `NODE_ENV=production` on that build — Vitest's own `NODE_ENV=test` would otherwise leak in, and Vercel Analytics would compile to its external debug script and stall page loads in any e2e run served from that `dist/`.
+
+> ℹ️ While a view transition animates, clicks land on the transition overlay and are silently dropped. End-to-end tests that click again right after a client-side navigation first wait on `transitionFinished(page)`.
 
 > ℹ️ Playwright is pinned to `workers: 2`. Each worker launches its own headless Chromium, and the default (a quarter of the cores) starves them on a dev machine that already has a browser open — the workers then die with an out-of-memory crash rather than a test failure.
 
@@ -350,15 +423,20 @@ npx astro check   # must finish with 0 errors
 npm run build     # must complete cleanly
 ```
 
-## ✉️ EmailJS configuration
+## 🔐 Environment variables
 
-The form uses EmailJS when these public variables are present. Without them it falls back silently to the form's `mailto:` action.
+Every variable is listed in [`.env.example`](.env.example) and validated at config time by the Zod schema in [`src/core/schemas/envSchema.ts`](src/core/schemas/envSchema.ts). `astro.config.mjs` runs before Vite loads `.env`, so `parseEnv()` reads the files itself; real process variables (Vercel's dashboard, `cross-env` in the npm scripts) take precedence. An invalid set fails the build with the offending names listed.
 
-```env
-PUBLIC_EMAILJS_SERVICE_ID=your_service_id
-PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
-PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
-```
+| Variable | Needed | Purpose |
+| --- | --- | --- |
+| `PUBLIC_EMAILJS_SERVICE_ID`, `PUBLIC_EMAILJS_TEMPLATE_ID`, `PUBLIC_EMAILJS_PUBLIC_KEY` | All three, or none | Contact-form delivery — a partial set is rejected |
+| `PUBLIC_KEYSTATIC_STORAGE` | Optional, `local` by default | `github` switches Keystatic to GitHub storage, and on Vercel enables the CMS |
+| `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`, `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` | On Vercel in GitHub mode | GitHub App credentials, created by Keystatic's setup flow |
+| `KEYSTATIC`, `VERCEL` | Set by the tooling | `"1"` enables the CMS locally (`dev:cms`) / marks a Vercel build |
+
+### ✉️ EmailJS
+
+The form uses EmailJS when its three variables are present. Without them it falls back silently to the form's `mailto:` action.
 
 The EmailJS template needs at least the fields `from_name`, `reply_to`, `subject` and `message`.
 
@@ -372,6 +450,7 @@ The pages follow conventions the end-to-end tests actively verify:
 - 🔗 `aria-labelledby` linking every section to its own heading (e.g. `#articles-title`);
 - 🧭 `aria-current` on the active navbar link — `page` for the exact route, `true` for a section ancestor;
 - 🎛️ `aria-expanded` on the mobile menu toggle, `aria-pressed` on the theme toggle;
+- ⌨️ the WAI-ARIA tabs pattern on the homepage carousels: roving tabindex, arrow keys with wrap, Home/End;
 - 📢 `role="status"` and `aria-live` for form feedback;
 - 🏷️ Italian `aria-label`s on links and controls;
 - ⌨️ visible focus on links and interactive controls;

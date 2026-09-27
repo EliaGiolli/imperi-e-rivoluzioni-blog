@@ -61,12 +61,12 @@ Grounded in the four questions raised after the third round closed. Full design,
 
 ## Phase 5 — Verification & docs
 - [x] - add `tests/unit/sortReadings.test.ts`, mirroring `sortArticles.test.ts` — already added with Phase 2 (#12)
-- [ ] - extend `tests/integration/build.test.ts`: the Search Console file reaches `dist/`, the homepage has 2 tablists and `HOME_PREVIEW_COUNT * 2` tabpanels, exactly 2 tabs carry `tabindex="0"`, both CTAs render. Leave the existing `dist/articles/…` assertion untouched — it is the canary for the adapter relocating output
-- [ ] - add e2e coverage for keyboard tab navigation on both homepage groups
-- [ ] - fix the fragile locator in "navigates from the homepage to an article": `getByRole("link", { name: "Articoli" }).first()` is a substring match the new CTA would also match
-- [ ] - update `CLAUDE.md` (it still claims three collections including the deleted `projects`) and the README's analytics and CMS sections
-- [ ] - confirm `npx astro check` and `npm run build` run clean as the exit criterion for each phase above
-- [ ] - update the `README.md`
+- [x] - extend `tests/integration/build.test.ts`: the Search Console file reaches `dist/`, the homepage has 2 tablists and `HOME_PREVIEW_COUNT * 2` tabpanels, exactly 2 tabs carry `tabindex="0"`, both CTAs render. Leave the existing `dist/articles/…` assertion untouched — it is the canary for the adapter relocating output — parsed with jsdom; also asserts only the first panel of each group is uncloaked. The build now forces `NODE_ENV=production`: vitest's `NODE_ENV=test` leaked into the child build and compiled Vercel Analytics to its external debug script, stalling page loads by ~10 s in any e2e run served from that `dist/` (the root cause of the intermittent e2e timeouts)
+- [x] - add e2e coverage for keyboard tab navigation on both homepage groups — arrow keys with wrap, Home/End, roving tabindex, Tab into the open panel, on both groups; plus a click test
+- [x] - fix the fragile locator in "navigates from the homepage to an article": `getByRole("link", { name: "Articoli" }).first()` is a substring match the new CTA would also match — scoped to `Main navigation` with `exact: true`. Also added a `transitionFinished(page)` wait: clicks during a view transition hit its overlay and are dropped, which failed "resolves every link in the navbar" ~3 runs in 8
+- [x] - update `CLAUDE.md` (it still claims three collections including the deleted `projects`) and the README's analytics and CMS sections — two collections with full frontmatter, CMS + env sections, test-harness gotchas, `ROADMAP.md` is tracked, `AGENTS.md` references removed (the file does not exist)
+- [x] - confirm `npx astro check` and `npm run build` run clean as the exit criterion for each phase above
+- [x] - update the `README.md` — new Analytics, Keystatic (incl. production setup) and Environment variables sections; tabs, structure, fields, helpers, stack, commands and test coverage brought up to date
 
 ---
 
