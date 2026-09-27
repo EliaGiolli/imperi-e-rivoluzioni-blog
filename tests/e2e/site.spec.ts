@@ -16,6 +16,15 @@ const NAV_DESTINATIONS = [
 /** The `dark` class has to be read exactly: the html element also carries `dark:` utilities. */
 const isDark = (page: Page) => page.evaluate(() => document.documentElement.classList.contains("dark"));
 
+/**
+ * Waits for a client-side navigation's view transition to finish. While it animates, the
+ * browser hit-tests against the transition overlay, so a click fired straight after the new
+ * page appears is swallowed and the next navigation silently never happens.
+ * Astro clears `data-astro-transition` on <html> once the transition has finished.
+ */
+const transitionFinished = (page: Page) =>
+	expect(page.locator("html")).not.toHaveAttribute("data-astro-transition", /.*/);
+
 test.describe("public navigation", () => {
 	test("navigates from the homepage to an article", async ({ page }) => {
 		await page.goto("/");
@@ -23,9 +32,11 @@ test.describe("public navigation", () => {
 		await expect(page).toHaveTitle(/Imperi e Rivoluzioni/);
 		await expect(page.locator("#articles-title")).toHaveText("Articoli");
 
-		await page.getByRole("link", { name: "Articoli" }).first().click();
+		// Scoped and exact: the homepage's "Tutti gli articoli" CTA would match a bare substring search.
+		await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Articoli", exact: true }).click();
 		await expect(page).toHaveURL(/\/articles\/?$/);
 		await expect(page.getByRole("heading", { name: "Articoli", level: 1 })).toBeVisible();
+		await transitionFinished(page);
 
 		await page.getByRole("link", { name: /Leggi l'articolo/ }).first().click();
 		await expect(page).toHaveURL(/\/articles\/i-semi-del-militarismo-giapponese\/?$/);
@@ -45,6 +56,7 @@ test.describe("public navigation", () => {
 			await expect(page).toHaveURL(new RegExp(`${path}/?$`));
 			await expect(page.getByRole("heading", { name: heading, level: 1 })).toBeVisible();
 			await expect(link).toHaveAttribute("aria-current", "page");
+			await transitionFinished(page);
 		}
 
 		// The logo closes the loop back to the homepage.
@@ -84,6 +96,69 @@ test.describe("public navigation", () => {
 		// A single article is not the archive, but the archive link still owns the section.
 		await page.goto("/articles/i-semi-del-militarismo-giapponese");
 		await expect(mainNav.getByRole("link", { name: "Articoli" })).toHaveAttribute("aria-current", "true");
+	});
+});
+
+test.describe("homepage tabs", () => {
+	for (const group of ["Seleziona un articolo", "Seleziona una lettura"]) {
+		test(`follows the WAI-ARIA keyboard pattern in "${group}"`, async ({ page }) => {
+			await page.goto("/");
+			// Alpine strips every x-cloak when it starts; keys pressed before that would be lost.
+			await expect(page.locator("[x-cloak]")).toHaveCount(0);
+
+			const tabs = page.getByRole("tablist", { name: group }).getByRole("tab");
+			await expect(tabs).toHaveCount(3);
+
+			/** Exactly one tab selected, focused and in the tab order, and only its panel shown. */
+			const expectActive = async (active: number) => {
+				for (let index = 0; index < 3; index++) {
+					const tab = tabs.nth(index);
+					const panel = page.locator(`#${await tab.getAttribute("aria-controls")}`);
+					const isActive = index === active;
+
+					await expect(tab).toHaveAttribute("aria-selected", String(isActive));
+					await expect(tab).toHaveAttribute("tabindex", isActive ? "0" : "-1");
+					await (isActive ? expect(panel).toBeVisible() : expect(panel).toBeHidden());
+				}
+				await expect(tabs.nth(active)).toBeFocused();
+			};
+
+			await tabs.first().focus();
+
+			await page.keyboard.press("ArrowRight");
+			await expectActive(1);
+			await page.keyboard.press("ArrowRight");
+			await expectActive(2);
+			await page.keyboard.press("ArrowRight");
+			await expectActive(0); // wraps forwards
+
+			await page.keyboard.press("ArrowLeft");
+			await expectActive(2); // wraps backwards
+
+			await page.keyboard.press("Home");
+			await expectActive(0);
+			await page.keyboard.press("End");
+			await expectActive(2);
+
+			// Roving tabindex: Tab leaves the tablist straight into the active panel.
+			await page.keyboard.press("Tab");
+			await expect(page.locator(`#${await tabs.nth(2).getAttribute("aria-controls")}`)).toBeFocused();
+		});
+	}
+
+	test("switches panels on click", async ({ page }) => {
+		await page.goto("/");
+		await expect(page.locator("[x-cloak]")).toHaveCount(0);
+
+		const tabs = page.getByRole("tablist", { name: "Seleziona una lettura" }).getByRole("tab");
+		const firstPanel = page.locator(`#${await tabs.nth(0).getAttribute("aria-controls")}`);
+		const secondPanel = page.locator(`#${await tabs.nth(1).getAttribute("aria-controls")}`);
+
+		await tabs.nth(1).click();
+
+		await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
+		await expect(secondPanel).toBeVisible();
+		await expect(firstPanel).toBeHidden();
 	});
 });
 
