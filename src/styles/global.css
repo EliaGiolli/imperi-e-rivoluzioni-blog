@@ -14,6 +14,67 @@
  */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * The Gazzetta palette, as semantic tokens rather than raw hues. Each utility (`text-ink`,
+ * `border-rule`, `bg-paper`, …) reads a --gz-* variable, and the evening edition simply
+ * redefines those variables on `.dark`, so components need no `dark:` duplicates.
+ * `inline` makes the utilities reference the variables directly, keeping them live.
+ */
+@theme inline {
+	--color-paper: var(--gz-paper);
+	--color-ink: var(--gz-ink);
+	--color-ink-2: var(--gz-ink-2);
+	--color-mute: var(--gz-mute);
+	--color-accent: var(--gz-accent);
+	--color-mark: var(--gz-mark);
+	--color-rule: var(--gz-rule);
+	--color-field: var(--gz-field);
+	--color-hover: var(--gz-hover);
+}
+
+/* Edizione del mattino: ink on warm paper. Every text pair clears WCAG AA on --gz-paper. */
+:root {
+	--gz-paper: #efe6d3;
+	--gz-ink: #201f1d;
+	--gz-ink-2: #444141;
+	--gz-mute: #605d5d;
+	--gz-accent: #7d5411;
+	--gz-mark: #b68235;
+	--gz-rule: rgb(32 31 29 / 20%);
+	--gz-field: rgb(32 31 29 / 45%);
+	--gz-hover: rgb(32 31 29 / 5%);
+}
+
+/* Edizione della sera: the same page turned over, ivory on anthracite, gold accent. */
+:root.dark {
+	--gz-paper: #1f1d1b;
+	--gz-ink: #efe6d3;
+	--gz-ink-2: #d7d3d3;
+	--gz-mute: #bab6b6;
+	--gz-accent: #e1ad66;
+	--gz-mark: #c28d41;
+	--gz-rule: rgb(239 230 211 / 20%);
+	--gz-field: rgb(239 230 211 / 45%);
+	--gz-hover: rgb(239 230 211 / 7%);
+}
+
+/*
+ * The three rule weights of the system: double for the masthead, section openings and
+ * boxes; a solid ink line (`border-ink`) for datelines and tables; a faint `border-rule`
+ * inside sections. Only the double one needs a utility of its own.
+ */
+@utility rule-double {
+	border: 3px double var(--gz-ink);
+}
+
+@utility rule-t-double {
+	border-top: 3px double var(--gz-ink);
+}
+
+@utility rule-b-double {
+	border-bottom: 3px double var(--gz-ink);
+}
+
 :root {
 	font-family: "Lora", serif;
 	color: #2b2622;
