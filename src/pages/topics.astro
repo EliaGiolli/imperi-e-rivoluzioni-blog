@@ -59,7 +59,7 @@ const countLabel = (articleCount: number, readingCount: number): string =>
 					>
 						<div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-stone-200 pb-5 dark:border-stone-700">
 							<h3 id={`tema-${topic.slug}-title`} class="text-2xl font-extrabold text-stone-900 dark:text-stone-100">{topic.name}</h3>
-							<p class="font-dispatch text-sm uppercase tracking-[0.16em] text-stone-600 dark:text-stone-400">
+							<p class="text-xs font-semibold uppercase tracking-[0.16em] tracking-[0.16em] text-stone-600 dark:text-stone-400">
 								{countLabel(topic.articleCount, topic.readingCount)}
 							</p>
 						</div>
@@ -102,7 +102,7 @@ const countLabel = (articleCount: number, readingCount: number): string =>
 					<div class="border-t-2 border-stone-900 pt-4 dark:border-stone-600">
 						<dt class="flex flex-wrap items-baseline justify-between gap-2">
 							<span class="text-lg font-bold text-stone-900 dark:text-stone-100">{tag.name}</span>
-							<span class="font-dispatch text-sm uppercase tracking-[0.16em] text-stone-600 dark:text-stone-400">
+							<span class="text-xs font-semibold uppercase tracking-[0.16em] tracking-[0.16em] text-stone-600 dark:text-stone-400">
 								{countLabel(tag.articleCount, tag.readingCount)}
 							</span>
 						</dt>

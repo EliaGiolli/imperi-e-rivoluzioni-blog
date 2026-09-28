@@ -30,6 +30,9 @@
 	--color-rule: var(--gz-rule);
 	--color-field: var(--gz-field);
 	--color-hover: var(--gz-hover);
+
+	--font-heading: "Cormorant Garamond", serif;
+	--font-body: "Lora", serif;
 }
 
 /* Edizione del mattino: ink on warm paper. Every text pair clears WCAG AA on --gz-paper. */
@@ -130,13 +133,14 @@ body {
 	color: #efe6d3;
 }
 
+/* Cormorant for the masthead and headlines, Lora for everything read at length. */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	font-family: "Playfair Display", serif;
+	font-family: var(--font-heading);
 }
 
 /*
@@ -187,7 +191,7 @@ h6 {
 }
 
 .prose :is(h1, h2, h3, h4, h5, h6) {
-	font-family: "Playfair Display", serif;
+	font-family: var(--font-heading);
 	letter-spacing: -0.01em;
 	scroll-margin-top: 5.5rem;
 }
@@ -225,11 +229,6 @@ h6 {
 
 .dark .prose pre {
 	border-color: #57534e;
-}
-
-.font-dispatch {
-	font-family: "Special Elite", monospace;
-	letter-spacing: 0.08em;
 }
 
 ::selection {
