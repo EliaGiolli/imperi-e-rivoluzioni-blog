@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 
 import MainLayout from "../core/layouts/MainLayout.astro";
+import PageHeader from "../shared/components/PageHeader.astro";
+import SectionHeading from "../shared/components/SectionHeading.astro";
 import Button from "../shared/ui/Button.astro";
 
 import graduationPhoto from "../features/home/assets/foto-laurea.jpg";
@@ -9,17 +11,14 @@ import { INSTAGRAM_URL, SUBSTACK_URL } from "../shared/utils/constants";
 
 const pillars = [
 	{
-		icon: "◈",
 		title: "Cosa racconto",
 		body: "Il lungo XX secolo e le sue eredità: imperialismo e nazionalismi, guerre mondiali, rivoluzioni, fascismi, nazismo, comunismo, URSS e Guerra fredda, fino alle linee di frattura della geopolitica di oggi.",
 	},
 	{
-		icon: "⌁",
 		title: "Come lavoro",
 		body: "Parto da una domanda, non da una tesi. Confronto le fonti, tengo separati i fatti accertati, le interpretazioni storiografiche e le questioni ancora aperte, e cito ciò su cui mi appoggio.",
 	},
 	{
-		icon: "❖",
 		title: "Cosa non troverai",
 		body: "Nessun titolo acchiappa-clic, nessuna lista superficiale, nessuna lezione morale sul passato. Testi lunghi, argomentati e pensati per essere letti con calma, anche quando la risposta è \"non lo sappiamo\".",
 	},
@@ -30,37 +29,33 @@ const pillars = [
 	title="Chi sono"
 	description="Chi c'è dietro Imperi e Rivoluzioni: un progetto indipendente di divulgazione storica sul lungo XX secolo, tra imperi, rivoluzioni, autoritarismi e geopolitica contemporanea."
 >
-	<main class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
-		<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700 dark:text-amber-500">Il progetto</p>
-		<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-100">
-			Chi sono e perché scrivo
-		</h1>
-		<p class="mt-6 max-w-3xl text-lg leading-8 text-stone-700 dark:text-stone-300">
-			<strong>Imperi e Rivoluzioni</strong> è un progetto indipendente di ricerca e divulgazione storica.
-			Nasce da una convinzione semplice: quasi nessuna crisi contemporanea è davvero inedita, e per capirla
-			bisogna risalire alle strutture di potere che l'hanno resa possibile.
-		</p>
+	<main class="page-frame">
+		<PageHeader
+			kicker="Il progetto"
+			title="Chi sono e perché scrivo"
+			dek="Imperi e Rivoluzioni è un progetto indipendente di ricerca e divulgazione storica. Nasce da una convinzione semplice: quasi nessuna crisi contemporanea è davvero inedita, e per capirla bisogna risalire alle strutture di potere che l'hanno resa possibile."
+		/>
 
-		<section class="mt-16 grid gap-10 lg:grid-cols-[0.75fr_1fr] lg:gap-14" aria-labelledby="bio-title">
-			<figure class="max-w-sm">
-				<div class="overflow-hidden rounded-2xl border border-stone-300 bg-stone-200 shadow-[12px_12px_0_rgba(185,139,62,0.22)] dark:border-stone-700 dark:bg-stone-800">
+		<section aria-labelledby="bio-title" class="mt-[clamp(28px,3.4vw,44px)] grid gap-x-12 gap-y-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+			<figure class="m-0">
+				<div class="border border-ink bg-paper p-[5px]">
 					<Image
 						src={graduationPhoto}
 						alt="Elia Giolli durante la cerimonia di laurea"
-						class="aspect-4/5 h-full w-full object-cover"
-						width={720}
-						height={900}
+						class="block aspect-4/5 h-auto w-full object-cover contrast-[1.05] sepia-[.15]"
+						width={640}
+						height={800}
 						loading="lazy"
 					/>
 				</div>
-				<figcaption class="mt-3 text-sm text-stone-500 dark:text-stone-400">
+				<figcaption class="mt-2 border-b border-rule pb-2 text-sm italic leading-[1.45] text-ink-2">
 					Una formazione linguistica per leggere la storia oltre i confini nazionali.
 				</figcaption>
 			</figure>
 
-			<div class="border-t-2 border-stone-900 pt-6 dark:border-stone-600">
-				<h2 id="bio-title" class="text-3xl font-extrabold text-stone-900 dark:text-stone-100">Studiare, collegare, sintetizzare</h2>
-				<div class="mt-6 space-y-5 text-base leading-7 text-stone-700 dark:text-stone-300">
+			<div class="border-t border-ink pt-3.5">
+				<h2 id="bio-title" class="m-0 text-[clamp(28px,3vw,38px)] font-normal leading-[1.1]">Studiare, collegare, sintetizzare</h2>
+				<div class="drop-cap mt-4 space-y-4 text-justify text-[17px] leading-[1.75] text-ink-2 hyphens-auto">
 					<p>
 						Mi chiamo Elia e sono laureato in lingue e letterature straniere. Non mi presento come uno storico
 						che sa tutto, ma come un autore e ricercatore indipendente: studio, collego e sintetizzo con serietà
@@ -82,27 +77,27 @@ const pillars = [
 			</div>
 		</section>
 
-		<section class="mt-20" aria-labelledby="mission-title">
-			<h2 id="mission-title" class="text-3xl font-extrabold text-stone-900 dark:text-stone-100">La linea editoriale</h2>
-			<div class="mt-8 grid gap-6 md:grid-cols-3">
+		<section aria-labelledby="mission-title" class="mt-[clamp(32px,4vw,56px)]">
+			<SectionHeading id="mission-title" kicker="Il metodo" title="La linea editoriale" />
+			<div class="mt-5 grid gap-x-10 gap-y-6 md:grid-cols-3">
 				{pillars.map((pillar) => (
-					<article class="rounded-2xl border border-stone-300 bg-white p-6 shadow-[6px_6px_0_rgba(185,139,62,0.12)] dark:border-stone-700 dark:bg-stone-800">
-						<span class="text-2xl text-amber-800 dark:text-amber-500" aria-hidden="true">{pillar.icon}</span>
-						<h3 class="mt-4 text-xl font-bold text-stone-900 dark:text-stone-100">{pillar.title}</h3>
-						<p class="mt-3 text-base leading-7 text-stone-700 dark:text-stone-300">{pillar.body}</p>
+					<article class="border-t border-ink pt-3.5 md:border-t-0 md:border-l md:border-rule md:pt-0 md:pl-6 md:first:border-l-0 md:first:pl-0">
+						<h3 class="m-0 text-2xl font-semibold leading-[1.2]">{pillar.title}</h3>
+						<p class="mt-2 mb-0 text-justify text-[15.5px] leading-[1.65] text-ink-2 hyphens-auto">{pillar.body}</p>
 					</article>
 				))}
 			</div>
 		</section>
 
-		<section class="mt-20 rounded-2xl border border-stone-300 bg-white p-8 lg:p-10 dark:border-stone-700 dark:bg-stone-800" aria-labelledby="follow-title">
-			<h2 id="follow-title" class="text-3xl font-extrabold text-stone-900 dark:text-stone-100">Dove continua il discorso</h2>
-			<p class="mt-4 max-w-3xl text-base leading-7 text-stone-700 dark:text-stone-300">
+		<section aria-labelledby="follow-title" class="rule-double mx-auto mt-[clamp(32px,4vw,56px)] max-w-[780px] p-[clamp(20px,3vw,34px)] text-center">
+			<p class="kicker m-0 text-accent">Instagram · il blog · Substack</p>
+			<h2 id="follow-title" class="mt-2 mb-0 text-[clamp(28px,3vw,38px)] font-normal leading-[1.1]">Dove continua il discorso</h2>
+			<p class="mx-auto mt-2.5 mb-0 max-w-[36em] text-[15px] leading-[1.6] text-ink-2">
 				Il percorso parte dalla scoperta su Instagram, prosegue con gli approfondimenti di questo blog e arriva
 				alle letture e alle riflessioni più personali su Substack: tre luoghi diversi per costruire nel tempo una
 				forma mentis storica.
 			</p>
-			<div class="mt-8 flex flex-wrap items-center gap-4">
+			<div class="mt-5 flex flex-wrap items-center justify-center gap-3">
 				<Button href="/articles" variant="primary">Leggi gli articoli</Button>
 				<Button href={INSTAGRAM_URL} variant="secondary" target="_blank" rel="noreferrer">Instagram</Button>
 				<Button href={SUBSTACK_URL} variant="secondary" target="_blank" rel="noreferrer">Substack</Button>
