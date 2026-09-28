@@ -43,20 +43,20 @@ In e2e tests, call `transitionFinished(page)` after a client-side navigation bef
 Feature-based, four top-level source areas under `src/`:
 
 - `pages/` — routes only. Page files fetch collections with `getCollection` and compose feature sections; they hold no reusable logic.
-- `features/<domain>/` — domain sections + cards (`ArticlesSection` + `ArticleCard`, `ReadingSection` + `ReadingCard` + `ReadingTagFilters`, …), each with its own `assets/` where needed.
-- `shared/` — cross-domain pieces: `ui/` (Button, Card, Tabs, TabPanel), `forms/`, `components/` (Navbar, Footer), `lib/cn.ts`, `types/` (every type and interface, behind a type-only barrel), `utils/constants.ts` (blog name, social URLs, contact mail, `HOME_PREVIEW_COUNT`, `GITHUB_REPO`), `utils/variants.ts` (CVA definitions).
+- `features/<domain>/` — domain pieces: `articles/` (`LeadStory`, `SeriesBox`), `readings/` (`ReadingEntry`, `ReadingTagFilters`), `home/` (`AuthorNote`, `SubscribeBox`), `contact/` (`ContactMe`), each with its own `assets/` where needed.
+- `shared/` — cross-domain pieces: `ui/` (Button), `forms/`, `components/` (Navbar with its `masthead` and compact variants, EditionSwitch, PageHeader, SectionHeading, Footer), `lib/cn.ts`, `types/` (every type and interface, behind a type-only barrel), `utils/constants.ts` (blog name, social URLs, contact mail, `HOME_PREVIEW_COUNT`, `GITHUB_REPO`), `utils/variants.ts` (CVA definitions).
 - `core/` — `layouts/MainLayout.astro` (the only layout: html shell, global.css import, Navbar/slot/Footer, Vercel Analytics), `helpers/` (pure functions, re-exported from `helpers/index.ts`), `schemas/envSchema.ts` and `config/envParser.ts` (environment validation, see below).
 
-Imports are relative throughout — no path aliases are configured.
+Imports are relative throughout. The one path alias, `@assets/*` → `src/assets/*` in `tsconfig.json`, exists only for cover images: Keystatic writes them as `@assets/articles/<slug>/cover.jpg`, and a relative path would depend on each article's folder depth.
 
 ### Content collections
 
 `src/content.config.ts` defines two glob-loaded collections with Zod schemas: `articles` and `readings`.
 
-- `articles` frontmatter: `title, description, pubDate, updatedDate?, author (default "Elia Giolli"), featured (default false), order, tags[], topic, category, slug`. Routing uses the **explicit `slug` field** as the `[id]` param — two articles have a `slug` that differs from their filename, and those are live URLs. Files live in topic subfolders (`src/content/articles/giappone/…`); the subfolder is organizational only — grouping in the UI comes from `topic` + `category`.
+- `articles` frontmatter: `title, description, pubDate, updatedDate?, author (default "Elia Giolli"), featured (default false), order, tags[], topic, category, slug, cover?, coverAlt?, coverCaption?, coverCredit?, sources[]`. A `cover` requires `coverAlt` (the schema refuses it otherwise). `sources` are `{ author, title, publisher }`, rendered as a numbered list with ids `fonte-1…n`; the body cites them with plain links, `[2](#fonte-2)`, which the prose styles draw as superscript `[2]` markers. Routing uses the **explicit `slug` field** as the `[id]` param — two articles have a `slug` that differs from their filename, and those are live URLs. Files live in topic subfolders (`src/content/articles/giappone/…`, lower case as git tracks it); the subfolder is organizational only — grouping in the UI comes from `topic` + `category`, and a category is a series (`seriesOf`).
 - `readings` frontmatter: `name, author, description, tags[], topic, amazonUrl` (validated as a URL), `addedDate` (when the book entered the bibliography; orders the homepage). Routing uses the **auto-generated `reading.id`**, not a frontmatter field.
 
-`src/pages/articles/index.astro` currently hardcodes its topic/category sections and filters the collection inline. Adding a new topic means adding a section there.
+The archive (`src/pages/articles/index.astro`) is grouped by `archiveOf`: topic → series → parts in reading order, so a new topic or series appears on its own. The header's issue number ("Anno I · N. 3") comes from `editionOf`: one issue per article by publication date, a new year every twelve months.
 
 ### CMS (Keystatic) and environment
 
@@ -72,10 +72,10 @@ Imports are relative throughout — no path aliases are configured.
 
 No UI-framework integrations on the public site (React exists only inside the `/keystatic` admin). Two mechanisms only:
 
-- **Alpine.js** for anything in-page (mobile menu, tag filtering, homepage tab carousels, theme toggle) via `x-data` on markup. Alpine is imported and `Alpine.start()`ed in a single `<script>` in `shared/components/Navbar.astro` — since Navbar renders on every page via MainLayout, that one call bootstraps Alpine site-wide. Do not add a second `Alpine.start()`. The import needs `// @ts-expect-error` (the package ships no declarations). `[x-cloak]` is handled in `global.css`.
+- **Alpine.js** for anything in-page (the evening-edition switch, the readings tag filter) via `x-data` on markup. Alpine is imported and `Alpine.start()`ed in a single `<script>` in `shared/components/Navbar.astro` — since Navbar renders on every page via MainLayout, that one call bootstraps Alpine site-wide. Do not add a second `Alpine.start()`. The import needs `// @ts-expect-error` (the package ships no declarations). `[x-cloak]` is handled in `global.css`.
 - Plain `<script>` modules for non-UI browser work, e.g. the EmailJS submit handler in `features/contact/ContactMe.astro`, which reads config from `data-*` attributes and silently falls back to the form's `mailto:` action when `PUBLIC_EMAILJS_SERVICE_ID` / `_TEMPLATE_ID` / `_PUBLIC_KEY` are unset.
 
-`shared/ui/Tabs.astro` + `TabPanel.astro` implement the WAI-ARIA tabs pattern (roving tabindex, arrow keys with wrap, Home/End) with one Alpine scope per `idPrefix`. Tab 0's active state is server-rendered and panel 0 is never cloaked, so a group renders correctly before Alpine starts and without JavaScript.
+Two Alpine pitfalls this codebase has hit: directives only work inside an `x-data` scope (the header carries an empty `x-data` for the switch), and `:class` **adds** to the server-rendered classes instead of replacing them. Draw toggled states from an attribute Alpine flips (e.g. `aria-pressed:bg-ink` in Tailwind) rather than binding two class lists. Don't `x-cloak` content that should be readable without JavaScript.
 
 Prefer Alpine over vanilla JS for interactivity, and move business logic out of components into `core/helpers/`.
 
@@ -83,12 +83,12 @@ Prefer Alpine over vanilla JS for interactivity, and move business logic out of 
 
 Tailwind v4 through the `@tailwindcss/vite` plugin (no `tailwind.config`); the single entry is `src/styles/global.css`, imported by MainLayout.
 
-The palette is expressed as **built-in Tailwind utilities**, not custom color names — paper `stone-100`, charcoal `stone-900`, antique gold `amber-700`, rust red `red-700`. Fonts: Playfair Display (headings, set globally on `h1`–`h6`), Lora (body), Special Elite via the `.font-dispatch` class. The raw hexes and a few `!important` hero overrides live in `global.css`.
+The design system is "La Gazzetta", a period newspaper. Colours are **semantic tokens** declared with `@theme inline` in `global.css` over `--gz-*` variables: `paper`, `ink`, `ink-2`, `mute`, `accent`, `mark`, `rule`, `field`, `hover` (so `text-ink`, `border-rule`, `bg-paper`, …). The evening edition redefines the variables on `.dark`, so components need no `dark:` colour pairs; don't reintroduce raw `stone-`/`amber-` utilities. Colour is only ever a line or text, never a filled block. Rules come in three weights: `rule-double` / `rule-t-double` / `rule-b-double` (masthead, section openings, boxes), `border-ink` (datelines, tables), `border-rule` (inside sections). `page-frame` is the 1240px frame every block sits in; `kicker` is the letter-spaced label. Fonts: Cormorant Garamond (`font-heading`, set on `h1`–`h6`, regular weight at display sizes), Lora (`font-body`). Long-form text uses `prose` (retheme in `global.css`: justified, hyphenated, ruled `h2`, fenced blocks as double-ruled "schede") plus the opt-in `.drop-cap`.
 
-Buttons go through `shared/ui/Button.astro`, which merges `cva` variants from `utils/variants.ts` with `cn()` (clsx + tailwind-merge) and renders `<a>` or `<button>` depending on whether `href` is passed. Add new variants to `variants.ts` rather than ad-hoc classes.
+Buttons go through `shared/ui/Button.astro`, which merges `cva` variants from `utils/variants.ts` with `cn()` (clsx + tailwind-merge) and renders `<a>` or `<button>` depending on whether `href` is passed. Add new variants to `variants.ts` rather than ad-hoc classes. Variants are outlines, never fills: `primary` (accent outline), `secondary` (ink outline), `ghost` (text link).
 
 `PALETTE.md` and `PROJECT_OVERVIEW.md` exist locally but are **gitignored**, so they may be absent in a fresh clone — the palette/typography facts above are the fallback. `ROADMAP.md` **is** tracked: tick items off in the same PR that completes them.
 
 ### Accessibility
 
-The existing pages follow conventions the e2e tests assert on: semantic landmarks, `aria-labelledby` linking sections to their heading ids (e.g. `#articles-title`), `aria-expanded` on the mobile menu toggle, `role="status"` + `aria-live` for form feedback, the WAI-ARIA tabs keyboard pattern on the homepage, Italian `aria-label`s. Match these when adding sections.
+The existing pages follow conventions the e2e tests assert on: semantic landmarks, `aria-labelledby` linking sections to their heading ids (e.g. `#articles-title`), `role="status"` + `aria-live` for form feedback, one `h1` per page (the masthead wordmark on the front page), `aria-pressed` on the "Edizione della sera" switch and the reading tags, `aria-current` on the section nav (labelled "Sezioni"), Italian `aria-label`s. Match these when adding sections.
