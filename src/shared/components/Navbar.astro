@@ -1,61 +1,76 @@
 ---
 import { getCollection } from "astro:content";
-import { byMostRecent, editionOf, formatDate, navLinkCurrent } from "../../core/helpers";
+import { byMostRecent, editionOf, formatDate, formatDateline, navLinkCurrent } from "../../core/helpers";
 import type { NavbarProps } from "../types";
 import { NAV_LINKS } from "../utils/constants";
+import EditionSwitch from "./EditionSwitch.astro";
 
 type Props = NavbarProps;
 
-const { issueSlug } = Astro.props;
+const { issueSlug, masthead = false } = Astro.props;
 const pathname = Astro.url.pathname;
 
-// The ear of the header carries the issue on the page: the article's own on an article,
-// the latest one everywhere else.
+// The header carries the issue on the page: the article's own on an article, the latest
+// one everywhere else.
 const articles = await getCollection("articles");
 const issue = articles.find((article) => article.data.slug === issueSlug) ?? [...articles].sort(byMostRecent)[0];
 const edition = editionOf(issue, articles);
-const issueDate = formatDate(issue.data.pubDate);
 
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark";
 ---
 
 {/* An empty Alpine scope: without one, Alpine ignores the switch's bindings. */}
 <header class="page-frame" x-data>
-	<div class="rule-b-double grid min-h-16 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
-		<p class="m-0 text-[13px] text-mute tabular-nums">
-			<span class="hidden sm:inline">Anno {edition.yearRoman} · </span>N. {edition.number}<span class="hidden sm:inline"> · {issueDate}</span>
-		</p>
+	{masthead ? (
+		<>
+			<div class="flex min-h-12 items-center justify-between gap-3 border-b border-rule text-[13px] text-mute">
+				<p class="m-0 tabular-nums">Anno {edition.yearRoman} · N. {edition.number}</p>
+				<EditionSwitch label="long" />
+			</div>
 
-		<a
-			href="/"
-			aria-current={navLinkCurrent(pathname, "/")}
-			class={`whitespace-nowrap font-heading text-[clamp(24px,2.6vw,34px)] leading-none tracking-[-0.01em] text-ink no-underline ${FOCUS}`}
-		>
-			{/* The wordmark: the italic accent "e" is part of the masthead typography. */}
-			Imperi <em class="text-accent">e</em> Rivoluzioni
-		</a>
+			<div class="grid items-center gap-[clamp(16px,3vw,40px)] pt-[clamp(18px,2.4vw,30px)] pb-[clamp(12px,1.6vw,20px)] md:grid-cols-[minmax(150px,1fr)_auto_minmax(150px,1fr)]">
+				<div class="hidden border border-ink px-3.5 py-3 text-center md:block">
+					<p class="m-0 font-heading text-[19px] italic leading-tight">Storia contemporanea e geopolitica</p>
+					<p class="m-0 mt-1.5 text-xs uppercase tracking-[0.14em] text-mute">Dal 1870 a oggi</p>
+				</div>
+				<h1 class="m-0 text-center font-heading text-[clamp(44px,7.2vw,90px)] font-normal leading-[0.95] tracking-[-0.02em]">
+					<a href="/" aria-current={navLinkCurrent(pathname, "/")} class={`text-ink no-underline ${FOCUS}`}>
+						{/* The wordmark: the italic accent "e" is part of the masthead typography. */}
+						Imperi <em class="text-accent">e</em> Rivoluzioni
+					</a>
+				</h1>
+				<a href="#abbonamenti" class={`hidden border border-ink px-3.5 py-3 text-center text-ink no-underline hover:bg-hover md:block ${FOCUS}`}>
+					<span class="block font-heading text-[19px] italic leading-tight">Ogni numero via email</span>
+					<span class="kicker mt-1.5 block text-accent">Abbonati gratis →</span>
+				</a>
+			</div>
 
-		<div class="flex justify-end">
-			{/*
-				A toggle, not a three-way switch: `aria-pressed` says whether the evening edition
-				is on, so the label can stay stable. The knob moves with the `dark` class, which
-				the inline head script has already applied by the time this paints.
-			*/}
-			<button
-				type="button"
-				aria-label="Edizione della sera"
-				aria-pressed="false"
-				:aria-pressed="$store.theme.dark.toString()"
-				x-on:click="$store.theme.toggle()"
-				class={`inline-flex min-h-10 min-w-11 cursor-pointer items-center gap-2 rounded border border-rule bg-transparent px-2.5 text-[13px] font-semibold text-ink hover:border-ink ${FOCUS}`}
+			<div class="rule-t-double flex flex-wrap justify-between gap-x-5 gap-y-1 border-b border-ink py-2 text-[13px] tabular-nums">
+				<span>{formatDateline(issue.data.pubDate)}</span>
+				<span class="hidden italic md:inline">Il lungo XX secolo, per leggere il presente dalle sue radici</span>
+				<span><span class="dark:hidden">Edizione del mattino</span><span class="hidden dark:inline">Edizione della sera</span></span>
+			</div>
+		</>
+	) : (
+		<div class="rule-b-double grid min-h-16 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+			<p class="m-0 text-[13px] text-mute tabular-nums">
+				<span class="hidden sm:inline">Anno {edition.yearRoman} · </span>N. {edition.number}<span class="hidden sm:inline"> · {formatDate(issue.data.pubDate)}</span>
+			</p>
+
+			<a
+				href="/"
+				aria-current={navLinkCurrent(pathname, "/")}
+				class={`whitespace-nowrap font-heading text-[clamp(24px,2.6vw,34px)] leading-none tracking-[-0.01em] text-ink no-underline ${FOCUS}`}
 			>
-				<span aria-hidden="true" class="hidden sm:inline">Sera</span>
-				<span aria-hidden="true" class="flex h-4 w-7 items-center justify-start rounded-full border border-ink px-0.5 dark:justify-end">
-					<span class="h-2.5 w-2.5 rounded-full bg-ink"></span>
-				</span>
-			</button>
+				{/* The wordmark: the italic accent "e" is part of the masthead typography. */}
+				Imperi <em class="text-accent">e</em> Rivoluzioni
+			</a>
+
+			<div class="flex justify-end">
+				<EditionSwitch />
+			</div>
 		</div>
-	</div>
+	)}
 
 	{/* One row at every width: on a phone it scrolls sideways instead of folding into a menu. */}
 	<nav aria-label="Sezioni" class="overflow-x-auto border-b border-ink [scrollbar-width:none]">

@@ -53,47 +53,46 @@ describe("Astro production build", () => {
 	});
 });
 
-describe("homepage tab carousels", () => {
+describe("front page", () => {
 	const document = new JSDOM(readFileSync(homepagePath, "utf8")).window.document;
-	const tablists = [...document.querySelectorAll('[role="tablist"]')];
+	const hrefs = () => [...document.querySelectorAll("a")].map((link) => link.getAttribute("href"));
 
-	it("renders one tablist per section, each capped at HOME_PREVIEW_COUNT", () => {
-		expect(tablists.map((tablist) => tablist.getAttribute("aria-label")).sort()).toEqual([
-			"Seleziona un articolo",
-			"Seleziona una lettura",
-		]);
-		for (const tablist of tablists) {
-			expect(tablist.querySelectorAll('[role="tab"]')).toHaveLength(HOME_PREVIEW_COUNT);
-		}
-		expect(document.querySelectorAll('[role="tabpanel"]')).toHaveLength(HOME_PREVIEW_COUNT * 2);
+	it("has a single h1: the masthead", () => {
+		const headings = document.querySelectorAll("h1");
+
+		expect(headings).toHaveLength(1);
+		expect(headings[0].textContent?.replace(/\s+/g, " ").trim()).toBe("Imperi e Rivoluzioni");
 	});
 
-	it("server-renders a roving tabindex with the first tab active", () => {
-		// Panels carry tabindex="0" as well, so only role="tab" elements count here.
-		const focusableTabs = document.querySelectorAll('[role="tab"][tabindex="0"]');
+	it("leads with the latest article and links through to it", () => {
+		const lead = document.querySelector('article[aria-labelledby="lead-title"]');
+		const leadPath = "/articles/il-governo-dei-generali-ascesa-hideki-tojo";
 
-		expect(focusableTabs).toHaveLength(2);
-		for (const tablist of tablists) {
-			const firstTab = tablist.querySelector('[role="tab"]');
-
-			expect(firstTab?.getAttribute("tabindex")).toBe("0");
-			expect(firstTab?.getAttribute("aria-selected")).toBe("true");
-		}
+		expect(lead?.querySelector("#lead-title a")?.getAttribute("href")).toBe(leadPath);
+		expect([...(lead?.querySelectorAll("a") ?? [])].some((link) => link.textContent?.includes("Continua a leggere") && link.getAttribute("href") === leadPath)).toBe(true);
+		expect(lead?.querySelectorAll(".drop-cap p").length).toBe(2);
 	});
 
-	it("leaves only the first panel of each group visible before Alpine loads", () => {
-		const visiblePanels = [...document.querySelectorAll('[role="tabpanel"]')]
-			.filter((panel) => !panel.hasAttribute("x-cloak"))
-			.map((panel) => panel.id);
-		const firstPanels = tablists.map((tablist) => tablist.querySelector('[role="tab"]')?.getAttribute("aria-controls"));
+	it("lists the lead article's whole series", () => {
+		const parts = document.querySelectorAll('section[aria-labelledby="serie-title"] li');
 
-		expect(visiblePanels.sort()).toEqual(firstPanels.sort());
+		expect(parts).toHaveLength(3);
+		expect(parts[2].textContent).toContain("in primo piano");
 	});
 
-	it("links each section to its full archive", () => {
-		const ctas = [...document.querySelectorAll("a")].map((link) => [link.textContent?.trim(), link.getAttribute("href")]);
+	it("shows the HOME_PREVIEW_COUNT most recently added readings, with the archive link", () => {
+		const readings = document.querySelectorAll('section[aria-labelledby="letture-title"] article');
 
-		expect(ctas).toContainEqual(["Tutti gli articoli", "/articles"]);
-		expect(ctas).toContainEqual(["Tutte le letture", "/readings"]);
+		expect(readings).toHaveLength(HOME_PREVIEW_COUNT);
+		expect(readings[0].textContent).toContain("Perché Stalin creò Israele");
+		expect(hrefs()).toContain("/readings");
+	});
+
+	it("sends the subscription form to Substack with the email field", () => {
+		const form = document.querySelector("#abbonamenti form");
+
+		expect(form?.getAttribute("action")).toMatch(/^https:\/\/imperierivoluzioni\.substack\.com\/subscribe$/);
+		expect(form?.getAttribute("method")).toBe("get");
+		expect(form?.querySelector('input[type="email"][name="email"][required]')).not.toBeNull();
 	});
 });

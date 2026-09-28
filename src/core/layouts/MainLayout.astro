@@ -26,6 +26,7 @@ const {
 	modifiedTime,
 	noindex = false,
 	issueSlug,
+	masthead = false,
 } = Astro.props;
 
 // Pages pass their own part of the title; the blog name is appended once. The homepage
@@ -111,7 +112,7 @@ const ogImageUrl = new URL(OG_IMAGE_PATH, siteUrl);
 		<slot name="head" />
 	</head>
 	<body class="min-h-screen bg-paper text-ink">
-		<Navbar issueSlug={issueSlug} />
+		<Navbar issueSlug={issueSlug} masthead={masthead} />
 		<slot />
 		<Footer />
 	</body>

@@ -18,8 +18,8 @@ export const button = cva(
       },
       size: {
         sm: "min-h-10 px-3 text-base",
-        md: "min-h-[46px] px-5 text-lg",
-        lg: "min-h-[50px] px-6 text-xl",
+        md: "min-h-11.5 px-5 text-lg",
+        lg: "min-h-12.5 px-6 text-xl",
       },
     },
     compoundVariants: [

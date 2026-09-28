@@ -1,0 +1,17 @@
+---
+import type { SectionHeadingProps } from "../types";
+
+type Props = SectionHeadingProps;
+
+const { id, kicker, title, link } = Astro.props;
+---
+
+<div class="rule-t-double flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2 pt-3">
+	<div class="flex flex-wrap items-baseline gap-x-3.5 gap-y-1">
+		<span class="kicker text-accent">{kicker}</span>
+		<h2 id={id} class="m-0 text-[clamp(30px,3vw,40px)] font-normal leading-[1.1]">{title}</h2>
+	</div>
+	{link && (
+		<a href={link.href} class="text-sm font-semibold text-accent underline-offset-4 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark">{link.label}</a>
+	)}
+</div>

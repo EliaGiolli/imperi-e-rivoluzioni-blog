@@ -1,0 +1,32 @@
+---
+import { formatDate } from "../../core/helpers";
+import type { SeriesBoxProps } from "../../shared/types";
+
+type Props = SeriesBoxProps;
+
+const { series, currentNote } = Astro.props;
+---
+
+<section aria-labelledby="serie-title">
+	<p class="kicker m-0 text-mute">La serie</p>
+	<h2 id="serie-title" class="mt-1.5 mb-0.5 text-[25px] font-semibold leading-[1.15]">{series.name}</h2>
+	<p class="m-0 text-[13.5px] text-mute">{series.total} {series.total === 1 ? "puntata" : "puntate"} · {series.topic}</p>
+	<ol class="mt-3 mb-0 list-none p-0">
+		{series.parts.map((part) => (
+			<li class="grid grid-cols-[40px_minmax(0,1fr)] gap-2 border-t border-rule py-3">
+				<span class="font-heading text-2xl leading-none font-medium italic text-accent tabular-nums" aria-hidden="true">{part.roman}</span>
+				<div>
+					<a
+						href={`/articles/${part.article.data.slug}`}
+						class="font-heading text-lg leading-tight font-semibold text-ink no-underline hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark"
+					>
+						<span class="sr-only">Parte {part.position}: </span>{part.article.data.title.split(":")[0]}
+					</a>
+					<p class="m-0 mt-0.5 text-[13px] text-mute">
+						{formatDate(part.article.data.pubDate)}{part.current && ` · ${currentNote}`}
+					</p>
+				</div>
+			</li>
+		))}
+	</ol>
+</section>

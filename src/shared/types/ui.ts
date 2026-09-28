@@ -2,7 +2,7 @@ import type { CollectionEntry } from "astro:content";
 import type { VariantProps } from "class-variance-authority";
 
 import type { button } from "../utils/variants";
-import type { ArticleCardArticle, ReadingCardReading } from "./content";
+import type { ArticleCardArticle, ReadingCardReading, Series } from "./content";
 
 /**
  * The `Props` of every component, in one place. Each component aliases the type it needs
@@ -26,10 +26,45 @@ export interface MainLayoutProps {
 	noindex?: boolean;
 	/** The article whose issue number the header shows; defaults to the latest one. */
 	issueSlug?: string;
+	/** Only the front page sets this: it prints the full masthead. */
+	masthead?: boolean;
 }
 
 export interface NavbarProps {
 	issueSlug?: string;
+	/** The front page's full masthead (with the page's h1) instead of the compact strip. */
+	masthead?: boolean;
+}
+
+export interface EditionSwitchProps {
+	/** "Sera" in the compact strip, "Edizione della sera" in the front-page masthead. */
+	label?: "short" | "long";
+}
+
+/** A section opening: a double rule, a letter-spaced kicker and the heading. */
+export interface SectionHeadingProps {
+	id: string;
+	kicker: string;
+	title: string;
+	/** An optional link aligned to the right of the heading row, e.g. "Tutte le letture". */
+	link?: { href: string; label: string };
+}
+
+export interface LeadStoryProps {
+	article: CollectionEntry<"articles">;
+	series: Series<CollectionEntry<"articles">>;
+	paragraphs: string[];
+}
+
+export interface SeriesBoxProps {
+	series: Series<CollectionEntry<"articles">>;
+	/** What the current part is called in the list: "in primo piano" on the front page. */
+	currentNote: string;
+}
+
+export interface ReadingEntryProps {
+	reading: CollectionEntry<"readings">;
+	headingLevel?: HeadingLevel;
 }
 
 export interface CardProps {
@@ -85,27 +120,4 @@ export interface ReadingTagFiltersProps {
 /** Astro hands the 500 page whatever was thrown; the template never renders it. */
 export interface ServerErrorPageProps {
 	error: unknown;
-}
-
-/** One tab button; `id` is the stable key its panel is matched against, not the DOM id. */
-export interface TabItem {
-	id: string;
-	label: string;
-}
-
-export interface TabsProps {
-	/** Namespaces this group's DOM ids and Alpine scope so several tab groups can share a page. */
-	idPrefix: string;
-	tabs: TabItem[];
-	ariaLabel: string;
-	class?: string;
-}
-
-export interface TabPanelProps {
-	idPrefix: string;
-	/** Must match the `id` of the corresponding entry in the sibling `<Tabs>`'s `tabs` prop. */
-	id: string;
-	/** Position in that same `tabs` array — what `<Tabs>`'s active state is compared against. */
-	index: number;
-	class?: string;
 }
