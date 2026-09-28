@@ -1,0 +1,26 @@
+---
+import type { EditionSwitchProps } from "../types";
+
+type Props = EditionSwitchProps;
+
+const { label = "short" } = Astro.props;
+---
+
+{/*
+	A toggle, not a three-way switch: `aria-pressed` says whether the evening edition is on,
+	so the label can stay stable. The knob moves with the `dark` class, which the inline head
+	script has already applied by the time this paints. It needs an enclosing x-data scope.
+*/}
+<button
+	type="button"
+	aria-label="Edizione della sera"
+	aria-pressed="false"
+	:aria-pressed="$store.theme.dark.toString()"
+	x-on:click="$store.theme.toggle()"
+	class="inline-flex min-h-10 min-w-11 cursor-pointer items-center gap-2 rounded border border-rule bg-transparent px-2.5 text-[13px] font-semibold text-ink hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark"
+>
+	<span aria-hidden="true" class="hidden sm:inline">{label === "long" ? "Edizione della sera" : "Sera"}</span>
+	<span aria-hidden="true" class="flex h-4 w-7 items-center justify-start rounded-full border border-ink px-0.5 dark:justify-end">
+		<span class="h-2.5 w-2.5 rounded-full bg-ink"></span>
+	</span>
+</button>

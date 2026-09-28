@@ -1,7 +1,6 @@
 import type { NavLink } from "../types";
 
 export const BLOG_NAME = "Imperi e Rivoluzioni"
-export const LOGO_ALT_TEXT = "Il logo del blog"
 
 export const BLOG_AUTHOR = "Elia Giolli"
 export const BLOG_LOCALE = "it_IT"
@@ -26,12 +25,12 @@ export const INSTAGRAM_URL = 'https://www.instagram.com/imperierivoluzioni/';
 export const SUBSTACK_URL = "https://imperierivoluzioni.substack.com/?r=92ksfy&utm_campaign=pub-share-checklist";
 export const MAIL = 'rivoluzionieimperi@gmail.com';
 
-// Main navigation, shared by the desktop and mobile menus in Navbar.astro.
+// The section nav under the header, in the order it prints.
 
 export const NAV_LINKS: NavLink[] = [
 	{ href: "/about", label: "Chi sono" },
 	{ href: "/articles", label: "Articoli" },
-	{ href: "/readings", label: "Letture consigliate", shortLabel: "Letture" },
+	{ href: "/readings", label: "Letture" },
 	{ href: "/topics", label: "Temi" },
-	{ href: "/contacts", label: "Contatti", cta: true },
+	{ href: "/contacts", label: "Contatti" },
 ];

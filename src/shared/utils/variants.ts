@@ -1,22 +1,31 @@
 import { cva } from "class-variance-authority";
 
+/*
+ * Gazzetta buttons are drawn, never filled: colour lives only in the rule and the label.
+ * Every variant reads the edition tokens, so none needs a dark: pair.
+ */
 export const button = cva(
-  "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2",
+  "inline-flex items-center justify-center gap-2 rounded font-heading font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark",
   {
     variants: {
       variant: {
-        // Antique gold on charcoal text carries its own contrast, so primary needs no dark pair.
-        primary: "bg-amber-700 text-stone-900 hover:bg-amber-600",
-        secondary:
-          "border border-stone-300 bg-stone-100 text-stone-900 hover:border-amber-700 hover:bg-stone-200 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-100 dark:hover:border-amber-500 dark:hover:bg-stone-700",
-        ghost: "bg-transparent text-red-700 hover:bg-stone-200 dark:text-amber-500 dark:hover:bg-stone-800",
+        // The accent outline: the one call to action a section leads with.
+        primary: "border border-mark text-accent hover:bg-hover",
+        // The ink outline: every other action.
+        secondary: "border border-ink text-ink hover:bg-hover",
+        // A plain text link for tertiary actions.
+        ghost: "font-body text-accent underline underline-offset-4 hover:text-ink",
       },
       size: {
-        sm: "px-3 py-1.5 text-sm",
-        md: "px-4 py-2 text-base",
-        lg: "px-6 py-3 text-lg",
+        sm: "min-h-10 px-3 text-base",
+        md: "min-h-11.5 px-5 text-lg",
+        lg: "min-h-12.5 px-6 text-xl",
       },
     },
+    compoundVariants: [
+      // A text link keeps the surrounding text size and needs no box padding.
+      { variant: "ghost", class: "min-h-0 px-0 text-sm" },
+    ],
     defaultVariants: { variant: "primary", size: "md" },
   }
 );

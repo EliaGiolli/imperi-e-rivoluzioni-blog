@@ -1,32 +1,54 @@
 ---
 import { getCollection } from "astro:content";
 import MainLayout from "../../core/layouts/MainLayout.astro";
+import { archiveOf, formatDate, readingTime, slugifyTheme } from "../../core/helpers";
+import PageHeader from "../../shared/components/PageHeader.astro";
+import SectionHeading from "../../shared/components/SectionHeading.astro";
 
-import ArticleCard from "../../features/articles/ArticleCard.astro";
-import { byReadingOrder } from "../../core/helpers";
-
-const articles = [...(await getCollection("articles"))].sort(byReadingOrder);
+// Grouped from the content itself: a new topic or series appears here without touching the page.
+const archive = archiveOf(await getCollection("articles"));
 ---
 
 <MainLayout
 	title="Articoli"
 	description="L'archivio degli articoli di Imperi e Rivoluzioni: ricostruzioni storiche sul lungo XX secolo, dai percorsi sul militarismo giapponese alle radici dei conflitti contemporanei."
 >
-	<main class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
-		<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700 dark:text-amber-500">Archivio</p>
-		<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-100">Articoli</h1>
-		<p class="mt-6 max-w-3xl text-lg leading-8 text-stone-700 dark:text-stone-300">Analisi storiche per leggere il presente attraverso le sue radici.</p>
+	<main class="page-frame">
+		<PageHeader kicker="Archivio" title="Articoli" dek="Analisi storiche per leggere il presente attraverso le sue radici, raccolte per tema e per serie." />
 
-		<section class="mt-14" aria-labelledby="giappone-title">
-			<h2 id="giappone-title" class="text-3xl font-extrabold text-stone-900 dark:text-stone-100">Giappone</h2>
-			<div class="mt-8">
-				<h3 class="text-2xl font-bold text-red-700 dark:text-amber-500">militarismo giapponese</h3>
-				<div class="mt-6 grid gap-6 lg:grid-cols-2">
-					{articles
-						.filter((article) => article.data.topic === "Giappone" && article.data.category === "militarismo giapponese")
-						.map((article) => <ArticleCard article={article} headingLevel="h4" />)}
-				</div>
-			</div>
-		</section>
+		{archive.map(({ topic, series: allSeries }) => (
+			<section aria-labelledby={`archivio-${slugifyTheme(topic)}`} class="mt-[clamp(28px,3.4vw,44px)]">
+				<SectionHeading id={`archivio-${slugifyTheme(topic)}`} kicker="Tema" title={topic} />
+
+				{allSeries.map((series) => (
+					<div class="mt-5 grid gap-x-10 gap-y-3 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)]">
+						<div>
+							<p class="kicker m-0 text-mute">La serie</p>
+							<h3 class="mt-1.5 mb-0 text-2xl font-semibold leading-[1.15]">{series.name}</h3>
+							<p class="m-0 mt-0.5 text-[13.5px] text-mute">{series.parts.length} {series.parts.length === 1 ? "puntata" : "puntate"}</p>
+						</div>
+
+						<ol class="m-0 list-none p-0">
+							{series.parts.map(({ article, roman }) => (
+								<li class="grid grid-cols-[48px_minmax(0,1fr)] gap-2 border-t border-rule py-4 first:border-t-0 first:pt-0 md:first:border-t md:first:pt-4">
+									<span class="font-heading text-[28px] leading-none font-medium italic text-accent tabular-nums" aria-hidden="true">{roman}</span>
+									<div>
+										<h4 class="m-0 text-[clamp(22px,2.2vw,28px)] font-normal leading-[1.15]">
+											<a href={`/articles/${article.data.slug}`} class="text-ink no-underline decoration-1 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark">
+												<span class="sr-only">Parte {roman}: </span>{article.data.title}
+											</a>
+										</h4>
+										<p class="mt-1.5 mb-0 text-justify text-[15px] leading-[1.6] text-ink-2 hyphens-auto">{article.data.description}</p>
+										<p class="mt-1.5 mb-0 text-[13px] text-mute">
+											<time datetime={article.data.pubDate.toISOString().slice(0, 10)}>{formatDate(article.data.pubDate)}</time>{" · "}{readingTime(article.body ?? "")} min di lettura
+										</p>
+									</div>
+								</li>
+							))}
+						</ol>
+					</div>
+				))}
+			</section>
+		))}
 	</main>
 </MainLayout>

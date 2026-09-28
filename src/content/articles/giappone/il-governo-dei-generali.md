@@ -15,10 +15,29 @@ tags:
 topic: Giappone
 category: militarismo giapponese
 slug: il-governo-dei-generali-ascesa-hideki-tojo
+cover: '@assets/articles/giappone/il-governo-dei-generali/cover.jpg'
+coverAlt: Hideki Tōjō in divisa e berretto militare, tra alcuni uomini in abito civile
+coverCaption: Hideki Tōjō, Primo Ministro del Giappone dall'ottobre 1941.
+sources:
+  - author: Hugh Byas
+    title: Government by Assassination
+    publisher: Alfred A. Knopf, New York 1942
+  - author: Richard Storry
+    title: 'The Double Patriots: A Study of Japanese Nationalism'
+    publisher: Chatto & Windus, Londra 1957
+  - author: Ben-Ami Shillony
+    title: 'Revolt in Japan: The Young Officers and the February 26, 1936 Incident'
+    publisher: Princeton University Press, Princeton 1973
+  - author: Herbert P. Bix
+    title: Hirohito and the Making of Modern Japan
+    publisher: HarperCollins, New York 2000
+  - author: Andrea Revelant
+    title: 'Il Giappone moderno: dall''Ottocento al 1945'
+    publisher: Einaudi, Torino 2018
 ---
 ## Introduzione: Il decennio del terrore politico
 
-Tra il 1930 e il 1936, il Giappone attraversò una fase di violenta instabilità interna definita dagli storici *"Government by Assassination"* (Governo per Assassinio). Politici moderati, ministri, industriali e persino Primi Ministri vennero presi di mira da societa segrete, gruppi ultranazionalisti e giovani ufficiali delle forze armate.
+Tra il 1930 e il 1936, il Giappone attraversò una fase di violenta instabilità interna definita dagli storici *"Government by Assassination"* (Governo per Assassinio)[1](#fonte-1). Politici moderati, ministri, industriali e persino Primi Ministri vennero presi di mira da societa segrete, gruppi ultranazionalisti e giovani ufficiali delle forze armate.
 
 Questa spirale di violenza politica disintegrò ciò che restava del sistema parlamentare, spostando l'asse del potere verso i vertici militari. La transizione non portò tuttavia all'ascesa di un unico leader carismatico di massa, ma all'affermazione di un **regime burocratico-militare** che avrebbe guidato il Paese nella Seconda Guerra Mondiale.
 
@@ -26,7 +45,7 @@ Questa spirale di violenza politica disintegrò ciò che restava del sistema par
 
 ## 1. Il terrorismo ultranazionalista e la fine dei governi di partito
 
-I giovani ufficiali radicali, influenzati da intellettuali come **Kita Ikki** (teorico di una "Riforma Showa" che univa il socialismo di Stato alla devozione imperiale), vedevano nel terrore l'unico mezzo per epurare la corte imperiale dai politici corrotti e dagli industriali avidi.
+I giovani ufficiali radicali, influenzati da intellettuali come **Kita Ikki** (teorico di una "Riforma Showa" che univa il socialismo di Stato alla devozione imperiale)[2](#fonte-2), vedevano nel terrore l'unico mezzo per epurare la corte imperiale dai politici corrotti e dagli industriali avidi.
 
 ### Gli assassinii chiave
 
@@ -48,9 +67,9 @@ L'Esercito Imperiale non era un blocco monolitico. Al suo interno divampò uno s
 
 ### L'Incidente del 26 Febbraio 1936
 
-La tensione tra le due correnti toccò il punto di rottura il **26 febbraio 1936**, quando oltre 1.400 soldati guidati da giovani ufficiali della *Kōdōha* occuparono il centro di Tokyo, occupando i ministeri e assassinando diversi alti funzionari di Stato.
+La tensione tra le due correnti toccò il punto di rottura il **26 febbraio 1936**, quando oltre 1.400 soldati guidati da giovani ufficiali della *Kōdōha* occuparono il centro di Tokyo, occupando i ministeri e assassinando diversi alti funzionari di Stato[3](#fonte-3).
 
-L'Imperatore Hirohito condannò duramente l'insurrezione. Privati del sostegno imperiale, i golpisti si arresero. I leader della *Kōdōha* e l'intellettuale Kita Ikki vennero processati e giustiziati.
+L'Imperatore Hirohito condannò duramente l'insurrezione[4](#fonte-4). Privati del sostegno imperiale, i golpisti si arresero. I leader della *Kōdōha* e l'intellettuale Kita Ikki vennero processati e giustiziati.
 
 Sebbene il colpo di Stato fosse fallito, la fazione rivale, la ***Tōseiha***, usò la minaccia dell'estremismo per imporre il proprio controllo assoluto sull'esecutivo. I generali burocratici ottennero la ripristinazione della norma per cui i ministri militari dovevano essere ufficiali in servizio attivo, garantendosi il veto definitivo sui governi.
 
@@ -96,20 +115,8 @@ L'attacco a Pearl Harbor del **7 dicembre 1941** fu la conseguenza logica di una
 
 La trasformazione del Giappone in uno Stato militarista non fu il frutto di un singolo golpe, né la creazione di una dittatura personale isolata.
 
-Al Processo di Tokyo del 1948, Hideki Tōjō si assunse la responsabilità generale delle decisioni di guerra, ma la storiografia ha ampiamente dimostrato come l'espansionismo imperiale fosse il risultato di un **sistema complesso**. Le vulnerabilità della Costituzione Meiji, le contraddizioni della modernizzazione, l'indottrinamento scolastico, gli shock economici e le insubordinazioni militari avevano cooperato, in oltre cinquant'anni, a rendere la guerra totale l'unica scelta percepita come possibile dalle élite di Tokyo.
+Al Processo di Tokyo del 1948, Hideki Tōjō si assunse la responsabilità generale delle decisioni di guerra, ma la storiografia ha ampiamente dimostrato come l'espansionismo imperiale fosse il risultato di un **sistema complesso**[5](#fonte-5). Le vulnerabilità della Costituzione Meiji, le contraddizioni della modernizzazione, l'indottrinamento scolastico, gli shock economici e le insubordinazioni militari avevano cooperato, in oltre cinquant'anni, a rendere la guerra totale l'unica scelta percepita come possibile dalle élite di Tokyo.
 
 ---
 
 *I tre articoli della serie "Il militarismo giapponese" sono ora completi e disponibili nella sezione Articoli del blog.*
-
----
-
-## Fonti
-
-Riferimenti storiografici su cui si appoggia la ricostruzione di questo articolo.
-
-1. Hugh Byas, *Government by Assassination*, Alfred A. Knopf, New York 1942.
-2. Richard Storry, *The Double Patriots: A Study of Japanese Nationalism*, Chatto & Windus, Londra 1957.
-3. Ben-Ami Shillony, *Revolt in Japan: The Young Officers and the February 26, 1936 Incident*, Princeton University Press, Princeton 1973.
-4. Herbert P. Bix, *Hirohito and the Making of Modern Japan*, HarperCollins, New York 2000.
-5. Andrea Revelant, *Il Giappone moderno: dall'Ottocento al 1945*, Einaudi, Torino 2018.

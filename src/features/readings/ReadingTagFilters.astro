@@ -1,51 +1,30 @@
 ---
+import PageHeader from "../../shared/components/PageHeader.astro";
 import type { ReadingTagFiltersProps } from "../../shared/types";
-import ReadingCard from "./ReadingCard.astro";
+import ReadingEntry from "./ReadingEntry.astro";
 
 type Props = ReadingTagFiltersProps;
 
 const { readings, label, title, description } = Astro.props;
 const tags = [...new Set(readings.flatMap((reading) => reading.data.tags))].sort((first, second) => first.localeCompare(second, "it"));
 
-// Alpine picks one of these per button, so both states are spelled out here rather than
-// inlined twice in the template. On charcoal the pressed tag becomes the parchment block.
-const TAG_ON = "border-stone-900 bg-stone-900 text-stone-100 dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900";
-const TAG_OFF = "border-stone-300 bg-white text-stone-700 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-300";
+// The pressed tag is the page turned over, paper on ink, drawn from aria-pressed alone: Alpine
+// only toggles the attribute, so there is no class list for it to merge with the server's.
+const TAG = "min-h-10 cursor-pointer rounded border border-rule bg-transparent px-3 text-[13px] font-semibold text-ink-2 hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper";
 ---
 
-<section
-	class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24"
-	aria-labelledby="reading-filter-title"
-	x-data="{ activeTag: 'Tutti' }"
->
-	<div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-		<div class="max-w-3xl">
-			<p class="text-sm font-bold uppercase tracking-[0.2em] text-red-700 dark:text-amber-500">{label}</p>
-			<h1 id="reading-filter-title" class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-100">{title}</h1>
-			<p class="mt-6 text-lg leading-8 text-stone-700 dark:text-stone-300">{description}</p>
-		</div>
-
-		<nav class="lg:max-w-xl" aria-label="Filtra le letture per tag">
-			<p class="mb-3 text-sm font-bold text-stone-900 dark:text-stone-100">Esplora per tag</p>
-			<ul class="flex flex-wrap gap-2" role="list">
-				<li>
-					<button
-						type="button"
-						class="rounded-lg border px-3 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-900"
-						:class={`activeTag === 'Tutti' ? ${JSON.stringify(TAG_ON)} : ${JSON.stringify(TAG_OFF)}`}
-						:aria-pressed="activeTag === 'Tutti'"
-						x-on:click="activeTag = 'Tutti'"
-					>
-						Tutti
-					</button>
-				</li>
-				{tags.map((tag) => (
+<div x-data="{ activeTag: 'Tutti' }">
+	<PageHeader kicker={label} title={title} dek={description} id="reading-filter-title">
+		<nav aria-label="Filtra le letture per tag" class="mt-5">
+			<ul class="m-0 flex list-none flex-wrap justify-center gap-2 p-0">
+				{["Tutti", ...tags].map((tag) => (
 					<li>
+						{/* Server-rendered as "Tutti" pressed, so the markup is right before Alpine starts. */}
 						<button
 							type="button"
-							class="rounded-lg border px-3 py-2 text-sm font-semibold transition-colors hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 dark:hover:border-stone-100 dark:focus-visible:ring-offset-stone-900"
-							:class={`activeTag === ${JSON.stringify(tag)} ? ${JSON.stringify(TAG_ON)} : ${JSON.stringify(TAG_OFF)}`}
-							:aria-pressed={`activeTag === ${JSON.stringify(tag)}`}
+							class={TAG}
+							aria-pressed={tag === "Tutti" ? "true" : "false"}
+							:aria-pressed={`(activeTag === ${JSON.stringify(tag)}).toString()`}
 							x-on:click={`activeTag = ${JSON.stringify(tag)}`}
 						>
 							{tag}
@@ -54,18 +33,21 @@ const TAG_OFF = "border-stone-300 bg-white text-stone-700 dark:border-stone-600 
 				))}
 			</ul>
 		</nav>
-	</div>
+	</PageHeader>
 
-	<div class="mt-12 grid gap-6 md:grid-cols-2" aria-live="polite">
+	{/*
+		No x-cloak: every reading is visible until a tag is chosen, so the list is complete
+		before Alpine starts and without JavaScript at all.
+	*/}
+	<div class="mt-[clamp(24px,3vw,40px)] grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-x-8 gap-y-7" aria-live="polite">
 		{readings.map((reading) => (
 			<div
 				x-data={`{ readingTags: ${JSON.stringify(reading.data.tags)} }`}
 				x-show="activeTag === 'Tutti' || readingTags.includes(activeTag)"
-				x-transition.opacity.duration.150ms
-				x-cloak
+				class="grid"
 			>
-				<ReadingCard reading={reading} headingLevel="h2" />
+				<ReadingEntry reading={reading} headingLevel="h2" />
 			</div>
 		))}
 	</div>
-</section>
+</div>

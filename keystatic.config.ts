@@ -71,6 +71,30 @@ export default config({
 					description: "Diventa /articles/<slug>. Non cambiarlo dopo la pubblicazione: romperebbe i link esistenti.",
 					validation: { isRequired: true, pattern: { regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: "Solo lettere minuscole, numeri e trattini" } },
 				}),
+				cover: fields.image({
+					label: "Foto di copertina",
+					description: "Facoltativa. Almeno 1600px di larghezza, e solo immagini di cui hai i diritti.",
+					directory: "src/assets/articles",
+					publicPath: "@assets/articles/",
+				}),
+				coverAlt: fields.text({
+					label: "Descrizione della foto",
+					description: "Obbligatoria se c'è una foto: cosa mostra, per chi non la vede.",
+				}),
+				coverCaption: fields.text({ label: "Didascalia", description: "Facoltativa: il contesto, sotto la foto." }),
+				coverCredit: fields.text({ label: "Credito fotografico", description: "Fonte e licenza, per esempio «Wikimedia Commons, pubblico dominio»." }),
+				sources: fields.array(
+					fields.object({
+						author: fields.text({ label: "Autore", validation: { isRequired: true } }),
+						title: fields.text({ label: "Titolo", validation: { isRequired: true } }),
+						publisher: fields.text({ label: "Editore, luogo e anno", validation: { isRequired: true } }),
+					}),
+					{
+						label: "Fonti",
+						description: "Nel testo, cita la fonte n con un link a #fonte-n: per esempio [2](#fonte-2) per la seconda.",
+						itemLabel: (props) => `${props.fields.author.value}, ${props.fields.title.value}`,
+					},
+				),
 				content: body,
 			},
 		}),

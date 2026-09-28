@@ -1,8 +1,6 @@
 ---
-import { Image } from "astro:assets";
-import image404 from '../shared/assets/404.png';
-
 import MainLayout from "../core/layouts/MainLayout.astro";
+import PageHeader from "../shared/components/PageHeader.astro";
 import Button from "../shared/ui/Button.astro";
 ---
 
@@ -11,19 +9,15 @@ import Button from "../shared/ui/Button.astro";
 	description="La pagina che cercavi non esiste o è stata spostata. Torna alla home di Imperi e Rivoluzioni per riprendere la navigazione."
 	noindex
 >
-    <Button href="/" variant="primary" class="mx-10 mt-10">Torna alla home</Button>
-    <div class="flex flex-col items-center justify-items-center gap-7">
-        <Image 
-            src={image404}
-            width={250} 
-            height={200} 
-            alt="Un cartello giallo simile a quello per i lavori con la scritta 404"
-        />
-        <h1 class="text-5xl text-red-700 dark:text-amber-500">404 - Pagina non trovata</h1>
-        <p class="text-2xl mb-10 text-stone-700 dark:text-stone-300">
-            Mi dispiace, ma non siamo riusciti a trovare la pagina che stai cercando
-        </p>
-
-    </div>
-
+	<main class="page-frame">
+		<PageHeader
+			kicker="Errata corrige · 404"
+			title="Pagina non trovata"
+			dek="Questa pagina non è mai andata in stampa, oppure è stata spostata in un altro numero."
+		/>
+		<div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+			<Button href="/" variant="primary">Torna alla prima pagina</Button>
+			<Button href="/articles" variant="secondary">Sfoglia l'archivio</Button>
+		</div>
+	</main>
 </MainLayout>

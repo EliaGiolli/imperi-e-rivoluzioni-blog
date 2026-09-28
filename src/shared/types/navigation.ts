@@ -5,12 +5,8 @@
  */
 export type NavLinkCurrent = "page" | "true" | undefined;
 
-/** One entry of the main navigation, shared by the desktop and mobile menus. */
+/** One entry of the section nav, the single row of links under the header. */
 export interface NavLink {
 	href: string;
 	label: string;
-	/** Shorter wording for the mobile menu, where the row is narrower. */
-	shortLabel?: string;
-	/** Rendered as the highlighted call to action that closes the menu. */
-	cta?: boolean;
 }

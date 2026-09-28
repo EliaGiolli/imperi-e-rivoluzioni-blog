@@ -1,146 +1,97 @@
 ---
-import { Image } from "astro:assets";
-import Button from "../ui/Button.astro";
+import { getCollection } from "astro:content";
+import { byMostRecent, editionOf, formatDate, formatDateline, navLinkCurrent } from "../../core/helpers";
+import type { NavbarProps } from "../types";
+import { NAV_LINKS } from "../utils/constants";
+import EditionSwitch from "./EditionSwitch.astro";
 
-import Logo from '../assets/I&R logo.png'
-import { cn } from "../lib/cn";
-import { navLinkCurrent } from "../../core/helpers";
-import { LOGO_ALT_TEXT, BLOG_NAME, NAV_LINKS } from "../utils/constants";
+type Props = NavbarProps;
 
+const { issueSlug, masthead = false } = Astro.props;
 const pathname = Astro.url.pathname;
 
-// The underline is what marks the current page without relying on colour alone.
-const ACTIVE_UNDERLINE = "underline decoration-2 underline-offset-8";
+// The header carries the issue on the page: the article's own on an article, the latest
+// one everywhere else.
+const articles = await getCollection("articles");
+const issue = articles.find((article) => article.data.slug === issueSlug) ?? [...articles].sort(byMostRecent)[0];
+const edition = editionOf(issue, articles);
 
-const desktopLinkClass = (cta: boolean | undefined, current: string | undefined): string =>
-  cn(
-    "rounded-full text-sm font-semibold no-underline transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700",
-    cta
-      ? "bg-amber-700 px-4 py-2.5 text-stone-900 shadow-sm shadow-stone-200 hover:bg-amber-600 dark:shadow-none"
-      : "px-3.5 py-2 text-stone-800 hover:bg-stone-200 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-100",
-    current && ACTIVE_UNDERLINE,
-    current && (cta
-      ? "decoration-stone-900"
-      : "bg-stone-200 text-stone-900 decoration-amber-800 dark:bg-stone-800 dark:text-stone-100 dark:decoration-amber-500"),
-  );
-
-const mobileLinkClass = (cta: boolean | undefined, current: string | undefined): string =>
-  cn(
-    "block rounded-2xl px-4 py-3 font-semibold no-underline transition-colors",
-    cta
-      ? "mt-1 bg-amber-700 text-stone-900 shadow-sm shadow-stone-200 hover:bg-amber-600 dark:shadow-none"
-      : "text-stone-800 hover:bg-stone-200 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-100",
-    current && ACTIVE_UNDERLINE,
-    current && (cta
-      ? "decoration-stone-900"
-      : "bg-stone-200 text-stone-900 decoration-amber-800 dark:bg-stone-800 dark:text-stone-100 dark:decoration-amber-500"),
-  );
-
-// Both icon buttons in the bar share the same shape, so they line up at every width.
-const ICON_BUTTON = "h-11 w-11 rounded-xl border border-stone-300 bg-white p-0 text-amber-800 shadow-sm shadow-stone-200 transition-colors hover:bg-stone-100 dark:border-stone-700 dark:bg-stone-800 dark:text-amber-500 dark:shadow-none dark:hover:bg-stone-700";
+const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark";
 ---
 
-<header
-  class="sticky top-0 z-50 border-b border-stone-300 bg-stone-100/85 shadow-[0_10px_30px_rgba(43,38,34,0.08)] backdrop-blur-md dark:border-stone-700 dark:bg-stone-900/85 dark:shadow-[0_10px_30px_rgba(0,0,0,0.45)]"
-  x-data="{ open: false }"
-  @keydown.escape.window="open = false"
->
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex min-h-19 items-center justify-between gap-4">
-      <a
-        class="flex items-center gap-3 rounded-full px-2 py-1.5 text-amber-800 no-underline transition-transform duration-200 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-100 dark:text-amber-500 dark:focus-visible:ring-offset-stone-900"
-        href="/"
-        aria-label="Homepage"
-        aria-current={navLinkCurrent(pathname, "/")}
-      >
-        <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-stone-300 bg-white shadow-sm shadow-stone-200 dark:border-stone-700 dark:bg-stone-800 dark:shadow-none">
-          <Image src={Logo} width={44} height={44} alt={LOGO_ALT_TEXT} class="h-full w-full object-contain" />
-        </div>
-        <div class="hidden sm:block">
-          <div class="text-sm font-medium uppercase tracking-[0.2em] text-stone-500 dark:text-stone-400">Blog</div>
-          <div class="text-base font-bold text-amber-800 dark:text-amber-500">{BLOG_NAME}</div>
-        </div>
-        <h1 class="hidden" aria-label="main-title">{BLOG_NAME}</h1>
-      </a>
+{/* An empty Alpine scope: without one, Alpine ignores the switch's bindings. */}
+<header class="page-frame" x-data>
+	{masthead ? (
+		<>
+			<div class="flex min-h-12 items-center justify-between gap-3 border-b border-rule text-[13px] text-mute">
+				<p class="m-0 tabular-nums">Anno {edition.yearRoman} · N. {edition.number}</p>
+				<EditionSwitch label="long" />
+			</div>
 
-      <nav class="hidden md:block" aria-label="Main navigation">
-        <ul class="flex list-none items-center gap-2 p-0">
-          {NAV_LINKS.map((link) => {
-            const current = navLinkCurrent(pathname, link.href);
+			<div class="grid items-center gap-[clamp(16px,3vw,40px)] pt-[clamp(18px,2.4vw,30px)] pb-[clamp(12px,1.6vw,20px)] md:grid-cols-[minmax(150px,1fr)_auto_minmax(150px,1fr)]">
+				<div class="hidden border border-ink px-3.5 py-3 text-center md:block">
+					<p class="m-0 font-heading text-[19px] italic leading-tight">Storia contemporanea e geopolitica</p>
+					<p class="m-0 mt-1.5 text-xs uppercase tracking-[0.14em] text-mute">Dal 1870 a oggi</p>
+				</div>
+				<h1 class="m-0 text-center font-heading text-[clamp(44px,7.2vw,90px)] font-normal leading-[0.95] tracking-[-0.02em]">
+					<a href="/" aria-current={navLinkCurrent(pathname, "/")} class={`text-ink no-underline ${FOCUS}`}>
+						{/* The wordmark: the italic accent "e" is part of the masthead typography. */}
+						Imperi <em class="text-accent">e</em> Rivoluzioni
+					</a>
+				</h1>
+				<a href="#abbonamenti" class={`hidden border border-ink px-3.5 py-3 text-center text-ink no-underline hover:bg-hover md:block ${FOCUS}`}>
+					<span class="block font-heading text-[19px] italic leading-tight">Ogni numero via email</span>
+					<span class="kicker mt-1.5 block text-accent">Abbonati gratis →</span>
+				</a>
+			</div>
 
-            return (
-              <li>
-                <a class={desktopLinkClass(link.cta, current)} href={link.href} aria-current={current}>{link.label}</a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+			<div class="rule-t-double flex flex-wrap justify-between gap-x-5 gap-y-1 border-b border-ink py-2 text-[13px] tabular-nums">
+				<span>{formatDateline(issue.data.pubDate)}</span>
+				<span class="hidden italic md:inline">Il lungo XX secolo, per leggere il presente dalle sue radici</span>
+				<span><span class="dark:hidden">Edizione del mattino</span><span class="hidden dark:inline">Edizione della sera</span></span>
+			</div>
+		</>
+	) : (
+		<div class="rule-b-double grid min-h-16 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+			<p class="m-0 text-[13px] text-mute tabular-nums">
+				<span class="hidden sm:inline">Anno {edition.yearRoman} · </span>N. {edition.number}<span class="hidden sm:inline"> · {formatDate(issue.data.pubDate)}</span>
+			</p>
 
-      <div class="flex items-center gap-2">
-        {/*
-          A toggle, not a three-way switch: `aria-pressed` says whether the dark theme is
-          on, so the label can stay stable. The icons swap in CSS off the `dark` class,
-          which the inline head script has already applied by the time this paints.
-        */}
-        <Button
-          variant="ghost"
-          size="sm"
-          class={ICON_BUTTON}
-          aria-label="Tema scuro"
-          aria-pressed="false"
-          :aria-pressed="$store.theme.dark.toString()"
-          x-on:click="$store.theme.toggle()"
-        >
-          <span class="text-lg leading-none dark:hidden" aria-hidden="true">☾</span>
-          <span class="hidden text-lg leading-none dark:inline" aria-hidden="true">☀</span>
-        </Button>
+			<a
+				href="/"
+				aria-current={navLinkCurrent(pathname, "/")}
+				class={`whitespace-nowrap font-heading text-[clamp(24px,2.6vw,34px)] leading-none tracking-[-0.01em] text-ink no-underline ${FOCUS}`}
+			>
+				{/* The wordmark: the italic accent "e" is part of the masthead typography. */}
+				Imperi <em class="text-accent">e</em> Rivoluzioni
+			</a>
 
-        <div class="md:hidden">
-          <Button
-            variant="ghost"
-            size="sm"
-            class={ICON_BUTTON}
-            aria-label="Apri il menu di navigazione"
-            :aria-expanded="open.toString()"
-            aria-controls="mobile-navigation"
-            x-on:click="open = !open"
-          >
-            <span class="sr-only">Menu</span>
-            <span class="flex flex-col gap-1.5" aria-hidden="true">
-              <span class="block h-0.5 w-5 rounded-full bg-current transition-transform duration-200" :class="open ? 'translate-y-2 rotate-45' : ''"></span>
-              <span class="block h-0.5 w-5 rounded-full bg-current transition-opacity duration-200" :class="open ? 'opacity-0' : ''"></span>
-              <span class="block h-0.5 w-5 rounded-full bg-current transition-transform duration-200" :class="open ? '-translate-y-2 -rotate-45' : ''"></span>
-            </span>
-          </Button>
-        </div>
-      </div>
-    </div>
+			<div class="flex justify-end">
+				<EditionSwitch />
+			</div>
+		</div>
+	)}
 
-    <nav
-      id="mobile-navigation"
-      class="border-t border-stone-200 py-4 md:hidden dark:border-stone-700"
-      x-cloak
-      x-show="open"
-      x-transition.origin.top.duration.200ms
-      @click.outside="open = false"
-      aria-label="Mobile navigation"
-    >
-      <ul class="m-0 flex list-none flex-col gap-1.5 p-0">
-        {NAV_LINKS.map((link) => {
-          const current = navLinkCurrent(pathname, link.href);
+	{/* One row at every width: on a phone it scrolls sideways instead of folding into a menu. */}
+	<nav aria-label="Sezioni" class="overflow-x-auto border-b border-ink [scrollbar-width:none]">
+		<ul class="m-0 flex w-max min-w-full list-none justify-center p-0">
+			{NAV_LINKS.map((link) => {
+				const current = navLinkCurrent(pathname, link.href);
 
-          return (
-            <li>
-              <a class={mobileLinkClass(link.cta, current)} href={link.href} aria-current={current} @click="open = false">
-                {link.shortLabel ?? link.label}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
-  </div>
+				return (
+					<li class="flex border-l border-rule first:border-l-0">
+						<a
+							href={link.href}
+							aria-current={current}
+							class={`flex min-h-11 items-center whitespace-nowrap px-[clamp(6px,1.8vw,22px)] text-[clamp(11px,2.8vw,12.5px)] font-semibold uppercase tracking-[clamp(0.4px,0.14vw,1.75px)] text-ink underline-offset-[5px] hover:underline ${current ? "underline" : "no-underline"} ${FOCUS}`}
+						>
+							{link.label}
+						</a>
+					</li>
+				);
+			})}
+		</ul>
+	</nav>
 </header>
 
 <script>

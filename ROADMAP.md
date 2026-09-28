@@ -7,6 +7,47 @@ After you complete the task, come back here and mark it as completed
 
 ---
 
+# Fifth round — "La Gazzetta" redesign
+
+The whole site becomes a period newspaper, following the Claude Design mockups ("Gazzetta Prima Pagina", "Gazzetta Articolo", developed from direction 1b). Full plan: `C:\Users\elia_\.claude\plans\we-need-to-complete-reflective-forest.md`.
+
+**Decisions taken:** Gazzetta everywhere, whole site in one round · **one branch (`redesign-gazzetta`) and one PR**, split into atomic commits (overrides the one-PR-per-phase rule for this round) · semantic colour tokens that flip with the edition replace the "built-in Tailwind utilities only" convention · Cormorant Garamond + Lora, Special Elite dropped · single 680px article column (the two-column variant 3e and the photo heroes 2a–2c are out of scope) · article pages gain a cover photo, inline `[n]` citations to structured sources, a series box and the edition number.
+
+## A. Foundations
+- [x] - colour tokens (`@theme inline` + `:root`/`.dark` variables) and rule utilities in `global.css`
+- [x] - fonts: Cormorant Garamond replaces Playfair Display, Special Elite and `.font-dispatch` removed
+- [x] - `prose` retheme on the tokens: drop cap, ruled `h2`, justified text, ruled tables, fenced blocks as "Scheda" boxes, superscript citation markers — fenced blocks stay **monospace** inside the double rule: the Manchuria diagram aligns arrows with spaces
+- [x] - Gazzetta `Button` variants (ruled outline, accent outline, text link)
+- [x] - Footer in the Gazzetta style, with RSS
+- [x] - Navbar `compact` variant with a scrolling section nav; hamburger and hidden `h1` removed — together with the switch (one commit: the switch is part of the same markup); the nav's aria-label became Italian, "Sezioni"
+- [x] - "Edizione della sera" switch replacing the theme toggle, same store and pre-paint script
+
+## B. Content model
+- [x] - helpers `seriesOf`, `editionOf`, `leadParagraphs`, with unit tests — done before the navbar, which needs `editionOf`; `editionOf` counts completed months, a bug the tests caught
+- [x] - structured `sources` field (Zod + Keystatic); the `## Fonti` lists move into frontmatter; inline `[n](#fonte-n)` markers — markers only where the passage is the cited book's own subject; no rehype plugin (Astro 7's default Markdown processor no longer runs them), so markers are announced as "[n]"
+- [x] - optional `cover` / `coverAlt` / `coverCredit` (Zod `image()` + Keystatic `fields.image`) — plus `coverCaption`; the `@assets` alias works; covers live at `src/assets/articles/<topic>/<entry>/cover.jpg`, where Keystatic's image field looks. The `giappone/` folder is lower case on disk now, as git tracks it
+- [x] - Keystatic round-trip gate: every entry saved once, diffs limited to the intended lines — the first try exposed that Keystatic could not see the covers (a save would have dropped them); after the relocation, every entry saved with a YAML-style-only diff
+
+## C. Homepage and article
+- [x] - Navbar `masthead` variant (issue number, three-column masthead, dateline) — in the same commit as the front page, so no commit carries two h1s
+- [x] - homepage as the front page: lead story, series + author's note, readings, Substack box, Lettere alla redazione
+- [x] - article page: breadcrumb, "Parte X di N", byline, cover, Fonti, series, reading-progress bar — the progress bar needs animation longhands: the CSS minifier drops a shorthand paired with a timeline; a `---` before a heading is hidden so rules don't stack
+
+## D. Remaining pages
+- [x] - `/articles` archive as a newspaper index — grouped by `archiveOf`, no longer hardcoded
+- [x] - `/readings` and `/readings/[id]` — tag buttons styled from `aria-pressed` (Alpine's `:class` merged both states and hid the label); readings no longer x-cloak'ed
+- [x] - `/topics`
+- [x] - `/about` and `/contacts`
+- [x] - `404` / `500`
+- [x] - sweep for leftover pre-Gazzetta utilities — pixel spacings with an exact Tailwind equivalent made canonical
+
+## E. Close
+- [x] - docs: `CLAUDE.md`, `PALETTE.md`, README design-system section
+- [x] - visual review: screenshots of every page at 1280 / 390px, Mattino and Sera — 36 renders (9 pages × 2 widths × 2 editions): no overflow, one h1 each, no broken images; no fixes needed beyond those made per page
+- [x] - tick off, push, open the PR
+
+---
+
 # Fourth round — analytics, admin CMS & homepage scaling
 
 Grounded in the four questions raised after the third round closed. Full design, code sketches and risk table live in the approved plan at `C:\Users\elia_\.claude\plans\i-d-like-to-plan-pure-lovelace.md`.

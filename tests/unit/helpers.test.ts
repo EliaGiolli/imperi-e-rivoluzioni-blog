@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { capitalizeFirstLetter, formatDate } from "../../src/core/helpers";
+import { capitalizeFirstLetter, formatDate, formatDateline } from "../../src/core/helpers";
 
 describe("capitalizeFirstLetter", () => {
 	it("capitalizes the first character", () => {
@@ -22,5 +22,11 @@ describe("formatDate", () => {
 
 	it("throws for an invalid date", () => {
 		expect(() => formatDate("not-a-date")).toThrowError(RangeError);
+	});
+});
+
+describe("formatDateline", () => {
+	it("prints the weekday first and capitalised, in Italian", () => {
+		expect(formatDateline(new Date("2026-09-13"))).toBe("Domenica 13 settembre 2026");
 	});
 });

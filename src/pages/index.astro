@@ -1,22 +1,51 @@
 ---
+import { getCollection } from "astro:content";
 import MainLayout from "../core/layouts/MainLayout.astro";
-import HeroSection from "../features/home/HeroSection.astro";
+import { byMostRecent, byMostRecentlyAdded, leadParagraphs, seriesOf } from "../core/helpers";
+import LeadStory from "../features/articles/LeadStory.astro";
+import SeriesBox from "../features/articles/SeriesBox.astro";
 import ContactMe from "../features/contact/ContactMe.astro";
-import AboutSection from "../features/home/AboutSection.astro";
-import ReadingSection from "../features/readings/ReadingSection.astro";
-import ArticlesSection from "../features/articles/ArticlesSection.astro";
+import AuthorNote from "../features/home/AuthorNote.astro";
+import SubscribeBox from "../features/home/SubscribeBox.astro";
+import ReadingEntry from "../features/readings/ReadingEntry.astro";
+import SectionHeading from "../shared/components/SectionHeading.astro";
+import { HOME_PREVIEW_COUNT } from "../shared/utils/constants";
+
+// The front page leads with the latest issue and its series.
+const articles = await getCollection("articles");
+const lead = [...articles].sort(byMostRecent)[0];
+const series = seriesOf(lead, articles);
+const paragraphs = leadParagraphs(lead.body ?? "", 2);
+
+const readings = [...(await getCollection("readings"))].sort(byMostRecentlyAdded).slice(0, HOME_PREVIEW_COUNT);
 ---
 
 <MainLayout
 	title="Imperi e Rivoluzioni — Storia contemporanea e geopolitica"
 	description="Analisi di storia contemporanea e geopolitica sul lungo XX secolo: imperi, nazionalismi, rivoluzioni, guerre mondiali e Guerra fredda, per leggere il presente attraverso le sue radici."
+	masthead
 >
-	<HeroSection />
+	<main class="page-frame">
+		<div class="flex flex-wrap gap-x-10 gap-y-7 pt-[clamp(24px,3vw,40px)] pb-[clamp(28px,3.4vw,44px)]">
+			<LeadStory article={lead} series={series} paragraphs={paragraphs} />
+			<div aria-hidden="true" class="hidden flex-[0_0_1px] self-stretch bg-rule lg:block"></div>
+			<aside aria-label="La serie e l'autore" class="flex min-w-0 flex-[1_1_280px] flex-col gap-6.5">
+				<SeriesBox series={series} currentNote="in primo piano" />
+				<AuthorNote />
+			</aside>
+		</div>
 
-	<main>
-		<AboutSection />
-		<ReadingSection />
-		<ArticlesSection />
+		<section aria-labelledby="letture-title" class="pb-[clamp(28px,3.4vw,44px)]">
+			<SectionHeading id="letture-title" kicker="Rubrica" title="Letture consigliate" link={{ href: "/readings", label: "Tutte le letture" }} />
+			<div class="mt-4.5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-x-8 gap-y-6">
+				{readings.map((reading) => <ReadingEntry reading={reading} />)}
+			</div>
+		</section>
+
+		<div class="pb-[clamp(32px,4vw,52px)]">
+			<SubscribeBox />
+		</div>
+
 		<ContactMe />
 	</main>
 </MainLayout>

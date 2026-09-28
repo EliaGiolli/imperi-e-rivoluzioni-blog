@@ -38,10 +38,10 @@ A static site built with Astro, with no UI-framework integrations on the public 
 
 | Route | Page | What it does |
 | --- | --- | --- |
-| `/` | 🏠 Home | Hero, editorial promise, the latest readings and articles as keyboard-accessible tab carousels, and the contact form |
+| `/` | 🏠 Front page | Masthead with the issue number and dateline, the latest article as the lead story with its series, the author's note, the latest readings, the Substack box and the letters to the editors |
 | `/about` | 👤 About | Bio, working method and editorial line — labelled "Chi sono", the first item in the navbar |
-| `/articles` | 📜 Archive | Articles grouped by topic and category, ordered by cycle sequence |
-| `/articles/[id]` | 📖 Article | Full text with a sticky side table of contents, date, author and reading time |
+| `/articles` | 📜 Archive | A newspaper index: topics, then series, then parts in reading order, grouped from the content itself |
+| `/articles/[id]` | 📖 Article | Series kicker, byline, cover photo, a single justified column with a drop cap, numbered sources with inline `[n]` markers, the whole series, and a reading-progress hairline |
 | `/readings` | 📚 Recommended readings | Bibliography, filterable by tag on the client |
 | `/readings/[id]` | 🔖 Reading sheet | Extended book entry with an Amazon link |
 | `/topics` | 🗺️ Themes | Thematic index crossing articles and readings, plus an analytical index by tag |
@@ -73,21 +73,21 @@ The project follows a **feature-based** layout: routes hold no reusable logic, d
 │   │   ├── layouts/              # MainLayout: the site's only layout
 │   │   └── schemas/              # envSchema: Zod schema for every environment variable
 │   ├── features/
-│   │   ├── articles/             # ArticlesSection + ArticleCard
+│   │   ├── articles/             # LeadStory, SeriesBox
 │   │   ├── contact/              # ContactMe and the EmailJS handler
-│   │   ├── home/                 # HeroSection + AboutSection
-│   │   └── readings/             # ReadingSection, ReadingCard, ReadingTagFilters
+│   │   ├── home/                 # AuthorNote, SubscribeBox
+│   │   └── readings/             # ReadingEntry, ReadingTagFilters
 │   ├── pages/
 │   │   ├── articles/             # index.astro + [id].astro
 │   │   ├── readings/             # index.astro + [id].astro
 │   │   ├── rss.xml.ts            # RSS endpoint
 │   │   └── *.astro               # Routes only: they compose the sections
 │   ├── shared/
-│   │   ├── components/           # Navbar (+ theme store), Footer
+│   │   ├── components/           # Navbar (masthead + compact, theme store), EditionSwitch, PageHeader, SectionHeading, Footer
 │   │   ├── forms/                # Form, Input
 │   │   ├── lib/                  # cn(): clsx + tailwind-merge
 │   │   ├── types/                # Every type and interface in the codebase
-│   │   ├── ui/                   # Button, Card, Tabs, TabPanel
+│   │   ├── ui/                   # Button
 │   │   └── utils/                # Constants and CVA variants
 │   └── styles/                   # global.css: the single Tailwind entry
 ├── tests/
@@ -115,9 +115,9 @@ src/content/articles/**/*.md
           ▼
    content.config.ts  ──  schema validation
           │
-          ├── ArticlesSection → Tabs → ArticleCard   (home, latest 3)
-          ├── /articles        → ArticleCard          (archive, by cycle sequence)
-          ├── /articles/[id]   → Markdown + TOC       (routed on the slug field)
+          ├── /                → LeadStory + SeriesBox (the latest issue)
+          ├── /articles        → archiveOf             (topic → series → parts)
+          ├── /articles/[id]   → Markdown + sources    (routed on the slug field)
           ├── /topics          → thematic index       (crossed with the readings)
           └── /rss.xml         → feed                 (newest first)
 ```
@@ -133,6 +133,10 @@ src/content/articles/**/*.md
 | `tags` | `string[]` | Feed the analytical index on `/topics` |
 | `topic`, `category` | `string` | Drive the grouping in the archive |
 | `slug` | `string` | **This is the route's `[id]` parameter**, not the generated id |
+| `cover` | `image?` | Optimised by Astro; stored by Keystatic as `@assets/articles/<slug>/cover.jpg`. Never enlarged past its own width |
+| `coverAlt` | `string?` | **Required when there is a cover** — the schema refuses one without it |
+| `coverCaption`, `coverCredit` | `string?` | Shown under the photo |
+| `sources` | `{ author, title, publisher }[]` | Numbered Fonti with ids `fonte-1…n`; the body cites them as `[2](#fonte-2)`, drawn as a superscript `[2]` |
 
 > ⚠️ The subfolder under `src/content/articles/` is organisational only: the grouping in the UI comes from `topic` and `category`.
 
@@ -146,7 +150,7 @@ src/content/readings/*.md
           ▼
    content.config.ts
           │
-          ├── ReadingSection    → Tabs → ReadingCard (home, latest 3 added)
+          ├── / and /readings   → ReadingEntry       (newest added first)
           ├── ReadingTagFilters → client-side tag filter (Alpine)
           └── /topics           → crossed with the articles by topic and tag
 ```
@@ -174,6 +178,11 @@ Pure functions live in `core/helpers/` and are re-exported from `helpers/index.t
 | `readingTime` | Word-count reading estimate, ignoring code, diagrams and Markdown syntax |
 | `byReadingOrder` / `byMostRecent` | Comparators for ordering the article listings |
 | `byMostRecentlyAdded` | Newest-added-first comparator for the readings, tie-broken on the Italian-collated title |
+| `seriesOf` | An article's series (same topic and category) in reading order, with its part and neighbours |
+| `editionOf` | The newspaper numbering — one issue per article by publication date, a new year every twelve months |
+| `archiveOf` | The archive index: topic → series → parts |
+| `leadParagraphs` | The opening prose paragraphs of a Markdown body, as plain text, for the front page |
+| `formatDateline`, `toRoman` | "Domenica 13 settembre 2026"; "Parte III", "Anno I" |
 | `buildThemeIndex`, `slugifyTheme` | Build the `/topics` index by crossing articles and readings |
 | `navLinkCurrent` | The `aria-current` value a navbar link deserves for the current route |
 | `validateContactForm`, `contactErrorSummary` | Contact-form rules and the single line announced to screen readers |
@@ -185,9 +194,9 @@ Every `type` and `interface` lives in `shared/types/`, split by domain — `cont
 
 ```astro
 ---
-import type { CardProps } from "../types";
+import type { ButtonProps } from "../types";
 
-type Props = CardProps;
+type Props = ButtonProps;
 ---
 ```
 
@@ -195,17 +204,15 @@ type Props = CardProps;
 
 No UI-framework integrations on the public pages — React is loaded only inside the `/keystatic` admin. Two mechanisms only:
 
-- **Alpine.js** for anything in-page: mobile menu, tag filter, homepage tab carousels, theme toggle. Alpine is imported and started with a single `Alpine.start()` inside `Navbar.astro` — which, appearing on every page through `MainLayout`, bootstraps it site-wide. **Do not add a second `Alpine.start()`.**
+- **Alpine.js** for anything in-page: the evening-edition switch and the readings tag filter. Alpine is imported and started with a single `Alpine.start()` inside `Navbar.astro` — which, appearing on every page through `MainLayout`, bootstraps it site-wide. **Do not add a second `Alpine.start()`.**
 - **Plain `<script>` modules** for non-UI work, such as the EmailJS handler in `ContactMe.astro`.
 
-### 🗂️ Tabs
+### 📰 The newspaper layout
 
-`shared/ui/Tabs.astro` and `TabPanel.astro` implement the [WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) and back both homepage carousels, capped at `HOME_PREVIEW_COUNT` (3) entries each:
-
-- **roving tabindex** — only the selected tab is in the tab order, so Tab moves straight from the tablist into the open panel;
-- **←/→** move between tabs and wrap at either end; **Home**/**End** jump to the first and last;
-- one Alpine scope per group, keyed by `idPrefix` so the two groups' ids never collide;
-- tab 0's active state is **server-rendered** and panel 0 is never cloaked, so each group renders correctly before Alpine starts — and without JavaScript at all.
+- **Header.** The front page prints the full masthead: issue number and the "Edizione della sera" switch, the wordmark as the page's only `h1`, and a dateline whose edition name follows the switch. Every other page gets the compact strip (issue · wordmark · switch). Both end with the section nav, one row at every width that scrolls sideways on a phone — there is no hamburger menu.
+- **Issue number.** "Anno I · N. 3" comes from `editionOf`: the latest issue everywhere, the article's own on an article page.
+- **Toggled states** are drawn from the attribute Alpine flips (`aria-pressed:bg-ink`), because Alpine's `:class` adds to the server-rendered classes instead of replacing them. Content is never `x-cloak`ed when it should be readable without JavaScript.
+- **Reading progress** on article pages is a CSS scroll timeline, no script; browsers without scroll timelines simply don't show it.
 
 ### 🔀 View transitions
 
@@ -214,9 +221,9 @@ No UI-framework integrations on the public pages — React is loaded only inside
 - Astro copies the incoming document's `<html>` attributes over the live ones, which drops any class set at runtime. The theme class is re-applied on `astro:after-swap`, an event that fires before the new page paints.
 - Alpine's mutation observer picks up the swapped-in `<body>` on its own, so in-page interactivity keeps working without re-initialising it by hand.
 
-### 🌗 Theme toggle
+### 🌗 Morning and evening editions
 
-Dark mode is class-driven rather than media-query-only, so the navbar button can override the OS preference:
+The evening edition ("Edizione della sera") is class-driven rather than media-query-only, so the switch in the header can override the OS preference:
 
 ```css
 @custom-variant dark (&:where(.dark, .dark *));
@@ -226,7 +233,7 @@ It defaults to `prefers-color-scheme` and persists an explicit choice in `localS
 
 ### 🔘 UI components
 
-Buttons go through `shared/ui/Button.astro`, which merges the `cva` variants defined in `utils/variants.ts` through `cn()`, and renders `<a>` or `<button>` depending on whether `href` is passed. New variants belong in `variants.ts`, not in ad-hoc classes.
+Buttons go through `shared/ui/Button.astro`, which merges the `cva` variants defined in `utils/variants.ts` through `cn()`, and renders `<a>` or `<button>` depending on whether `href` is passed. New variants belong in `variants.ts`, not in ad-hoc classes. Every variant is drawn, never filled: `primary` is the accent outline, `secondary` the ink outline, `ghost` a text link.
 
 ### 🌍 Language
 
@@ -234,50 +241,50 @@ All user-facing copy, content and content metadata is **in Italian**; code ident
 
 ## 🎨 Design system
 
-Tailwind v4 through the `@tailwindcss/vite` plugin, with no `tailwind.config`: the single entry is `src/styles/global.css`.
+"La Gazzetta": the site is set as a period newspaper — a masthead, datelines, double rules, justified columns. Tailwind v4 runs through the `@tailwindcss/vite` plugin, with no `tailwind.config`: the single entry is `src/styles/global.css`.
 
 ### Palette
 
-The palette is expressed with native Tailwind utilities, not custom colour names.
+Colours are **semantic tokens**, declared once with `@theme inline` over `--gz-*` variables. The evening edition redefines the variables on `.dark`, so a component writes `text-ink` or `border-rule` and never pairs `dark:` colours.
 
-| | Colour | Hex | Utility |
+| Token | Mattino | Sera | Use |
 | --- | --- | --- | --- |
-| ![#EFE6D3](https://img.shields.io/badge/-EFE6D3-EFE6D3?style=flat-square) | Cream / paper | `#EFE6D3` | `stone-100` |
-| ![#2B2622](https://img.shields.io/badge/-2B2622-2B2622?style=flat-square) | Charcoal | `#2B2622` | `stone-900` |
-| ![#B98B3E](https://img.shields.io/badge/-B98B3E-B98B3E?style=flat-square) | Antique gold | `#B98B3E` | `amber-700` |
-| ![#A13D2C](https://img.shields.io/badge/-A13D2C-A13D2C?style=flat-square) | Rust red | `#A13D2C` | `red-700` |
+| `paper` | ![#efe6d3](https://img.shields.io/badge/-efe6d3-efe6d3?style=flat-square) `#efe6d3` | ![#1f1d1b](https://img.shields.io/badge/-1f1d1b-1f1d1b?style=flat-square) `#1f1d1b` | Page |
+| `ink` | `#201f1d` | `#efe6d3` | Headlines, rules |
+| `ink-2` | `#444141` | `#d7d3d3` | Body copy |
+| `mute` | `#605d5d` | `#bab6b6` | Datelines, captions, labels |
+| `accent` | ![#7d5411](https://img.shields.io/badge/-7d5411-7d5411?style=flat-square) `#7d5411` | ![#e1ad66](https://img.shields.io/badge/-e1ad66-e1ad66?style=flat-square) `#e1ad66` | Kickers, numerals, source markers, the accent button |
+| `mark` | `#b68235` | `#c28d41` | Accent outlines, focus rings, reading progress |
+| `rule` | `rgba(32,31,29,.2)` | `rgba(239,230,211,.2)` | Faint rules inside sections |
 
-### Dark palette
+Every text pair clears WCAG AA on its paper. Colour is only ever a line or text, never a filled block — the one inversion is a pressed tag, drawn paper-on-ink. Invalid form fields keep a red edge: an error signal, not a brand colour.
 
-The same identity turned over — charcoal page, parchment ink — with one deliberate substitution.
+### Rules and frame
 
-| Role | Light | Dark |
+| Weight | Utility | Where |
 | --- | --- | --- |
-| Page background | `#EFE6D3` paper | `stone-900` |
-| Elevated surfaces (cards, TOC) | `white` | `stone-800` |
-| Recessed bands (hero, footer, alternating sections) | `stone-200` | `stone-950` |
-| Body ink | `stone-700` / `#2B2622` | `stone-300` / `#EFE6D3` |
-| Accent | `red-700` rust | `amber-500` gold |
+| 3px double | `rule-double`, `rule-t-double`, `rule-b-double` | Masthead, section openings, boxes |
+| 1px ink | `border-ink` | Datelines, tables, cards of a series |
+| 1px faint | `border-rule` | Inside sections, column rules |
 
-> ℹ️ Rust red reaches only **2.6:1** against charcoal, so antique gold (~7.9:1) carries the accents in dark mode — which is also what the hero already did on its own dark background. Required-field asterisks and invalid-input rings stay red (`red-400`): they are error affordances, not brand accents.
+`page-frame` is the 1240px broadsheet frame every block sits in; `kicker` is the letter-spaced small-capital label ("In primo piano", "Rubrica").
 
 ### Typography
 
 | Use | Font |
 | --- | --- |
-| Headings and logotype | **Playfair Display** — set globally on `h1`–`h6` |
-| Body copy | **Lora** |
-| "Dispatch" accent | **Special Elite**, through the `.font-dispatch` class |
+| Masthead and headlines | **Cormorant Garamond** (`font-heading`) — regular weight at display sizes, italic for deks and quotes |
+| Body copy | **Lora** (`font-body`) |
 
 Fonts are loaded from `MainLayout`'s `<head>` with `preconnect` hints, **not** with an `@import` in `global.css` — an `@import` inside the bundled CSS serialises the requests, so the fonts cannot start downloading until the stylesheet has arrived and parsed.
 
 ### Long-form reading
 
-`@tailwindcss/typography` is registered with Tailwind v4's `@plugin` directive, and the `prose` theme is mapped onto the site's palette twice — once per mode. On paper: charcoal Playfair headings and rust-red links. On charcoal: parchment headings and gold links. Gold list markers and quote borders, and blockquotes rendered as set-apart panels, hold in both. Detail pages let the plugin govern the measure.
+`@tailwindcss/typography` is registered with Tailwind v4's `@plugin` directive and its `prose` theme reads the tokens, so one block serves both editions. Running text is justified and hyphenated (the page is `lang="it"`); each `h2` opens with a faint rule, and a Markdown `---` right before a heading is hidden so the two don't stack; tables get ink rules around the header; fenced blocks become double-ruled "schede", kept monospace because the ASCII diagrams align with spaces. The opt-in `.drop-cap` sets the first letter of the opening paragraph.
 
 ### 🏃 Motion
 
-Smooth scrolling is opt-in, behind `prefers-reduced-motion: no-preference`. `scroll-padding-top: 5.5rem` stays unconditional so that the article table of contents and the `/topics` jump links clear the sticky header in either motion mode.
+Smooth scrolling is opt-in, behind `prefers-reduced-motion: no-preference`. The header is not sticky, so in-page jumps (source markers, the `/topics` index, the series links) need only a small `scroll-padding-top`.
 
 ## 🔍 SEO and discoverability
 
@@ -393,8 +400,8 @@ npm test                   # All three in sequence
 | Suite | Covers |
 | --- | --- |
 | 🔬 Unit | `formatDate`, `capitalizeFirstLetter`, `readingTime`, the sort comparators, `buildThemeIndex`, `navLinkCurrent`, the contact-form rules, the JSON-LD builder, `cn()`, and the environment schema with the CMS gate |
-| 🔗 Integration | A real `astro build`, asserting on the emitted `dist/` HTML: the article route, the Search Console file, and the homepage tab carousels (two tablists, `HOME_PREVIEW_COUNT` tabs each, a server-rendered roving tabindex, only the first panels uncloaked, both archive CTAs) |
-| 🎭 End-to-end | Every navbar link resolving to the right page, the mobile menu, `aria-current`, the WAI-ARIA keyboard pattern on both homepage tab groups, the theme toggle surviving navigation and reloads, and Alpine still driving markup that view transitions swap in |
+| 🔗 Integration | A real `astro build`, asserting on the emitted `dist/` HTML: the article route, the Search Console file, the front page (one `h1`, the lead story and its link, the series, `HOME_PREVIEW_COUNT` readings, the Substack form) and the article page (one `h1`, every source marker resolving, the series with the current part, the cover's alt text, the issue number) |
+| 🎭 End-to-end | Every navbar link resolving to the right page, every section reachable at phone width, `aria-current`, the front page leading to its article, the evening-edition switch surviving navigation and reloads, and Alpine still driving markup that view transitions swap in |
 
 Running a single test:
 
@@ -449,8 +456,8 @@ The pages follow conventions the end-to-end tests actively verify:
 - 🏗️ semantic landmarks: `header`, `main`, `nav`, `section`, `article`, `footer`;
 - 🔗 `aria-labelledby` linking every section to its own heading (e.g. `#articles-title`);
 - 🧭 `aria-current` on the active navbar link — `page` for the exact route, `true` for a section ancestor;
-- 🎛️ `aria-expanded` on the mobile menu toggle, `aria-pressed` on the theme toggle;
-- ⌨️ the WAI-ARIA tabs pattern on the homepage carousels: roving tabindex, arrow keys with wrap, Home/End;
+- 🎛️ `aria-pressed` on the "Edizione della sera" switch and on the reading tags;
+- 📰 one `h1` per page — the masthead wordmark on the front page, the page title everywhere else;
 - 📢 `role="status"` and `aria-live` for form feedback;
 - 🏷️ Italian `aria-label`s on links and controls;
 - ⌨️ visible focus on links and interactive controls;

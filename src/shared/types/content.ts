@@ -84,26 +84,56 @@ export interface ArticleSchemaInput {
 	siteUrl: string;
 }
 
-/** The slice of an article entry an ArticleCard renders. */
-export interface ArticleCardArticle {
-	id: string;
+/** The slice of an article a series box needs: identity, place in the cycle, and date. */
+export interface SeriesArticle {
 	data: {
 		title: string;
-		description: string;
-		tags: string[];
 		slug: string;
+		topic: string;
+		category: string;
+		order: number;
+		pubDate: Date;
 	};
 }
 
-/** The slice of a reading entry a ReadingCard renders. */
-export interface ReadingCardReading {
-	id: string;
-	data: {
-		name: string;
-		author: string;
-		description: string;
-		tags: string[];
-		topic: string;
-		amazonUrl: string;
-	};
+/** One instalment of a series, as the series box and the "Parte X di N" kicker show it. */
+export interface SeriesPart<T extends SeriesArticle = SeriesArticle> {
+	article: T;
+	/** 1-based position in the reading order. */
+	position: number;
+	roman: string;
+	current: boolean;
+}
+
+/** A multi-part cycle: every article sharing a topic and a category, in reading order. */
+export interface Series<T extends SeriesArticle = SeriesArticle> {
+	name: string;
+	topic: string;
+	parts: SeriesPart<T>[];
+	/** The current article's part. */
+	part: SeriesPart<T>;
+	total: number;
+	previous?: SeriesPart<T>;
+	next?: SeriesPart<T>;
+}
+
+/** The newspaper numbering of an article: "Anno I · N. 3". */
+export interface Edition {
+	/** 1-based year of publication, counted in 12-month steps from the first article. */
+	year: number;
+	yearRoman: string;
+	/** 1-based issue number: one issue per article, in publication order. */
+	number: number;
+}
+
+/** One series in the archive: its name and its parts in reading order. */
+export interface ArchiveSeries<T extends SeriesArticle = SeriesArticle> {
+	name: string;
+	parts: SeriesPart<T>[];
+}
+
+/** One topic in the archive, with its series. */
+export interface ArchiveTopic<T extends SeriesArticle = SeriesArticle> {
+	topic: string;
+	series: ArchiveSeries<T>[];
 }
