@@ -7,6 +7,47 @@ After you complete the task, come back here and mark it as completed
 
 ---
 
+# Fifth round — "La Gazzetta" redesign
+
+The whole site becomes a period newspaper, following the Claude Design mockups ("Gazzetta Prima Pagina", "Gazzetta Articolo", developed from direction 1b). Full plan: `C:\Users\elia_\.claude\plans\we-need-to-complete-reflective-forest.md`.
+
+**Decisions taken:** Gazzetta everywhere, whole site in one round · **one branch (`redesign-gazzetta`) and one PR**, split into atomic commits (overrides the one-PR-per-phase rule for this round) · semantic colour tokens that flip with the edition replace the "built-in Tailwind utilities only" convention · Cormorant Garamond + Lora, Special Elite dropped · single 680px article column (the two-column variant 3e and the photo heroes 2a–2c are out of scope) · article pages gain a cover photo, inline `[n]` citations to structured sources, a series box and the edition number.
+
+## A. Foundations
+- [ ] - colour tokens (`@theme inline` + `:root`/`.dark` variables) and rule utilities in `global.css`
+- [ ] - fonts: Cormorant Garamond replaces Playfair Display, Special Elite and `.font-dispatch` removed
+- [ ] - `prose` retheme on the tokens: drop cap, ruled `h2`, justified text, ruled tables, fenced blocks as "Scheda" boxes, superscript citation markers
+- [ ] - Gazzetta `Button` variants (ruled outline, accent outline, text link)
+- [ ] - Footer in the Gazzetta style, with RSS
+- [ ] - Navbar `compact` variant with a scrolling section nav; hamburger and hidden `h1` removed
+- [ ] - "Edizione della sera" switch replacing the theme toggle, same store and pre-paint script
+
+## B. Content model
+- [ ] - helpers `seriesOf`, `editionOf`, `leadParagraphs`, with unit tests
+- [ ] - structured `sources` field (Zod + Keystatic); the `## Fonti` lists move into frontmatter; inline `[n](#fonte-n)` markers
+- [ ] - optional `cover` / `coverAlt` / `coverCredit` (Zod `image()` + Keystatic `fields.image`)
+- [ ] - Keystatic round-trip gate: every entry saved once, diffs limited to the intended lines
+
+## C. Homepage and article
+- [ ] - Navbar `masthead` variant (issue number, three-column masthead, dateline)
+- [ ] - homepage as the front page: lead story, series + author's note, readings, Substack box, Lettere alla redazione
+- [ ] - article page: breadcrumb, "Parte X di N", byline, cover, Fonti, series, reading-progress bar
+
+## D. Remaining pages
+- [ ] - `/articles` archive as a newspaper index
+- [ ] - `/readings` and `/readings/[id]`
+- [ ] - `/topics`
+- [ ] - `/about` and `/contacts`
+- [ ] - `404` / `500`
+- [ ] - sweep for leftover pre-Gazzetta utilities
+
+## E. Close
+- [ ] - docs: `CLAUDE.md`, `PALETTE.md`, README design-system section
+- [ ] - visual review: screenshots of every page at 1280 / 390px, Mattino and Sera
+- [ ] - tick off, push, open the PR
+
+---
+
 # Fourth round — analytics, admin CMS & homepage scaling
 
 Grounded in the four questions raised after the third round closed. Full design, code sketches and risk table live in the approved plan at `C:\Users\elia_\.claude\plans\i-d-like-to-plan-pure-lovelace.md`.
