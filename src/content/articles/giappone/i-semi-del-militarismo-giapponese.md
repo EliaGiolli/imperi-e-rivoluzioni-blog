@@ -16,7 +16,7 @@ tags:
 topic: Giappone
 category: militarismo giapponese
 slug: i-semi-del-militarismo-giapponese
-cover: '@assets/articles/meiji-constitution.jpg'
+cover: '@assets/articles/giappone/i-semi-del-militarismo-giapponese/cover.jpg'
 coverAlt: >-
   Incisione d'epoca: l'Imperatore Meiji, in piedi su una pedana sotto un baldacchino, legge la Costituzione davanti a dignitari in uniforme e dame di corte
 coverCaption: 'La promulgazione della Costituzione Meiji, 11 febbraio 1889.'

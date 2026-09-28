@@ -15,7 +15,7 @@ tags:
 topic: Giappone
 category: militarismo giapponese
 slug: il-governo-dei-generali-ascesa-hideki-tojo
-cover: '@assets/articles/tojo.jpg'
+cover: '@assets/articles/giappone/il-governo-dei-generali/cover.jpg'
 coverAlt: >-
   Hideki Tōjō in divisa e berretto militare, tra alcuni uomini in abito civile
 coverCaption: 'Hideki Tōjō, Primo Ministro del Giappone dall''ottobre 1941.'
