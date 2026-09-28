@@ -10,12 +10,12 @@ const Heading = headingLevel;
 const LINK = "underline-offset-4 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark";
 ---
 
-<article aria-labelledby={`reading-${reading.id}`} class="flex flex-col border-t border-ink pt-3.5" data-reading-tags={data.tags.join("|")}>
+<article aria-labelledby={`reading-${reading.id}`} class="flex flex-col border-t border-ink pt-3.5">
 	<p class="kicker m-0 text-mute">{data.topic}</p>
 	<Heading id={`reading-${reading.id}`} class="mt-2 mb-0 text-[22px] font-semibold leading-[1.2] text-balance">{data.name}</Heading>
 	<p class="m-0 mt-1 text-sm italic text-ink-2">{data.author}</p>
 	<p class="m-0 mt-2.5 flex-1 text-justify text-[14.5px] leading-[1.6] text-ink-2 hyphens-auto">{data.description}</p>
-	<p class="m-0 mt-3 flex flex-wrap gap-x-[18px] gap-y-1 text-sm font-semibold">
+	<p class="m-0 mt-3 flex flex-wrap gap-x-4.5 gap-y-1 text-sm font-semibold">
 		<a href={`/readings/${reading.id}`} class={`text-accent ${LINK}`}>Apri la scheda<span class="sr-only"> di {data.name}</span></a>
 		<a href={data.amazonUrl} target="_blank" rel="noreferrer" class={`text-ink ${LINK}`}>
 			Su Amazon<span aria-hidden="true"> ↗</span><span class="sr-only"> (sito esterno)</span>

@@ -5,14 +5,14 @@ import { SUBSTACK_URL } from "../../shared/utils/constants";
 const subscribeUrl = new URL("/subscribe", SUBSTACK_URL).href;
 ---
 
-<section id="abbonamenti" aria-labelledby="abbonamenti-title" class="rule-double mx-auto max-w-[780px] p-[clamp(20px,3vw,34px)] text-center">
+<section id="abbonamenti" aria-labelledby="abbonamenti-title" class="rule-double mx-auto max-w-195 p-[clamp(20px,3vw,34px)] text-center">
 	<p class="kicker m-0 text-accent">Abbonamenti</p>
 	<h2 id="abbonamenti-title" class="mt-2 mb-0 text-[clamp(30px,3.2vw,42px)] font-normal leading-[1.1]">Ricevi ogni nuovo numero</h2>
 	<p class="mx-auto mt-2.5 mb-0 max-w-[34em] text-[15px] leading-[1.6] text-ink-2">
 		Un'email quando esce un nuovo articolo, con riflessioni e letture che non trovi sul blog. Gratis, su Substack.
 	</p>
-	<form action={subscribeUrl} method="get" target="_blank" class="mt-[18px] flex flex-wrap justify-center gap-2.5 text-left">
-		<label class="flex max-w-[380px] flex-[1_1_260px] flex-col gap-1.5 text-[13px] text-mute">
+	<form action={subscribeUrl} method="get" target="_blank" class="mt-4.5 flex flex-wrap justify-center gap-2.5 text-left">
+		<label class="flex max-w-95 flex-[1_1_260px] flex-col gap-1.5 text-[13px] text-mute">
 			Il tuo indirizzo email
 			<input
 				type="email"
@@ -25,7 +25,7 @@ const subscribeUrl = new URL("/subscribe", SUBSTACK_URL).href;
 		</label>
 		<button
 			type="submit"
-			class="min-h-12 cursor-pointer self-end rounded border border-mark bg-transparent px-[22px] font-heading text-lg font-semibold text-accent hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark"
+			class="min-h-12 cursor-pointer self-end rounded border border-mark bg-transparent px-5.5 font-heading text-lg font-semibold text-accent hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark"
 		>
 			Abbonati gratis<span class="sr-only"> (si apre Substack in una nuova scheda)</span>
 		</button>

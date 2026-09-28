@@ -28,11 +28,11 @@ const { Content } = await render(reading);
 				<p class="mt-4 mb-0 text-[13.5px] text-mute">di <strong class="font-semibold text-ink">{data.author}</strong></p>
 			</PageHeader>
 
-			<div class="prose prose-lg mx-auto mt-[clamp(24px,3vw,40px)] max-w-[680px]">
+			<div class="prose prose-lg mx-auto mt-[clamp(24px,3vw,40px)] max-w-170">
 				<Content />
 			</div>
 
-			<div class="mx-auto mt-8 max-w-[680px] border-t border-rule pt-5">
+			<div class="mx-auto mt-8 max-w-170 border-t border-rule pt-5">
 				<ul class="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-[13px] text-mute" aria-label={`Argomenti di ${data.name}`}>
 					{data.tags.map((tag) => <li class="kicker">{tag}</li>)}
 				</ul>

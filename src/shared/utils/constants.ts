@@ -1,7 +1,6 @@
 import type { NavLink } from "../types";
 
 export const BLOG_NAME = "Imperi e Rivoluzioni"
-export const LOGO_ALT_TEXT = "Il logo del blog"
 
 export const BLOG_AUTHOR = "Elia Giolli"
 export const BLOG_LOCALE = "it_IT"

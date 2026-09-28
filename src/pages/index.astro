@@ -29,7 +29,7 @@ const readings = [...(await getCollection("readings"))].sort(byMostRecentlyAdded
 		<div class="flex flex-wrap gap-x-10 gap-y-7 pt-[clamp(24px,3vw,40px)] pb-[clamp(28px,3.4vw,44px)]">
 			<LeadStory article={lead} series={series} paragraphs={paragraphs} />
 			<div aria-hidden="true" class="hidden flex-[0_0_1px] self-stretch bg-rule lg:block"></div>
-			<aside aria-label="La serie e l'autore" class="flex min-w-0 flex-[1_1_280px] flex-col gap-[26px]">
+			<aside aria-label="La serie e l'autore" class="flex min-w-0 flex-[1_1_280px] flex-col gap-6.5">
 				<SeriesBox series={series} currentNote="in primo piano" />
 				<AuthorNote />
 			</aside>
@@ -37,7 +37,7 @@ const readings = [...(await getCollection("readings"))].sort(byMostRecentlyAdded
 
 		<section aria-labelledby="letture-title" class="pb-[clamp(28px,3.4vw,44px)]">
 			<SectionHeading id="letture-title" kicker="Rubrica" title="Letture consigliate" link={{ href: "/readings", label: "Tutte le letture" }} />
-			<div class="mt-[18px] grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-x-8 gap-y-6">
+			<div class="mt-4.5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-x-8 gap-y-6">
 				{readings.map((reading) => <ReadingEntry reading={reading} />)}
 			</div>
 		</section>

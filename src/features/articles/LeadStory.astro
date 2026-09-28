@@ -26,7 +26,7 @@ const kicker = series.total > 1 ? `${series.name}, parte ${series.part.roman}` :
 	</p>
 
 	{data.cover && (
-		<figure class="mt-[18px] mb-0">
+		<figure class="mt-4.5 mb-0">
 			{/* Never enlarged past its own width: a small archive photo stays sharp, just smaller. */}
 			<div class="border border-ink bg-paper p-1" style={`max-width: ${data.cover.width + 10}px`}>
 				<Image src={data.cover} alt={data.coverAlt ?? ""} class="block h-auto w-full contrast-[1.12] grayscale" widths={[data.cover.width]} sizes={`(min-width: 960px) ${Math.min(data.cover.width, 760)}px, 100vw`} />
@@ -40,7 +40,7 @@ const kicker = series.total > 1 ? `${series.name}, parte ${series.part.roman}` :
 		</figure>
 	)}
 
-	<div class="drop-cap mt-[18px] columns-[2_260px] gap-8 text-justify text-[15.5px] leading-[1.65] text-ink-2 hyphens-auto [column-rule:1px_solid_var(--gz-rule)]">
+	<div class="drop-cap mt-4.5 columns-[2_260px] gap-8 text-justify text-[15.5px] leading-[1.65] text-ink-2 hyphens-auto [column-rule:1px_solid_var(--gz-rule)]">
 		{paragraphs.map((paragraph) => <p class="mt-0 mb-3">{paragraph}</p>)}
 	</div>
 
