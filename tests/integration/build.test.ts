@@ -96,3 +96,42 @@ describe("front page", () => {
 		expect(form?.querySelector('input[type="email"][name="email"][required]')).not.toBeNull();
 	});
 });
+
+describe("article page", () => {
+	const html = readFileSync(resolve(projectRoot, "dist/articles/il-governo-dei-generali-ascesa-hideki-tojo/index.html"), "utf8");
+	const document = new JSDOM(html).window.document;
+
+	it("has a single h1: the headline", () => {
+		const headings = document.querySelectorAll("h1");
+
+		expect(headings).toHaveLength(1);
+		expect(headings[0].textContent).toContain("Il governo dei generali");
+	});
+
+	it("links every source marker to a numbered source", () => {
+		const markers = [...document.querySelectorAll('a[href^="#fonte-"]')];
+
+		expect(markers.length).toBeGreaterThan(0);
+		for (const marker of markers) {
+			expect(document.querySelector(marker.getAttribute("href") ?? "")).not.toBeNull();
+		}
+		expect(document.querySelectorAll('#fonti li[id^="fonte-"]')).toHaveLength(5);
+	});
+
+	it("places the article in its series, as the current part", () => {
+		expect(document.body.textContent).toContain("Parte III di III");
+
+		const current = document.querySelectorAll('#serie a[aria-current="page"]');
+		expect(current).toHaveLength(1);
+		expect(current[0].getAttribute("href")).toBe("/articles/il-governo-dei-generali-ascesa-hideki-tojo");
+	});
+
+	it("renders the cover with its alt text, and keeps the progress bar out of the accessibility tree", () => {
+		expect(document.querySelector("figure img")?.getAttribute("alt")).toMatch(/^Hideki Tōjō in divisa/);
+		expect(document.querySelector(".reading-progress")?.getAttribute("aria-hidden")).toBe("true");
+	});
+
+	it("names the article's own issue in the header", () => {
+		expect(document.querySelector("header")?.textContent).toContain("N. 3");
+	});
+});

@@ -1,7 +1,8 @@
 ---
+import { getImage, Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import MainLayout from "../../core/layouts/MainLayout.astro";
-import { buildArticleSchema, formatDate, readingTime } from "../../core/helpers";
+import { buildArticleSchema, formatDate, readingTime, seriesOf, slugifyTheme, toRoman } from "../../core/helpers";
 import { BLOG_NAME, OG_IMAGE_PATH } from "../../shared/utils/constants";
 
 export async function getStaticPaths() {
@@ -9,43 +10,49 @@ export async function getStaticPaths() {
 
 	return articles.map((article) => ({
 		params: { id: article.data.slug },
-		props: { article },
+		props: { article, articles },
 	}));
 }
 
-const { article } = Astro.props;
-const { Content, headings } = await render(article);
+const { article, articles } = Astro.props;
+const { data } = article;
+const { Content } = await render(article);
 
 const minutes = readingTime(article.body ?? "");
+const series = seriesOf(article, articles);
+const inSeries = series.total > 1;
 const toIsoDate = (date: Date): string => date.toISOString().slice(0, 10);
-
-// Only the section level matters for the outline: H1 is the page title, H4+ is detail.
-const tableOfContents = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 
 const siteUrl = Astro.site ?? new URL(Astro.url.origin);
 // Trailing slash to match the canonical, the sitemap and the RSS feed.
-const articleUrl = new URL(`/articles/${article.data.slug}/`, siteUrl).href;
+const articleUrl = new URL(`/articles/${data.slug}/`, siteUrl).href;
+
+// Search engines get the article's own cover when it has one, the site card otherwise.
+const coverUrl = data.cover ? (await getImage({ src: data.cover, format: "jpg" })).src : OG_IMAGE_PATH;
 
 const articleSchema = buildArticleSchema({
-	title: article.data.title,
-	description: article.data.description,
-	author: article.data.author,
-	pubDate: article.data.pubDate,
-	updatedDate: article.data.updatedDate,
-	tags: article.data.tags,
+	title: data.title,
+	description: data.description,
+	author: data.author,
+	pubDate: data.pubDate,
+	updatedDate: data.updatedDate,
+	tags: data.tags,
 	url: articleUrl,
-	imageUrl: new URL(OG_IMAGE_PATH, siteUrl).href,
+	imageUrl: new URL(coverUrl, siteUrl).href,
 	blogName: BLOG_NAME,
 	siteUrl: siteUrl.href,
 });
+
+const LINK = "underline-offset-4 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark";
 ---
 
 <MainLayout
-	title={article.data.title}
-	description={article.data.description}
+	title={data.title}
+	description={data.description}
 	ogType="article"
-	publishedTime={article.data.pubDate}
-	modifiedTime={article.data.updatedDate ?? article.data.pubDate}
+	publishedTime={data.pubDate}
+	modifiedTime={data.updatedDate ?? data.pubDate}
+	issueSlug={data.slug}
 >
 	<script
 		slot="head"
@@ -54,83 +61,107 @@ const articleSchema = buildArticleSchema({
 		set:html={JSON.stringify(articleSchema)}
 	/>
 
-	<main class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
-		<a href="/articles" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-red-700 hover:text-red-800 dark:text-amber-500 dark:hover:text-amber-400">
-			<span aria-hidden="true">←</span>
-			<span>Torna agli articoli</span>
-		</a>
+	<div aria-hidden="true" class="reading-progress sticky top-0 z-10 h-[3px] bg-rule">
+		<span class="block h-[3px] bg-mark"></span>
+	</div>
 
-		<div class="mt-8 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-10">
-			{tableOfContents.length > 0 && (
-				<nav
-					class="mb-8 rounded-2xl border border-stone-300 bg-white p-5 lg:sticky lg:top-24 lg:mb-0 dark:border-stone-700 dark:bg-stone-800"
-					aria-labelledby="toc-title"
-				>
-					<p id="toc-title" class="text-xs font-semibold uppercase tracking-[0.16em] tracking-[0.16em] text-stone-600 dark:text-stone-400">Indice</p>
-					<ol class="mt-4 max-h-64 space-y-2 overflow-y-auto pr-1 text-sm lg:max-h-[65vh]" role="list">
-						{tableOfContents.map((heading) => (
-							<li class={heading.depth === 3 ? "pl-4" : ""}>
+	<main class="page-frame">
+		<article class="pt-[clamp(24px,3.4vw,48px)]">
+			<header class="mx-auto max-w-[900px] text-center">
+				<nav aria-label="Percorso" class="text-[13px] text-mute">
+					<a href="/articles" class={`text-inherit ${LINK}`}>Articoli</a>
+					<span aria-hidden="true"> › </span>
+					<a href={`/topics#tema-${slugifyTheme(data.topic)}`} class={`text-inherit ${LINK}`}>{data.topic}</a>
+					{inSeries && (
+						<>
+							<span aria-hidden="true"> › </span>
+							<a href="#serie" class={`text-inherit ${LINK}`}>{series.name}</a>
+						</>
+					)}
+				</nav>
+
+				<p class="kicker mt-[18px] mb-0 text-accent">
+					{inSeries ? `${series.name} · Parte ${series.part.roman} di ${toRoman(series.total)}` : data.topic}
+				</p>
+				<h1 class="mt-3.5 mb-0 text-[clamp(38px,5.4vw,70px)] font-normal leading-[1.02] tracking-[-0.02em] text-balance">{data.title}</h1>
+				<p class="mx-auto mt-4 mb-0 max-w-[40em] font-heading text-[clamp(19px,1.9vw,24px)] italic leading-[1.4] text-ink-2 text-pretty">{data.description}</p>
+
+				<p class="mt-[22px] mb-0 flex flex-wrap justify-center gap-x-[22px] gap-y-1.5 border-y border-ink py-2.5 text-[13.5px] text-mute">
+					<span>di <strong class="font-semibold text-ink">{data.author}</strong></span>
+					<time datetime={toIsoDate(data.pubDate)}>{formatDate(data.pubDate)}</time>
+					{data.updatedDate && (
+						<span>Aggiornato il <time datetime={toIsoDate(data.updatedDate)}>{formatDate(data.updatedDate)}</time></span>
+					)}
+					{minutes > 0 && <span>{minutes} min di lettura</span>}
+					{data.sources.length > 0 && (
+						<a href="#fonti" class={`text-inherit ${LINK}`}>{data.sources.length} {data.sources.length === 1 ? "fonte" : "fonti"}</a>
+					)}
+					{series.previous && (
+						<a href={`/articles/${series.previous.article.data.slug}`} class={`text-inherit ${LINK}`}>← Parte {series.previous.roman}</a>
+					)}
+				</p>
+			</header>
+
+			{data.cover && (
+				<figure class="mx-auto mt-[clamp(24px,3vw,40px)] mb-0 max-w-[900px]">
+					{/* Never enlarged past its own width: a small archive photo stays sharp, just smaller. */}
+					<div class="mx-auto border border-ink bg-paper p-[5px]" style={`max-width: ${data.cover.width + 12}px`}>
+						<Image src={data.cover} alt={data.coverAlt ?? ""} class="block h-auto w-full contrast-[1.12] grayscale" loading="eager" widths={[data.cover.width]} sizes={`(min-width: 960px) ${Math.min(data.cover.width, 890)}px, 100vw`} />
+					</div>
+					{(data.coverCaption || data.coverCredit) && (
+						<figcaption class="mx-auto mt-2 flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-rule pb-2 text-sm italic leading-[1.45] text-ink-2" style={`max-width: ${data.cover.width + 12}px`}>
+							{data.coverCaption && <span>{data.coverCaption}</span>}
+							{data.coverCredit && <span class="text-xs not-italic text-mute">{data.coverCredit}</span>}
+						</figcaption>
+					)}
+				</figure>
+			)}
+
+			<div class="prose prose-lg drop-cap mx-auto mt-[clamp(24px,3vw,40px)] max-w-[680px]">
+				<Content />
+			</div>
+
+			{data.sources.length > 0 && (
+				<section id="fonti" aria-labelledby="fonti-title" class="rule-t-double mx-auto mt-7 max-w-[680px] pt-3.5">
+					<h2 id="fonti-title" class="m-0 text-[26px] font-medium leading-[1.2]">Fonti</h2>
+					<p class="mt-1 mb-3 text-sm text-mute">Riferimenti storiografici su cui si appoggia la ricostruzione.</p>
+					<ol class="m-0 list-none p-0">
+						{data.sources.map((source, index) => (
+							<li id={`fonte-${index + 1}`} class="grid grid-cols-[30px_minmax(0,1fr)] gap-1.5 border-b border-rule py-2 text-[14.5px] leading-[1.5] text-ink-2">
+								<span class="font-heading text-lg leading-[1.2] font-medium italic text-accent tabular-nums">{index + 1}</span>
+								<span>{source.author}, <em>{source.title}</em>, {source.publisher}.</span>
+							</li>
+						))}
+					</ol>
+				</section>
+			)}
+
+			{inSeries && (
+				<section id="serie" aria-labelledby="serie-title" class="rule-t-double mt-[clamp(32px,4vw,56px)] pt-3">
+					<div class="flex flex-wrap items-baseline gap-x-3.5 gap-y-1.5">
+						<span class="kicker text-accent">La serie completa</span>
+						<h2 id="serie-title" class="m-0 text-[clamp(28px,3vw,38px)] font-normal leading-[1.1]">{series.name}</h2>
+					</div>
+					<ol class="mt-[18px] mb-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-x-7 gap-y-4 p-0">
+						{series.parts.map((part) => (
+							<li>
 								<a
-									href={`#${heading.slug}`}
-									class="block rounded-md px-2 py-1 leading-6 text-stone-700 transition-colors hover:bg-stone-100 hover:text-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-amber-400"
+									href={`/articles/${part.article.data.slug}`}
+									aria-current={part.current ? "page" : undefined}
+									class={`block h-full rounded px-4 py-3.5 text-ink no-underline hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark ${part.current ? "border-2 border-ink" : "border border-rule"}`}
 								>
-									{heading.text}
+									<span class="kicker flex justify-between gap-2 text-mute">
+										<span>Parte {part.roman}</span>
+										{part.current && <span class="text-accent">Stai leggendo</span>}
+									</span>
+									<span class="mt-2 block font-heading text-xl leading-[1.2] font-semibold">{part.article.data.title.split(":")[0]}</span>
+									<span class="mt-1 block text-[13.5px] text-mute">{formatDate(part.article.data.pubDate)}</span>
 								</a>
 							</li>
 						))}
 					</ol>
-				</nav>
+				</section>
 			)}
-
-			<article class="rounded-2xl border border-stone-300 bg-white p-8 shadow-[6px_6px_0_rgba(185,139,62,0.12)] sm:p-10 dark:border-stone-700 dark:bg-stone-800">
-				<p class="text-sm font-bold uppercase tracking-[0.18em] text-red-700 dark:text-amber-500">{article.data.topic}</p>
-				<h1 class="mt-4 text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-100">{article.data.title}</h1>
-				<p class="mt-4 text-xl font-semibold text-amber-800 dark:text-amber-500">{article.data.category}</p>
-				<p class="mt-6 text-lg leading-8 text-stone-700 dark:text-stone-300">{article.data.description}</p>
-
-				<ul class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold uppercase tracking-[0.16em] tracking-[0.12em] text-stone-600 dark:text-stone-400" aria-label="Dettagli dell'articolo">
-					<li>{article.data.author}</li>
-					<li aria-hidden="true">·</li>
-					<li>
-						<time datetime={toIsoDate(article.data.pubDate)}>{formatDate(article.data.pubDate)}</time>
-					</li>
-					{article.data.updatedDate && (
-						<>
-							<li aria-hidden="true">·</li>
-							<li>
-								Aggiornato il <time datetime={toIsoDate(article.data.updatedDate)}>{formatDate(article.data.updatedDate)}</time>
-							</li>
-						</>
-					)}
-					{minutes > 0 && (
-						<>
-							<li aria-hidden="true">·</li>
-							<li>{minutes} min di lettura</li>
-						</>
-					)}
-				</ul>
-
-				<ul class="mt-6 flex flex-wrap gap-2" aria-label={`Argomenti di ${article.data.title}`}>
-					{article.data.tags.map((tag: string) => (
-						<li class="rounded-md border border-stone-300 bg-stone-100 px-3 py-1 text-sm font-medium text-stone-700 dark:border-stone-600 dark:bg-stone-700 dark:text-stone-200">{tag}</li>
-					))}
-				</ul>
-
-				<div class="prose prose-lg mx-auto mt-10">
-					<Content />
-				</div>
-
-				{article.data.sources.length > 0 && (
-					<section id="fonti" aria-labelledby="fonti-title" class="mx-auto mt-10 max-w-[65ch]">
-						<h2 id="fonti-title" class="text-2xl">Fonti</h2>
-						<ol class="mt-3 list-decimal pl-6">
-							{article.data.sources.map((source, index) => (
-								<li id={`fonte-${index + 1}`}>{source.author}, <em>{source.title}</em>, {source.publisher}.</li>
-							))}
-						</ol>
-					</section>
-				)}
-			</article>
-		</div>
+		</article>
 	</main>
 </MainLayout>

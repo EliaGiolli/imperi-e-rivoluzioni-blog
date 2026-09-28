@@ -196,6 +196,11 @@ h6 {
 	border-top: 1px solid var(--gz-rule);
 }
 
+/* A Markdown `---` right before a heading would double its rule, so the heading's rule stands in for it. */
+.prose hr:has(+ h2) {
+	display: none;
+}
+
 .prose > h2:first-child {
 	margin-top: 0;
 	padding-top: 0;
@@ -303,6 +308,39 @@ h6 {
 .prose :is(td, th) {
 	text-align: left;
 	hyphens: auto;
+}
+
+/*
+ * Article reading progress: a hairline that fills as the page scrolls, driven entirely by a
+ * CSS scroll timeline, so no script runs. Browsers without scroll timelines never show it
+ * rather than showing a bar stuck at zero.
+ */
+.reading-progress {
+	display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+	.reading-progress {
+		display: block;
+	}
+
+	/* Longhands on purpose: the CSS minifier drops an `animation` shorthand paired with a timeline. */
+	.reading-progress > span {
+		transform-origin: left;
+		animation-name: reading-progress;
+		animation-timing-function: linear;
+		animation-fill-mode: both;
+		animation-timeline: scroll(root);
+	}
+}
+
+@keyframes reading-progress {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(1);
+	}
 }
 
 ::selection {
