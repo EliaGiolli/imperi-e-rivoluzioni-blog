@@ -2,11 +2,11 @@ import type { CollectionEntry } from "astro:content";
 import type { VariantProps } from "class-variance-authority";
 
 import type { button } from "../utils/variants";
-import type { ReadingCardReading, Series } from "./content";
+import type { Series } from "./content";
 
 /**
  * The `Props` of every component, in one place. Each component aliases the type it needs
- * (`type Props = CardProps`) so the markup stays the only thing left in the .astro file.
+ * (`type Props = ButtonProps`) so the markup stays the only thing left in the .astro file.
  */
 
 /**
@@ -75,12 +75,6 @@ export interface ReadingEntryProps {
 	headingLevel?: HeadingLevel;
 }
 
-export interface CardProps {
-	as?: "div" | "article" | "section";
-	class?: string;
-	[key: string]: unknown;
-}
-
 export interface ButtonProps extends VariantProps<typeof button> {
 	href?: string;
 	type?: "button" | "submit" | "reset";
@@ -106,11 +100,6 @@ export interface InputProps {
 	required?: boolean;
 	autocomplete?: string;
 	class?: string;
-}
-
-export interface ReadingCardProps {
-	reading: ReadingCardReading;
-	headingLevel?: HeadingLevel;
 }
 
 export interface ReadingTagFiltersProps {

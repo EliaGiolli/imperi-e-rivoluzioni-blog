@@ -84,19 +84,6 @@ export interface ArticleSchemaInput {
 	siteUrl: string;
 }
 
-/** The slice of a reading entry a ReadingCard renders. */
-export interface ReadingCardReading {
-	id: string;
-	data: {
-		name: string;
-		author: string;
-		description: string;
-		tags: string[];
-		topic: string;
-		amazonUrl: string;
-	};
-}
-
 /** The slice of an article a series box needs: identity, place in the cycle, and date. */
 export interface SeriesArticle {
 	data: {
