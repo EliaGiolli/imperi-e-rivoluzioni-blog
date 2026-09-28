@@ -79,28 +79,25 @@
 }
 
 :root {
-	font-family: "Lora", serif;
-	color: #2b2622;
-	background: #efe6d3;
+	font-family: var(--font-body);
+	color: var(--gz-ink);
+	background: var(--gz-paper);
 	color-scheme: light;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 }
 
-/* Old paper turned over: charcoal page, parchment ink, antique gold as the one accent. */
 :root.dark {
-	color: #efe6d3;
-	background: #1c1917;
 	color-scheme: dark;
 }
 
 /*
- * Anchor jumps: the article Table of Contents and the /topics theme index both link to
- * in-page ids, and the sticky header is 5.5rem tall, so targets need that much padding
- * to clear it. The smooth easing is opt-in for anyone who has not asked for less motion.
+ * Anchor jumps: the /topics index, the article's source markers and the series links all
+ * target in-page ids. The smooth easing is opt-in for anyone who has not asked for less
+ * motion.
  */
 html {
-	scroll-padding-top: 5.5rem;
+	scroll-padding-top: 1.5rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -123,14 +120,9 @@ html {
 
 body {
 	margin: 0;
-	font-family: "Lora", serif;
-	background-color: #efe6d3;
-	color: #2b2622;
-}
-
-.dark body {
-	background-color: #1c1917;
-	color: #efe6d3;
+	font-family: var(--font-body);
+	background-color: var(--gz-paper);
+	color: var(--gz-ink);
 }
 
 /* Cormorant for the masthead and headlines, Lora for everything read at length. */
@@ -144,77 +136,112 @@ h6 {
 }
 
 /*
- * Long-form reading theme: Tailwind Typography mapped onto the old-paper palette
- * (paper #efe6d3, charcoal #2b2622, antique gold #b98b3e, rust red #a13d2c).
- * These rules sit outside @layer on purpose, so they win over the plugin's own.
+ * Long-form reading theme: Tailwind Typography mapped onto the Gazzetta tokens. Because
+ * the tokens flip on .dark, one block serves both editions. These rules sit outside
+ * @layer on purpose, so they win over the plugin's own.
  */
 .prose {
-	--tw-prose-body: #44403c;
-	--tw-prose-headings: #2b2622;
-	--tw-prose-lead: #57534e;
-	--tw-prose-links: #a13d2c;
-	--tw-prose-bold: #2b2622;
-	--tw-prose-counters: #b98b3e;
-	--tw-prose-bullets: #b98b3e;
-	--tw-prose-hr: #d6d3d1;
-	--tw-prose-quotes: #2b2622;
-	--tw-prose-quote-borders: #b98b3e;
-	--tw-prose-captions: #78716c;
-	--tw-prose-code: #a13d2c;
-	--tw-prose-pre-code: #efe6d3;
-	--tw-prose-pre-bg: #2b2622;
-	--tw-prose-th-borders: #b98b3e;
-	--tw-prose-td-borders: #d6d3d1;
+	--tw-prose-body: var(--gz-ink-2);
+	--tw-prose-headings: var(--gz-ink);
+	--tw-prose-lead: var(--gz-ink-2);
+	--tw-prose-links: var(--gz-accent);
+	--tw-prose-bold: var(--gz-ink);
+	--tw-prose-counters: var(--gz-accent);
+	--tw-prose-bullets: var(--gz-mark);
+	--tw-prose-hr: var(--gz-rule);
+	--tw-prose-quotes: var(--gz-ink);
+	--tw-prose-quote-borders: var(--gz-ink);
+	--tw-prose-captions: var(--gz-mute);
+	--tw-prose-code: var(--gz-ink);
+	--tw-prose-pre-code: var(--gz-ink-2);
+	--tw-prose-pre-bg: transparent;
+	--tw-prose-th-borders: var(--gz-ink);
+	--tw-prose-td-borders: var(--gz-rule);
+	line-height: 1.75;
 }
 
-/*
- * The same theme on charcoal. Rust red only reaches 2.6:1 against #1c1917, so the
- * accent moves to antique gold (amber-500, ~7.9:1) while the ink becomes parchment.
- */
-.dark .prose {
-	--tw-prose-body: #d6d3d1;
-	--tw-prose-headings: #efe6d3;
-	--tw-prose-lead: #a8a29e;
-	--tw-prose-links: var(--color-amber-500);
-	--tw-prose-bold: #efe6d3;
-	--tw-prose-counters: var(--color-amber-500);
-	--tw-prose-bullets: var(--color-amber-600);
-	--tw-prose-hr: #44403c;
-	--tw-prose-quotes: #efe6d3;
-	--tw-prose-quote-borders: var(--color-amber-600);
-	--tw-prose-captions: #a8a29e;
-	--tw-prose-code: var(--color-amber-400);
-	--tw-prose-pre-code: #efe6d3;
-	--tw-prose-pre-bg: #0c0a09;
-	--tw-prose-th-borders: var(--color-amber-600);
-	--tw-prose-td-borders: #44403c;
+/* Newspaper setting: justified columns, hyphenated by the page's lang="it". */
+.prose :is(p, li) {
+	text-align: justify;
+	hyphens: auto;
 }
 
 .prose :is(h1, h2, h3, h4, h5, h6) {
 	font-family: var(--font-heading);
-	letter-spacing: -0.01em;
-	scroll-margin-top: 5.5rem;
+	text-align: left;
+	scroll-margin-top: 1.5rem;
+}
+
+/* Section headings open with a faint rule, as a new column would; the first one needs none. */
+.prose h2 {
+	font-weight: 500;
+	margin-top: 1.75em;
+	padding-top: 1.1em;
+	border-top: 1px solid var(--gz-rule);
+}
+
+.prose > h2:first-child {
+	margin-top: 0;
+	padding-top: 0;
+	border-top: 0;
+}
+
+.prose h3 {
+	font-weight: 600;
+}
+
+.prose a {
+	text-underline-offset: 3px;
 }
 
 .prose a:hover {
-	color: #8f3626;
+	color: var(--gz-ink);
 }
 
-.dark .prose a:hover {
-	color: var(--color-amber-400);
+/*
+ * Drop cap on the opening paragraph, opted into with .drop-cap on the prose container so
+ * short pages (reading sheets) can go without.
+ */
+.drop-cap > p:first-of-type::first-letter {
+	float: left;
+	font-family: var(--font-heading);
+	font-size: 5.1em;
+	line-height: 0.76;
+	padding: 0.1em 0.12em 0 0;
+	color: var(--gz-ink);
 }
 
-/* Pull quotes read as set-apart notes rather than italic asides. */
+/*
+ * Source markers: the Markdown writes [2](#fonte-2), the page renders a superscript [2]
+ * in the accent colour that jumps to the numbered source list.
+ */
+.prose a[href^="#fonte-"] {
+	font-size: 0.7em;
+	vertical-align: super;
+	line-height: 0;
+	padding: 0 1px;
+	color: var(--gz-accent);
+	text-decoration: none;
+}
+
+.prose a[href^="#fonte-"]::before {
+	content: "[";
+}
+
+.prose a[href^="#fonte-"]::after {
+	content: "]";
+}
+
+/* Pull quotes read as set-apart notes between two rules, not italic asides. */
 .prose blockquote {
-	font-style: normal;
-	border-inline-start-width: 3px;
-	border-radius: 0 0.75rem 0.75rem 0;
-	background: rgb(185 139 62 / 8%);
-	padding: 1rem 1.5rem;
-}
-
-.dark .prose blockquote {
-	background: rgb(185 139 62 / 14%);
+	font-style: italic;
+	font-family: var(--font-heading);
+	font-size: 1.25em;
+	line-height: 1.4;
+	border-inline-start: 0;
+	border-block: 1px solid var(--gz-ink);
+	padding: 0.75rem 0;
+	text-align: left;
 }
 
 .prose blockquote p:first-of-type::before,
@@ -222,18 +249,49 @@ h6 {
 	content: none;
 }
 
-/* The articles' ASCII diagrams are indented code blocks: give them a defined edge. */
+/*
+ * Fenced blocks are the articles' fact boxes and ASCII diagrams ("schede"): a double-ruled
+ * box on the page's own paper. They stay monospaced, because the diagrams align arrows
+ * and bars with spaces.
+ */
 .prose pre {
-	border: 1px solid #44403c;
+	border: 3px double var(--gz-ink);
+	border-radius: 0;
+	background: transparent;
+	color: var(--gz-ink-2);
+	font-size: 0.85em;
+	line-height: 1.6;
+	white-space: pre-wrap;
 }
 
-.dark .prose pre {
-	border-color: #57534e;
+/* Tables as in the Kōdōha / Tōseiha comparison: ink rules above and below the header. */
+.prose table {
+	font-size: 0.875em;
+	text-align: left;
+}
+
+.prose thead {
+	border-top: 1px solid var(--gz-ink);
+	border-bottom: 1px solid var(--gz-ink);
+}
+
+.prose thead th {
+	font-family: var(--font-body);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--gz-ink);
+}
+
+.prose :is(td, th) {
+	text-align: left;
+	hyphens: auto;
 }
 
 ::selection {
-	background: #b98b3e;
-	color: #2b2622;
+	background: var(--gz-mark);
+	color: var(--gz-paper);
 }
 
 .hero-primary {
