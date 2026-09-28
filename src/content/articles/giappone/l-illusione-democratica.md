@@ -18,14 +18,19 @@ category: militarismo giapponese
 slug: l-illusione-democratica-crisi-taisho
 cover: '@assets/articles/giappone/l-illusione-democratica/cover.jpg'
 coverAlt: >-
-  Soldati in fila, in uniforme e berretto da campo, con il fucile e la baionetta innestata
-coverCaption: 'Soldati dell''esercito del Manchukuo, lo Stato fantoccio creato dal Giappone in Manciuria nel 1932.'
+  Soldati in fila, in uniforme e berretto da campo, con il fucile e la baionetta
+  innestata
+coverCaption: >-
+  Soldati dell'esercito del Manchukuo, lo Stato fantoccio creato dal Giappone in
+  Manciuria nel 1932.
 sources:
   - author: Peter Duus
     title: Party Rivalry and Political Change in Taishō Japan
     publisher: Harvard University Press, Cambridge (MA) 1968
   - author: Mark Metzler
-    title: 'Lever of Empire: The International Gold Standard and the Crisis of Liberalism in Prewar Japan'
+    title: >-
+      Lever of Empire: The International Gold Standard and the Crisis of
+      Liberalism in Prewar Japan
     publisher: University of California Press, Berkeley 2006
   - author: Louise Young
     title: 'Japan''s Total Empire: Manchuria and the Culture of Wartime Imperialism'

@@ -18,8 +18,10 @@ category: militarismo giapponese
 slug: i-semi-del-militarismo-giapponese
 cover: '@assets/articles/giappone/i-semi-del-militarismo-giapponese/cover.jpg'
 coverAlt: >-
-  Incisione d'epoca: l'Imperatore Meiji, in piedi su una pedana sotto un baldacchino, legge la Costituzione davanti a dignitari in uniforme e dame di corte
-coverCaption: 'La promulgazione della Costituzione Meiji, 11 febbraio 1889.'
+  Incisione d'epoca: l'Imperatore Meiji, in piedi su una pedana sotto un
+  baldacchino, legge la Costituzione davanti a dignitari in uniforme e dame di
+  corte
+coverCaption: La promulgazione della Costituzione Meiji, 11 febbraio 1889.
 sources:
   - author: W. G. Beasley
     title: The Meiji Restoration

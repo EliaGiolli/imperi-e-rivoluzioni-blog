@@ -16,16 +16,15 @@ topic: Giappone
 category: militarismo giapponese
 slug: il-governo-dei-generali-ascesa-hideki-tojo
 cover: '@assets/articles/giappone/il-governo-dei-generali/cover.jpg'
-coverAlt: >-
-  Hideki Tōjō in divisa e berretto militare, tra alcuni uomini in abito civile
-coverCaption: 'Hideki Tōjō, Primo Ministro del Giappone dall''ottobre 1941.'
+coverAlt: Hideki Tōjō in divisa e berretto militare, tra alcuni uomini in abito civile
+coverCaption: Hideki Tōjō, Primo Ministro del Giappone dall'ottobre 1941.
 sources:
   - author: Hugh Byas
     title: Government by Assassination
     publisher: Alfred A. Knopf, New York 1942
   - author: Richard Storry
     title: 'The Double Patriots: A Study of Japanese Nationalism'
-    publisher: 'Chatto & Windus, Londra 1957'
+    publisher: Chatto & Windus, Londra 1957
   - author: Ben-Ami Shillony
     title: 'Revolt in Japan: The Young Officers and the February 26, 1936 Incident'
     publisher: Princeton University Press, Princeton 1973
