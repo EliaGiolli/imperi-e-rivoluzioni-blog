@@ -1,17 +1,21 @@
 ---
-import { BLOG_NAME } from "../utils/constants";
+import { BLOG_AUTHOR, BLOG_NAME, INSTAGRAM_URL, MAIL, SUBSTACK_URL } from "../utils/constants";
 
-import { SUBSTACK_URL, MAIL, INSTAGRAM_URL } from '../utils/constants';
+const linkClass = "text-ink underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mark";
 ---
 
-
-	<footer class="border-t border-stone-700 bg-stone-900 text-stone-200 dark:border-stone-800 dark:bg-stone-950">
-	<div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-6 text-sm max-[600px]:flex-col max-[600px]:items-start lg:px-8">
-		<p>&copy; {new Date().getFullYear()} {BLOG_NAME}</p>
-		<nav class="flex flex-wrap gap-5" aria-label="Link del footer">
-			<a class="transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href={`mailto:${MAIL}`}>Email</a>
-			<a class="transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Instagram</a>
-			<a class="transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700" href={SUBSTACK_URL} target="_blank" rel="noreferrer">Substack</a>
+<footer class="page-frame mt-14">
+	<div class="rule-t-double flex flex-wrap items-baseline justify-between gap-x-7 gap-y-2.5 pt-[18px] pb-7 text-[13.5px] text-mute">
+		<p class="m-0">
+			<span class="font-heading text-2xl text-ink">{BLOG_NAME}</span>
+			<span class="ml-3">Direttore e redattore: {BLOG_AUTHOR}</span>
+		</p>
+		<nav aria-label="Contatti e social" class="flex flex-wrap gap-x-5 gap-y-1.5">
+			<a class={linkClass} href={`mailto:${MAIL}`}>Email</a>
+			<a class={linkClass} href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Instagram</a>
+			<a class={linkClass} href={SUBSTACK_URL} target="_blank" rel="noreferrer">Substack</a>
+			<a class={linkClass} href="/rss.xml">RSS</a>
 		</nav>
+		<p class="m-0 basis-full text-[12.5px]">&copy; {new Date().getFullYear()} {BLOG_NAME} · Progetto editoriale indipendente</p>
 	</div>
 </footer>
