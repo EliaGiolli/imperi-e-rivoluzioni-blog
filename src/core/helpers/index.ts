@@ -1,3 +1,4 @@
+export * from './archive';
 export * from './buildThemeIndex';
 export * from './capitalizeFirstLetter';
 export * from './formatDate';

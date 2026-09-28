@@ -2,7 +2,7 @@ import type { CollectionEntry } from "astro:content";
 import type { VariantProps } from "class-variance-authority";
 
 import type { button } from "../utils/variants";
-import type { ArticleCardArticle, ReadingCardReading, Series } from "./content";
+import type { ReadingCardReading, Series } from "./content";
 
 /**
  * The `Props` of every component, in one place. Each component aliases the type it needs
@@ -39,6 +39,14 @@ export interface NavbarProps {
 export interface EditionSwitchProps {
 	/** "Sera" in the compact strip, "Edizione della sera" in the front-page masthead. */
 	label?: "short" | "long";
+}
+
+/** The opening of an inner page: kicker, the page's h1 and an optional italic dek. */
+export interface PageHeaderProps {
+	kicker: string;
+	title: string;
+	dek?: string;
+	id?: string;
 }
 
 /** A section opening: a double rule, a letter-spaced kicker and the heading. */
@@ -98,11 +106,6 @@ export interface InputProps {
 	required?: boolean;
 	autocomplete?: string;
 	class?: string;
-}
-
-export interface ArticleCardProps {
-	article: ArticleCardArticle;
-	headingLevel?: HeadingLevel;
 }
 
 export interface ReadingCardProps {

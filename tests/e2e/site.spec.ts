@@ -38,7 +38,7 @@ test.describe("public navigation", () => {
 		await expect(page.getByRole("heading", { name: "Articoli", level: 1 })).toBeVisible();
 		await transitionFinished(page);
 
-		await page.getByRole("link", { name: /Leggi l'articolo/ }).first().click();
+		await page.getByRole("link", { name: /I semi del militarismo giapponese/ }).click();
 		await expect(page).toHaveURL(/\/articles\/i-semi-del-militarismo-giapponese\/?$/);
 		await expect(page.getByRole("heading", { level: 1 })).toContainText("I semi del militarismo giapponese");
 		await expect(page.getByRole("heading", { name: /Il motto Fukoku Kyōhei/ })).toBeVisible();

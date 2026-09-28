@@ -84,17 +84,6 @@ export interface ArticleSchemaInput {
 	siteUrl: string;
 }
 
-/** The slice of an article entry an ArticleCard renders. */
-export interface ArticleCardArticle {
-	id: string;
-	data: {
-		title: string;
-		description: string;
-		tags: string[];
-		slug: string;
-	};
-}
-
 /** The slice of a reading entry a ReadingCard renders. */
 export interface ReadingCardReading {
 	id: string;
@@ -148,4 +137,16 @@ export interface Edition {
 	yearRoman: string;
 	/** 1-based issue number: one issue per article, in publication order. */
 	number: number;
+}
+
+/** One series in the archive: its name and its parts in reading order. */
+export interface ArchiveSeries<T extends SeriesArticle = SeriesArticle> {
+	name: string;
+	parts: SeriesPart<T>[];
+}
+
+/** One topic in the archive, with its series. */
+export interface ArchiveTopic<T extends SeriesArticle = SeriesArticle> {
+	topic: string;
+	series: ArchiveSeries<T>[];
 }
