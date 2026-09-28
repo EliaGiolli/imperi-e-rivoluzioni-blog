@@ -24,6 +24,12 @@ export interface MainLayoutProps {
 	modifiedTime?: Date;
 	/** Keeps a page out of search results without hiding it from visitors. */
 	noindex?: boolean;
+	/** The article whose issue number the header shows; defaults to the latest one. */
+	issueSlug?: string;
+}
+
+export interface NavbarProps {
+	issueSlug?: string;
 }
 
 export interface CardProps {

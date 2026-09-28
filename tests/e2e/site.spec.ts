@@ -8,7 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 const NAV_DESTINATIONS = [
 	{ label: "Chi sono", path: "/about", heading: /^Chi sono e perché scrivo$/ },
 	{ label: "Articoli", path: "/articles", heading: /^Articoli$/ },
-	{ label: "Letture consigliate", path: "/readings", heading: /^Letture per capire il presente$/ },
+	{ label: "Letture", path: "/readings", heading: /^Letture per capire il presente$/ },
 	{ label: "Temi", path: "/topics", heading: /^L'indice dei percorsi$/ },
 	{ label: "Contatti", path: "/contacts", heading: /^Mettiamo in ordine il problema\.$/ },
 ];
@@ -33,7 +33,7 @@ test.describe("public navigation", () => {
 		await expect(page.locator("#articles-title")).toHaveText("Articoli");
 
 		// Scoped and exact: the homepage's "Tutti gli articoli" CTA would match a bare substring search.
-		await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Articoli", exact: true }).click();
+		await page.getByRole("navigation", { name: "Sezioni" }).getByRole("link", { name: "Articoli", exact: true }).click();
 		await expect(page).toHaveURL(/\/articles\/?$/);
 		await expect(page.getByRole("heading", { name: "Articoli", level: 1 })).toBeVisible();
 		await transitionFinished(page);
@@ -47,7 +47,7 @@ test.describe("public navigation", () => {
 	test("resolves every link in the navbar", async ({ page }) => {
 		await page.goto("/");
 
-		const mainNav = page.getByRole("navigation", { name: "Main navigation" });
+		const mainNav = page.getByRole("navigation", { name: "Sezioni" });
 
 		for (const { label, path, heading } of NAV_DESTINATIONS) {
 			const link = mainNav.getByRole("link", { name: label, exact: true });
@@ -59,35 +59,31 @@ test.describe("public navigation", () => {
 			await transitionFinished(page);
 		}
 
-		// The logo closes the loop back to the homepage.
-		await page.getByRole("link", { name: "Homepage" }).click();
+		// The wordmark closes the loop back to the homepage.
+		await page.getByRole("link", { name: "Imperi e Rivoluzioni", exact: true }).click();
 		await expect(page).toHaveURL(/\/$/);
 		await expect(page.getByRole("heading", { name: /^Imperi e rivoluzioni\.$/, level: 1 })).toBeVisible();
 	});
 
-	test("opens the mobile navigation and follows a link", async ({ page }) => {
+	test("keeps every section one tap away on a phone", async ({ page }) => {
 		await page.setViewportSize({ width: 390, height: 844 });
 		await page.goto("/");
 
-		const menuButton = page.getByRole("button", { name: "Apri il menu di navigazione" });
-		await expect(menuButton).toHaveAttribute("aria-expanded", "false");
-		await menuButton.click();
+		// No menu to open: the section row stays on screen and scrolls sideways if it must.
+		const sections = page.getByRole("navigation", { name: "Sezioni" });
+		await expect(sections).toBeVisible();
+		for (const { label } of NAV_DESTINATIONS) {
+			await expect(sections.getByRole("link", { name: label, exact: true })).toBeAttached();
+		}
 
-		await expect(menuButton).toHaveAttribute("aria-expanded", "true");
-		const mobileNav = page.locator("#mobile-navigation");
-		await expect(mobileNav).toBeVisible();
-		await expect(mobileNav.getByRole("link", { name: "Articoli", exact: true })).toBeVisible();
-		await expect(mobileNav.getByRole("link", { name: "Chi sono", exact: true })).toBeVisible();
-
-		// The mobile menu uses the shorter wording, and closes itself on the way out.
-		await mobileNav.getByRole("link", { name: "Letture", exact: true }).click();
-		await expect(page).toHaveURL(/\/readings\/?$/);
-		await expect(page.getByRole("heading", { name: /^Letture per capire il presente$/, level: 1 })).toBeVisible();
-		await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+		const contacts = sections.getByRole("link", { name: "Contatti", exact: true });
+		await contacts.scrollIntoViewIfNeeded();
+		await contacts.click();
+		await expect(page).toHaveURL(/\/contacts\/?$/);
 	});
 
 	test("marks the open section in the navbar", async ({ page }) => {
-		const mainNav = page.getByRole("navigation", { name: "Main navigation" });
+		const mainNav = page.getByRole("navigation", { name: "Sezioni" });
 
 		await page.goto("/articles");
 		await expect(mainNav.getByRole("link", { name: "Articoli" })).toHaveAttribute("aria-current", "page");
@@ -169,7 +165,7 @@ test.describe("theme toggle", () => {
 	test("remembers the chosen theme across navigation and reloads", async ({ page }) => {
 		await page.goto("/");
 
-		const toggle = page.getByRole("button", { name: "Tema scuro" });
+		const toggle = page.getByRole("button", { name: "Edizione della sera" });
 		await expect(toggle).toHaveAttribute("aria-pressed", "false");
 		expect(await isDark(page)).toBe(false);
 
@@ -178,16 +174,16 @@ test.describe("theme toggle", () => {
 		await expect.poll(() => isDark(page)).toBe(true);
 
 		// A client-side navigation replaces the html attributes, so the class has to be re-applied.
-		await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Temi", exact: true }).click();
+		await page.getByRole("navigation", { name: "Sezioni" }).getByRole("link", { name: "Temi", exact: true }).click();
 		await expect(page).toHaveURL(/\/topics\/?$/);
 		expect(await isDark(page)).toBe(true);
 
 		// A full reload has to pick the choice back up from localStorage, before the first paint.
 		await page.reload();
 		expect(await isDark(page)).toBe(true);
-		await expect(page.getByRole("button", { name: "Tema scuro" })).toHaveAttribute("aria-pressed", "true");
+		await expect(page.getByRole("button", { name: "Edizione della sera" })).toHaveAttribute("aria-pressed", "true");
 
-		await page.getByRole("button", { name: "Tema scuro" }).click();
+		await page.getByRole("button", { name: "Edizione della sera" }).click();
 		await expect.poll(() => isDark(page)).toBe(false);
 	});
 
@@ -196,7 +192,7 @@ test.describe("theme toggle", () => {
 		await page.goto("/");
 
 		expect(await isDark(page)).toBe(true);
-		await expect(page.getByRole("button", { name: "Tema scuro" })).toHaveAttribute("aria-pressed", "true");
+		await expect(page.getByRole("button", { name: "Edizione della sera" })).toHaveAttribute("aria-pressed", "true");
 	});
 });
 
@@ -205,8 +201,8 @@ test.describe("client-side navigation", () => {
 		await page.goto("/");
 
 		await page
-			.getByRole("navigation", { name: "Main navigation" })
-			.getByRole("link", { name: "Letture consigliate", exact: true })
+			.getByRole("navigation", { name: "Sezioni" })
+			.getByRole("link", { name: "Letture", exact: true })
 			.click();
 		await expect(page).toHaveURL(/\/readings\/?$/);
 
