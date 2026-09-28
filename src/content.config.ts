@@ -23,7 +23,7 @@ const articlesCollection = defineCollection({
         pattern: "**/*.md",
         base: './src/content/articles'
     }),
-    schema: z.object({
+    schema: ({ image }) => z.object({
         title: z.string(),
         description: z.string(),
         pubDate: z.date(),
@@ -36,12 +36,20 @@ const articlesCollection = defineCollection({
         topic: z.string(),
         category: z.string(),
         slug: z.string(),
+        // Written by Keystatic as "@assets/articles/<file>", resolved through the tsconfig alias.
+        cover: image().optional(),
+        coverAlt: z.string().optional(),
+        coverCaption: z.string().optional(),
+        coverCredit: z.string().optional(),
         // Numbered in order: the body cites the n-th entry as [n](#fonte-n).
         sources: z.array(z.object({
             author: z.string(),
             title: z.string(),
             publisher: z.string(),
         })).default([]),
+    }).refine((data) => !data.cover || Boolean(data.coverAlt?.trim()), {
+        message: "A cover photo needs its coverAlt description",
+        path: ["coverAlt"],
     })
 });
 

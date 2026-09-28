@@ -9,6 +9,9 @@
   ],
   "compilerOptions": {
     "jsx": "preserve",
-    "types": ["node"]
+    "types": ["node"],
+    // The one path alias: Keystatic writes cover paths with a fixed prefix, and articles
+    // sit at different folder depths, so a relative path would not resolve for all of them.
+    "paths": { "@assets/*": ["./src/assets/*"] }
   }
 }

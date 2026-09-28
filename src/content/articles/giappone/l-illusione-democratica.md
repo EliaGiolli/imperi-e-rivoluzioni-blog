@@ -16,6 +16,10 @@ tags:
 topic: Giappone
 category: militarismo giapponese
 slug: l-illusione-democratica-crisi-taisho
+cover: '@assets/articles/manchukuo-army.jpg'
+coverAlt: >-
+  Soldati in fila, in uniforme e berretto da campo, con il fucile e la baionetta innestata
+coverCaption: 'Soldati dell''esercito del Manchukuo, lo Stato fantoccio creato dal Giappone in Manciuria nel 1932.'
 sources:
   - author: Peter Duus
     title: Party Rivalry and Political Change in Taishō Japan
