@@ -36,6 +36,12 @@ const articlesCollection = defineCollection({
         topic: z.string(),
         category: z.string(),
         slug: z.string(),
+        // Numbered in order: the body cites the n-th entry as [n](#fonte-n).
+        sources: z.array(z.object({
+            author: z.string(),
+            title: z.string(),
+            publisher: z.string(),
+        })).default([]),
     })
 });
 

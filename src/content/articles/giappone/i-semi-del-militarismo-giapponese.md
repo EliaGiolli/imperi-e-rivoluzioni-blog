@@ -16,12 +16,25 @@ tags:
 topic: Giappone
 category: militarismo giapponese
 slug: i-semi-del-militarismo-giapponese
+sources:
+  - author: W. G. Beasley
+    title: The Meiji Restoration
+    publisher: Stanford University Press, Stanford 1972
+  - author: Marius B. Jansen
+    title: The Making of Modern Japan
+    publisher: Harvard University Press, Cambridge (MA) 2000
+  - author: Andrew Gordon
+    title: 'A Modern History of Japan: From Tokugawa Times to the Present'
+    publisher: Oxford University Press, New York 2003
+  - author: Andrea Revelant
+    title: 'Il Giappone moderno: dall''Ottocento al 1945'
+    publisher: Einaudi, Torino 2018
 ---
 ## Introduzione: il paradosso della modernizzazione giapponese
 
 Quando si analizza la storia del Giappone del Novecento e la sua tragica deriva autoritaria culminata nella Seconda Guerra Mondiale, si tende spesso a considerare il militarismo degli anni '30 come una parentesi improvvisa, una "deviazione" o un colpo di mano orchestrato da generali fanatici. La storiografia contemporanea mostra tuttavia un quadro assai più complesso.
 
-Per comprendere perché il Giappone è diventato uno Stato militarista e ultra-nazionalista, non basta analizzare gli anni tra le due guerre. Bisogna tornare alle origini dello Stato moderno: la Restaurazione Meiji (1868).
+Per comprendere perché il Giappone è diventato uno Stato militarista e ultra-nazionalista, non basta analizzare gli anni tra le due guerre. Bisogna tornare alle origini dello Stato moderno: la Restaurazione Meiji (1868)[1](#fonte-1).
 
 Per evitare di trasformarsi in una colonia delle potenze occidentali — che già controllavano gran parte dell'Asia — la nuova classe dirigente giapponese avviò una corsa contro il tempo per modernizzare il Paese. Questa trasformazione, spesso celebrata come un miracolo economico e sociale, racchiudeva in sé una profonda contraddizione: per proteggere la propria indipendenza, il Giappone costruì una struttura statale in cui le forze armate occupavano un ruolo centrale e privilegiato.
 
@@ -115,14 +128,3 @@ Tuttavia, il prezzo di questa trasformazione fu altissimo. Il Paese si affacciav
 Quando negli anni '20 e '30 la crisi economica globale e le tensioni sociali travolgeranno l'esperimento democratico del periodo Taishō, i militari non dovranno fare altro che utilizzare gli strumenti istituzionali e ideologici che la Restaurazione Meiji aveva preparato per loro cinquant'anni prima.
 
 > **Nel prossimo articolo:** analizzeremo la breve e fragile parentesi della Democrazia Taishō, e vedremo come l'impatto devastante della Grande Depressione del 1929 farà crollare le istituzioni civili, spianando la strada all'occupazione autonoma della Manciuria da parte dell'Esercito.
-
----
-
-## Fonti
-
-Riferimenti storiografici su cui si appoggia la ricostruzione di questo articolo.
-
-1. W. G. Beasley, *The Meiji Restoration*, Stanford University Press, Stanford 1972.
-2. Marius B. Jansen, *The Making of Modern Japan*, Harvard University Press, Cambridge (MA) 2000.
-3. Andrew Gordon, *A Modern History of Japan: From Tokugawa Times to the Present*, Oxford University Press, New York 2003.
-4. Andrea Revelant, *Il Giappone moderno: dall'Ottocento al 1945*, Einaudi, Torino 2018.

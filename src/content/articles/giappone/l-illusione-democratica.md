@@ -16,6 +16,22 @@ tags:
 topic: Giappone
 category: militarismo giapponese
 slug: l-illusione-democratica-crisi-taisho
+sources:
+  - author: Peter Duus
+    title: Party Rivalry and Political Change in Taishō Japan
+    publisher: Harvard University Press, Cambridge (MA) 1968
+  - author: Mark Metzler
+    title: 'Lever of Empire: The International Gold Standard and the Crisis of Liberalism in Prewar Japan'
+    publisher: University of California Press, Berkeley 2006
+  - author: Louise Young
+    title: 'Japan''s Total Empire: Manchuria and the Culture of Wartime Imperialism'
+    publisher: University of California Press, Berkeley 1998
+  - author: Andrew Gordon
+    title: 'A Modern History of Japan: From Tokugawa Times to the Present'
+    publisher: Oxford University Press, New York 2003
+  - author: Andrea Revelant
+    title: 'Il Giappone moderno: dall''Ottocento al 1945'
+    publisher: Einaudi, Torino 2018
 ---
 ## Introduzione: La fragile parentesi della Democrazia Taishō
 
@@ -27,7 +43,7 @@ Tuttavia, questa stagione, passata alla storia come "Democrazia Taishō", poggia
 
 ## 1. La corruzione dei partiti e la repressione del dissenso
 
-Durante gli anni '20, la scena politica giapponese fu dominata da due grandi partiti parlamentari: il *Seiyūkai* e il *Minseitō*. Nonostante il mantenimento delle apparenze democratiche, il sistema soffriva di una profonda crisi di legittimità agli occhi della popolazione.
+Durante gli anni '20, la scena politica giapponese fu dominata da due grandi partiti parlamentari: il *Seiyūkai* e il *Minseitō*[1](#fonte-1). Nonostante il mantenimento delle apparenze democratiche, il sistema soffriva di una profonda crisi di legittimità agli occhi della popolazione.
 
 ### Il legame con i *Zaibatsu*
 
@@ -47,7 +63,7 @@ Le tensioni sociali esplosero a causa di una sequenza prolungata di shock econom
 
 * **I Moti del Riso (1918):** L'inflazione bellica e lo scontento per le speculazioni sui beni di prima necessità innescarono proteste di massa in centinaia di città e villaggi, costringendo il governo a impiegare la forza per ripristinare l'ordine.
 * **Il Grande Terremoto del Kantō (1923):** La distruzione di Tokyo e Yokohama provocò un disastro umano ed economico di proporzioni enormi, seguito da violenti pogrom contro le minoranze coreane e gli attivisti di sinistra, orchestrati dal clima di paranoia e dal vuoto d'autorità.
-* **La Crisi finanziaria del Shōwa (1927) e la Depressione del 1929:** Il crollo della Borsa di Wall Street nel 1929 devastò le esportazioni giapponesi, in particolare quelle della seta grezza. Le campagne caddero nella miseria estrema, con carestie nelle regioni settentrionali.
+* **La Crisi finanziaria del Shōwa (1927) e la Depressione del 1929:** Il crollo della Borsa di Wall Street nel 1929 devastò le esportazioni giapponesi, in particolare quelle della seta grezza[2](#fonte-2). Le campagne caddero nella miseria estrema, con carestie nelle regioni settentrionali.
 
 Crisi del 1929 -> Crollo export seta -> Carestia nelle campagne -> Radicalizzazione dei soldati-contadini
 
@@ -65,7 +81,7 @@ Nel nord-est della Cina, l'**Armata del Kwantung** — la forza militare giappon
 
 Nella cultura militare dell'epoca si diffuse la pratica del ***Gekokujō*** ("l'insubordinazione dal basso"), secondo cui gli ufficiali di grado medio-basso si ritenevano legittimati a disubbidire ai comandi civili e superiori in nome di un presunto "bene superiore dell'Imperatore e della Patria".
 
-Il **18 settembre 1931**, ufficiali dell'Armata del Kwantung organizzarono un finto attentato dinamitardo lungo i binari della ferrovia vicino a Mukden (**Incidente di Mukden**). Accusando dell'attacco i soldati cinesi, l'Esercito avviò l'invasione sistematica dell'intera Manciuria.
+Il **18 settembre 1931**, ufficiali dell'Armata del Kwantung organizzarono un finto attentato dinamitardo lungo i binari della ferrovia vicino a Mukden (**Incidente di Mukden**)[3](#fonte-3). Accusando dell'attacco i soldati cinesi, l'Esercito avviò l'invasione sistematica dell'intera Manciuria.
 
 ```
   [ GOVERNO CIVILE DI TOKYO ]
@@ -94,15 +110,3 @@ La strada verso la presa del potere totale da parte dei militari era ormai tracc
 ---
 
 ***Nel prossimo articolo:*** *Analizzeremo il clima di terrore politico degli anni '30, lo scontra tra fazioni militari, il fallito golpe del 1936 e l'ascesa del governo di Hideki Tōjō alla vigilia della guerra totale.*
-
----
-
-## Fonti
-
-Riferimenti storiografici su cui si appoggia la ricostruzione di questo articolo.
-
-1. Peter Duus, *Party Rivalry and Political Change in Taishō Japan*, Harvard University Press, Cambridge (MA) 1968.
-2. Mark Metzler, *Lever of Empire: The International Gold Standard and the Crisis of Liberalism in Prewar Japan*, University of California Press, Berkeley 2006.
-3. Louise Young, *Japan's Total Empire: Manchuria and the Culture of Wartime Imperialism*, University of California Press, Berkeley 1998.
-4. Andrew Gordon, *A Modern History of Japan: From Tokugawa Times to the Present*, Oxford University Press, New York 2003.
-5. Andrea Revelant, *Il Giappone moderno: dall'Ottocento al 1945*, Einaudi, Torino 2018.
